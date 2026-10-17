@@ -68,6 +68,12 @@ def lsqr(req):
     return {"x": r[0].tolist(), "istop": int(r[1]), "itn": int(r[2]), "r1norm": float(r[3]), "r2norm": float(r[4]),
             "anorm": float(r[5]), "acond": float(r[6]), "arnorm": float(r[7]), "xnorm": float(r[8])}
 
+def lsmr(req):
+    A = csr(req["A"]); b = np.array(req["b"], dtype=float)
+    r = sla.lsmr(A, b, damp=req["damp"], atol=req["atol"], btol=req["btol"], conlim=req["conlim"], maxiter=req["iter_lim"])
+    return {"x": r[0].tolist(), "istop": int(r[1]), "itn": int(r[2]), "normr": float(r[3]), "normar": float(r[4]),
+            "norma": float(r[5]), "conda": float(r[6]), "normx": float(r[7])}
+
 def rcm(req):
     return {"perm": [int(v) for v in reverse_cuthill_mckee(csr(req["A"]), symmetric_mode=False)]}
 
@@ -115,7 +121,7 @@ def version(req):
     import scipy, numpy
     return {"scipy": scipy.__version__, "numpy": numpy.__version__}
 
-OPS = {"solve": solve, "lsqr": lsqr, "rcm": rcm, "lu": lu, "amd": amd, "load": load, "time": timeit, "version": version}
+OPS = {"solve": solve, "lsqr": lsqr, "lsmr": lsmr, "rcm": rcm, "lu": lu, "amd": amd, "load": load, "time": timeit, "version": version}
 
 for line in sys.stdin:
     try:

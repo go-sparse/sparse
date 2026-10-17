@@ -44,6 +44,34 @@ func TestLSQRAgainstSciPy(t *testing.T) {
 	}
 }
 
+func TestLSMRAgainstSciPy(t *testing.T) {
+	rows, bad := VerifyLSMR(fixture(t).LSMR)
+	for _, r := range rows {
+		t.Logf("%s damp=%g atol=%g: scipy istop=%d itn=%d | go istop=%d itn=%d xdiff=%.1e", r.Matrix, r.Damp, r.ATol, r.Sci.Istop, r.Sci.Itn, r.GoIstop, r.GoItn, r.MaxXDiff)
+	}
+	for _, b := range bad {
+		t.Error(b)
+	}
+}
+
+func TestVerifyLSMRDetectsProblems(t *testing.T) {
+	ref := fixture(t).LSMR[0]
+	stop, itn, x, nr := ref, ref, ref, ref
+	stop.Sci.Istop = 7
+	itn.Sci.Itn += 10
+	x.Sci.X = append([]float64(nil), ref.Sci.X...)
+	x.Sci.X[0] += 1
+	nr.Sci.NormR += 1
+	for name, f := range map[string]LSMRFix{"istop": stop, "itn": itn, "x": x, "normr": nr} {
+		if _, bad := VerifyLSMR([]LSMRFix{f}); len(bad) == 0 {
+			t.Errorf("%s not detected", name)
+		}
+	}
+	if _, bad := VerifyLSMR([]LSMRFix{{LSQRCase: LSQRCase{Matrix: "garbage"}}}); len(bad) == 0 {
+		t.Error("bad matrix name")
+	}
+}
+
 func TestOrderingsAgainstSciPy(t *testing.T) {
 	ms, err := Suite(SuiteOrder)
 	if err != nil {
@@ -164,6 +192,9 @@ func TestGenerateFailures(t *testing.T) {
 		if _, err := GenerateLSQR(s); err == nil && mode != "garbage" { // lsqr's reply has no field of a wrong type
 			t.Errorf("%s: GenerateLSQR must fail", mode)
 		}
+		if _, err := GenerateLSMR(s); err == nil && mode != "garbage" {
+			t.Errorf("%s: GenerateLSMR must fail", mode)
+		}
 		if _, err := GenerateOrders(s, ms); err == nil {
 			t.Errorf("%s: GenerateOrders must fail", mode)
 		}
@@ -215,7 +246,7 @@ func TestGenerateAllEveryStage(t *testing.T) {
 	sm, _ := Suite(SuiteSolve)
 	nSolve := len(DefaultSolveCases(sm))
 	nLSQR := len(DefaultLSQRCases())
-	for _, after := range []int{1, 1 + nSolve, 1 + nSolve + nLSQR} {
+	for _, after := range []int{1, 1 + nSolve, 1 + nSolve + nLSQR, 1 + nSolve + 2*nLSQR} {
 		s, err := scipy.Start(scipy.FakeCommand("failafter:" + strconv.Itoa(after)))
 		if err != nil {
 			t.Fatal(err)

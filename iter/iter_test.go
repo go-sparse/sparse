@@ -537,3 +537,86 @@ func TestIncompleteFactorsMatchOnPattern(t *testing.T) {
 		}
 	}
 }
+
+func TestLSMR(t *testing.T) {
+	r := rand.New(rand.NewPCG(11, 12))
+	c := sparse.NewCOO[float64](40, 15)
+	for i := 0; i < 40; i++ {
+		for k := 0; k < 4; k++ {
+			_ = c.Append(i, r.IntN(15), r.NormFloat64())
+		}
+	}
+	for j := 0; j < 15; j++ {
+		_ = c.Append(j, j, 3)
+	}
+	a := c.ToCSR()
+	b := rhs(40, 13)
+	want := lsqrRef(a, b)
+	res, err := LSMR(a, b, &LSMROptions{ATol: 1e-12, BTol: 1e-12, MaxIter: 100})
+	if err != nil {
+		t.Fatal(err)
+	}
+	for i := range want {
+		if math.Abs(res.X[i]-want[i]) > 1e-7 {
+			t.Fatalf("x[%d] = %g, want %g (istop %d)", i, res.X[i], want[i], res.Istop)
+		}
+	}
+	tmp := make([]float64, 40)
+	a.MulVec(tmp, res.X)
+	axpy(-1, b, tmp)
+	if math.Abs(nrm2(tmp)-res.NormR) > 1e-8 || res.NormA <= 0 || res.CondA < 1 || res.NormX <= 0 || res.NormAR < 0 {
+		t.Fatalf("%+v", res)
+	}
+	d, _ := LSMR(a, b, &LSMROptions{Damp: 0.5, ATol: 1e-12, BTol: 1e-12, MaxIter: 100})
+	if nrm2(d.X) >= nrm2(res.X) {
+		t.Fatal("damping must shrink the solution")
+	}
+	w, _ := LSMR(a, b, &LSMROptions{X0: res.X, ATol: 1e-12, BTol: 1e-12, MaxIter: 100})
+	if w.Itn > 3 {
+		t.Fatalf("warm start took %d iterations", w.Itn)
+	}
+	def, _ := LSMR(a, b, nil)
+	if def.Istop == 0 || def.Itn > 15 {
+		t.Fatalf("default call: %+v", def)
+	}
+	if l, _ := LSMR(a, b, &LSMROptions{MaxIter: 1}); l.Istop != 7 {
+		t.Fatalf("istop %d", l.Istop)
+	}
+	if cl, _ := LSMR(a, b, &LSMROptions{ConLim: 1.0001, ATol: -1, BTol: -1, MaxIter: 100}); cl.Istop != 3 {
+		t.Fatalf("conlim istop %d", cl.Istop)
+	}
+	if tiny, _ := LSMR(a, b, &LSMROptions{ATol: -1, BTol: -1, ConLim: -1, MaxIter: 500}); tiny.Istop == 0 || tiny.Istop == 7 {
+		t.Fatalf("tiny tolerances istop %d", tiny.Istop)
+	}
+}
+
+func TestLSMREdgeCases(t *testing.T) {
+	one, _ := sparse.FromDense(1, 1, []float64{2})
+	res, _ := LSMR(one, []float64{3}, nil)
+	if math.Abs(res.X[0]-1.5) > 1e-12 {
+		t.Fatalf("%v", res.X)
+	}
+	zero := &sparse.CSR[float64]{Rows: 2, Cols: 2, Indptr: []int{0, 0, 0}}
+	if r, _ := LSMR(zero, []float64{1, 1}, nil); r.Itn != 0 {
+		t.Fatal("zero matrix")
+	}
+	if r, _ := LSMR(one, []float64{0}, nil); r.Itn != 0 {
+		t.Fatal("zero rhs")
+	}
+	if _, err := LSMR(one, []float64{1, 2}, nil); !errors.Is(err, ErrShape) {
+		t.Fatal("shape")
+	}
+	if _, err := LSMR(one, []float64{1}, &LSMROptions{X0: []float64{1, 2}}); !errors.Is(err, ErrShape) {
+		t.Fatal("x0 shape")
+	}
+	// beta = 0 inside the loop and a rank-deficient operator
+	ill, _ := sparse.Diags([][]float64{{1, 1e-9, 1e-18}}, []int{0}, 3, 3)
+	if r, _ := LSMR(ill, []float64{1, 1, 1}, &LSMROptions{ATol: -1, BTol: -1, ConLim: -1, MaxIter: 100}); r.Istop == 0 {
+		t.Fatal("must stop")
+	}
+	// a scripted operator whose bidiagonalisation ends (u vanishes) at once
+	id := sparse.Eye[float64](3)
+	if r, _ := LSMR(id, []float64{1, 2, 3}, &LSMROptions{MaxIter: 10}); r.Itn == 0 || nrm2(r.X) == 0 {
+		t.Fatal("identity")
+	}
+}

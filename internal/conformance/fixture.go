@@ -32,6 +32,7 @@ type Fixture struct {
 	NumPy  string     `json:"numpy"`
 	Solves []SolveFix `json:"solves"`
 	LSQR   []LSQRFix  `json:"lsqr"`
+	LSMR   []LSMRFix  `json:"lsmr"`
 	Orders []OrderFix `json:"orders"`
 }
 
@@ -47,6 +48,9 @@ func GenerateAll(s *scipy.Session) (*Fixture, error) {
 		return nil, err
 	}
 	if f.LSQR, err = GenerateLSQR(s); err != nil {
+		return nil, err
+	}
+	if f.LSMR, err = GenerateLSMR(s); err != nil {
 		return nil, err
 	}
 	om, _ := Suite(SuiteOrder)

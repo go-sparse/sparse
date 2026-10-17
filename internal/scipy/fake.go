@@ -77,6 +77,8 @@ func fakeAnswer(op string, a Matrix, b []float64) any {
 		return SolveResponse{Iters: 1, Res: 1e-9}
 	case "lsqr":
 		return LSQRResponse{X: make([]float64, a.N), Itn: 1, Istop: 1}
+	case "lsmr":
+		return LSMRResponse{X: make([]float64, a.N), Itn: 1, Istop: 1}
 	case "rcm", "amd":
 		p := make([]int, a.M)
 		for i := range p {
