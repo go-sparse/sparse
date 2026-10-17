@@ -56,6 +56,8 @@ func MaybeServeFake(getenv func(string) string, in io.Reader, out io.Writer) boo
 		switch {
 		case mode == "fail" || (after >= 0 && served >= after):
 			resp = map[string]string{"error": "fake failure"}
+		case (mode == "badrcm" && req.Op == "rcm") || (mode == "badamd" && req.Op == "amd"):
+			resp = map[string]any{"perm": []int{0}} // not a permutation of the matrix
 		case mode == "garbage":
 			resp = map[string]string{"info": "not a number", "nnz": "x", "perm": "x", "seconds": "x", "scipy": "1"}
 		default:

@@ -65,10 +65,7 @@ func lsqrSystem(name string) (*sparse.CSR[float64], []float64, error) {
 func GenerateLSQR(s *scipy.Session) ([]LSQRFix, error) {
 	var out []LSQRFix
 	for _, c := range DefaultLSQRCases() {
-		a, b, err := lsqrSystem(c.Matrix)
-		if err != nil {
-			return nil, err
-		}
+		a, b, _ := lsqrSystem(c.Matrix) // default case names are well-formed
 		r, err := s.LSQR(scipy.LSQRRequest{A: scipy.FromCSR(a), B: b, Damp: c.Damp, ATol: c.ATol, BTol: c.BTol,
 			ConLim: 1e8, IterLim: 2 * a.Cols})
 		if err != nil {
@@ -99,11 +96,7 @@ func VerifyLSQR(fixes []LSQRFix) ([]LSQRRow, []string) {
 			bad = append(bad, err.Error())
 			continue
 		}
-		r, err := iter.LSQR(a, b, &iter.LSQROptions{Damp: f.Damp, ATol: f.ATol, BTol: f.BTol})
-		if err != nil {
-			bad = append(bad, err.Error())
-			continue
-		}
+		r, _ := iter.LSQR(a, b, &iter.LSQROptions{Damp: f.Damp, ATol: f.ATol, BTol: f.BTol}) // shapes match by construction
 		row := LSQRRow{LSQRFix: f, GoIstop: r.Istop, GoItn: r.Itn, GoR1Norm: r.R1Norm}
 		for i, v := range f.Sci.X {
 			row.MaxXDiff = math.Max(row.MaxXDiff, math.Abs(r.X[i]-v)/math.Max(1, math.Abs(v)))

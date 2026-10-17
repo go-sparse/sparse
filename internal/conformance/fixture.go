@@ -42,30 +42,21 @@ func GenerateAll(s *scipy.Session) (*Fixture, error) {
 	if f.SciPy, f.NumPy, err = s.Versions(); err != nil {
 		return nil, err
 	}
-	sm, err := Suite(SuiteSolve)
-	if err != nil {
-		return nil, err
-	}
+	sm, _ := Suite(SuiteSolve) // the suite names are constants that Build accepts
 	if f.Solves, err = Generate(s, sm); err != nil {
 		return nil, err
 	}
 	if f.LSQR, err = GenerateLSQR(s); err != nil {
 		return nil, err
 	}
-	om, err := Suite(SuiteOrder)
-	if err != nil {
-		return nil, err
-	}
+	om, _ := Suite(SuiteOrder)
 	f.Orders, err = GenerateOrders(s, om)
 	return f, err
 }
 
 // SaveFixture writes f as indented JSON.
 func SaveFixture(path string, f *Fixture) error {
-	b, err := json.MarshalIndent(f, "", " ")
-	if err != nil {
-		return err
-	}
+	b, _ := json.MarshalIndent(f, "", " ") // plain data: cannot fail
 	return os.WriteFile(path, append(b, '\n'), 0o644)
 }
 

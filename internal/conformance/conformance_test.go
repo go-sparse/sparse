@@ -197,6 +197,36 @@ func TestGenerateOrdersEveryStep(t *testing.T) {
 	}
 }
 
+func TestGenerateOrdersBadPermutations(t *testing.T) {
+	ms, _ := Suite([]string{"lap2d:6:6"})
+	for _, mode := range []string{"badrcm", "badamd"} {
+		s, err := scipy.Start(scipy.FakeCommand(mode))
+		if err != nil {
+			t.Fatal(err)
+		}
+		if _, err := GenerateOrders(s, ms); err == nil {
+			t.Errorf("%s must fail", mode)
+		}
+		s.Close()
+	}
+}
+
+func TestGenerateAllEveryStage(t *testing.T) {
+	sm, _ := Suite(SuiteSolve)
+	nSolve := len(DefaultSolveCases(sm))
+	nLSQR := len(DefaultLSQRCases())
+	for _, after := range []int{1, 1 + nSolve, 1 + nSolve + nLSQR} {
+		s, err := scipy.Start(scipy.FakeCommand("failafter:" + strconv.Itoa(after)))
+		if err != nil {
+			t.Fatal(err)
+		}
+		if _, err := GenerateAll(s); err == nil {
+			t.Errorf("failafter %d must fail", after)
+		}
+		s.Close()
+	}
+}
+
 func TestVerifyDetectsProblems(t *testing.T) {
 	ms, _ := Suite([]string{"lap2d:12:12"})
 	good := SolveFix{SolveCase: SolveCase{Matrix: "lap2d:12:12", Solver: "cg", Precond: "none", RTol: 1e-8}}

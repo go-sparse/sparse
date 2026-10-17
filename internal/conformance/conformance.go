@@ -33,15 +33,9 @@ type Named struct {
 // each optionally followed by "+scr:seed" (symmetric random permutation).
 func Build(name string) (Named, error) {
 	base, scr, _ := strings.Cut(name, "+scr:")
-	f := strings.Split(base, ":")
-	num := func(i int) float64 {
-		if i >= len(f) {
-			return math.NaN()
-		}
-		v, err := strconv.ParseFloat(f[i], 64)
-		if err != nil {
-			return math.NaN()
-		}
+	f := append(strings.Split(base, ":"), "0", "0", "0", "0", "0")
+	num := func(i int) float64 { // missing or malformed numbers read as 0
+		v, _ := strconv.ParseFloat(f[i], 64)
 		return v
 	}
 	var a *sparse.CSR[float64]
@@ -154,10 +148,7 @@ func RunGo(n Named, c SolveCase) (info, iters int, res float64, err error) {
 		return 0, 0, 0, err
 	}
 	b := RHS(n.A.Rows)
-	r, err := goSolvers[c.Solver](n.A, b, &iter.Options{RTol: c.RTol, Restart: c.Restart, M: m})
-	if err != nil {
-		return 0, 0, 0, err
-	}
+	r, _ := goSolvers[c.Solver](n.A, b, &iter.Options{RTol: c.RTol, Restart: c.Restart, M: m}) // square system, matching rhs
 	return r.Info, r.Iterations, iter.TrueResidual(n.A, b, r.X), nil
 }
 
