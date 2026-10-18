@@ -1,0 +1,2 @@
+go test fuzz v1
+[]byte("\x1a\x12\x03\x1b\x18\x15\x0f\x17\x0f\x15\x11\x04\x13\x1a\x1f\t\x11\r\x7f\x14\xdd\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r")

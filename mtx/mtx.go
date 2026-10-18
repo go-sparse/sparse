@@ -102,23 +102,65 @@ func ReadFile(path string) (*Matrix, error) {
 	return Read(f)
 }
 
-// Read parses a Matrix Market stream.
-func Read(r io.Reader) (*Matrix, error) {
-	br := bufio.NewReaderSize(r, 1<<16)
+// Limits bound what Read accepts from an untrusted stream. A zero field
+// takes its DefaultLimits value. Nothing is allocated from a declared size
+// before the data that backs it has been read, but the Matrix is later
+// converted with O(Rows+Cols) arrays, hence MaxDim.
+type Limits struct {
+	MaxDim      int   // rows and columns
+	MaxEntries  int   // declared coordinate entries; rows*cols of an array file
+	MaxLine     int   // bytes in one line
+	MaxBytes    int64 // bytes read (after decompression)
+	MaxComments int   // comment lines kept in Header.Comments
+}
+
+// DefaultLimits are generous for real matrices (2.7e8 entries) and refuse
+// absurd headers.
+var DefaultLimits = Limits{MaxDim: 1 << 27, MaxEntries: 1 << 28, MaxLine: 1 << 16, MaxBytes: 1 << 34, MaxComments: 1 << 12}
+
+func (l Limits) fill() Limits {
+	d := DefaultLimits
+	if l.MaxDim > 0 {
+		d.MaxDim = l.MaxDim
+	}
+	if l.MaxEntries > 0 {
+		d.MaxEntries = l.MaxEntries
+	}
+	if l.MaxLine > 0 {
+		d.MaxLine = max(l.MaxLine, 64)
+	}
+	if l.MaxBytes > 0 {
+		d.MaxBytes = l.MaxBytes
+	}
+	if l.MaxComments > 0 {
+		d.MaxComments = l.MaxComments
+	}
+	return d
+}
+
+// Read parses a Matrix Market stream with DefaultLimits.
+func Read(r io.Reader) (*Matrix, error) { return ReadLimited(r, DefaultLimits) }
+
+// ReadLimited parses a Matrix Market stream, refusing input beyond lim.
+func ReadLimited(r io.Reader, lim Limits) (*Matrix, error) {
+	lim = lim.fill()
+	br := bufio.NewReaderSize(io.LimitReader(r, lim.MaxBytes), lim.MaxLine)
 	if magic, _ := br.Peek(2); len(magic) == 2 && magic[0] == 0x1f && magic[1] == 0x8b {
 		zr, err := gzip.NewReader(br)
 		if err != nil {
 			return nil, err
 		}
 		defer zr.Close()
-		br = bufio.NewReaderSize(zr, 1<<16)
+		// the decompressed size is bounded too (a gzip bomb)
+		br = bufio.NewReaderSize(io.LimitReader(zr, lim.MaxBytes), lim.MaxLine)
 	}
-	p := &parser{br: br}
+	p := &parser{br: br, lim: lim}
 	return p.parse()
 }
 
 type parser struct {
 	br   *bufio.Reader
+	lim  Limits
 	line int
 }
 
@@ -126,14 +168,26 @@ func (p *parser) errf(format string, a ...any) error {
 	return fmt.Errorf("%w: line %d: %s", ErrFormat, p.line, fmt.Sprintf(format, a...))
 }
 
+// eof turns a next() failure into the caller's message, keeping the
+// "line too long" error as it is.
+func (p *parser) eof(err error, msg string) error {
+	if errors.Is(err, ErrFormat) {
+		return err
+	}
+	return p.errf("%s", msg)
+}
+
 // next returns the next line (without terminator); io.EOF at the end.
 func (p *parser) next() (string, error) {
-	s, err := p.br.ReadString('\n')
-	if err != nil && s == "" {
+	b, long, err := p.br.ReadLine()
+	if err != nil {
 		return "", err
 	}
 	p.line++
-	return strings.TrimRight(s, "\r\n"), nil
+	if long {
+		return "", p.errf("line longer than %d bytes", p.lim.MaxLine)
+	}
+	return string(b), nil
 }
 
 // nextData returns the next non-blank, non-comment line.
@@ -141,7 +195,7 @@ func (p *parser) nextData() ([]string, error) {
 	for {
 		s, err := p.next()
 		if err != nil {
-			return nil, p.errf("unexpected end of file")
+			return nil, p.eof(err, "unexpected end of file")
 		}
 		f := strings.Fields(s)
 		if len(f) > 0 && !strings.HasPrefix(f[0], "%") {
@@ -153,7 +207,7 @@ func (p *parser) nextData() ([]string, error) {
 func (p *parser) parse() (*Matrix, error) {
 	s, err := p.next()
 	if err != nil {
-		return nil, p.errf("empty file")
+		return nil, p.eof(err, "empty file")
 	}
 	f := strings.Fields(strings.ToLower(s))
 	if len(f) != 5 || f[0] != "%%matrixmarket" || f[1] != "matrix" {
@@ -185,10 +239,13 @@ func (p *parser) parse() (*Matrix, error) {
 	for {
 		s, err = p.next()
 		if err != nil {
-			return nil, p.errf("missing size line")
+			return nil, p.eof(err, "missing size line")
 		}
 		t := strings.TrimSpace(s)
 		if strings.HasPrefix(t, "%") {
+			if len(h.Comments) >= p.lim.MaxComments {
+				return nil, p.errf("more than %d comment lines", p.lim.MaxComments)
+			}
 			h.Comments = append(h.Comments, strings.TrimPrefix(t, "%"))
 			continue
 		}
@@ -213,20 +270,30 @@ func (p *parser) parse() (*Matrix, error) {
 		dims[i] = v
 	}
 	h.Rows, h.Cols = dims[0], dims[1]
+	if h.Rows > p.lim.MaxDim || h.Cols > p.lim.MaxDim {
+		return nil, p.errf("dimensions %dx%d exceed the limit %d", h.Rows, h.Cols, p.lim.MaxDim)
+	}
 	if h.Symmetry != General && h.Rows != h.Cols {
 		return nil, p.errf("%s matrix must be square", h.Symmetry)
 	}
-	if h.Layout == Coordinate {
-		h.Entries = dims[2]
-	} else {
-		h.Entries = h.Rows * h.Cols
-		if h.Symmetry != General {
-			h.Entries = h.Rows * (h.Rows + 1) / 2
-			if h.Symmetry == SkewSymmetric {
-				h.Entries = h.Rows * (h.Rows - 1) / 2
-			}
-		}
+	// stored-value count in int64: rows and cols are below MaxDim here, but
+	// their product overflows a 32-bit int
+	n := int64(dims[0])
+	var entries int64
+	switch {
+	case h.Layout == Coordinate:
+		entries = int64(dims[2])
+	case h.Symmetry == General:
+		entries = n * int64(h.Cols)
+	case h.Symmetry == SkewSymmetric:
+		entries = n * (n - 1) / 2
+	default:
+		entries = n * (n + 1) / 2
 	}
+	if entries > int64(p.lim.MaxEntries) {
+		return nil, p.errf("%d stored entries exceed the limit %d", entries, p.lim.MaxEntries)
+	}
+	h.Entries = int(entries)
 	coo := sparse.NewCOO[complex128](h.Rows, h.Cols)
 	if h.Layout == Coordinate {
 		err = p.readCoordinate(&h, coo)

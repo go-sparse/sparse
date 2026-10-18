@@ -67,6 +67,22 @@ is `docs/perf.md`. **Status: not yet measured** — the development host's load
 average was 20 to 110 throughout, so every cell is empty rather than wrong;
 re-run the command on an idle machine and commit the table.
 
+The kernels (SpMV, SpMM, dot, axpy, norms) are scalar pure Go for now. SIMD
+and generated-assembly versions belong in shared code (go-asmgen / go-ndarray)
+rather than here, one implementation per kernel; they are not done yet.
+
+## Untrusted input
+
+`mtx.Read` is meant to be safe on hostile files. `mtx.ReadLimited` takes
+`Limits` (defaults: dimensions 2^27, 2^28 entries, 64 KiB lines, 16 GiB read
+after decompression, 4096 comment lines); declared sizes are checked before
+anything is allocated from them, the stored-value count is computed in `int64`
+(so it cannot overflow a 32-bit `int`), memory grows only as entries are
+actually read, and a gzip bomb is cut off at the byte limit. `NewCSR`/`NewCSC`
+validate hand-built arrays, `COO.Validate` does the same for a hand-built COO,
+and `FromDense` checks `rows*cols` without overflow. `mtx.FuzzRead` has a
+committed corpus under `mtx/testdata/fuzz` and its seeds run in every `go test`.
+
 ## Quality gates
 
 `gofmt -l`, `go vet`, `go test -race` with 100% statement coverage over all

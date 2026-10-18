@@ -53,6 +53,10 @@ func TestMedianAndGoTime(t *testing.T) {
 	}
 }
 
+func init() { // tiny workloads: the tests check the plumbing, not the speed
+	workloads = []workload{{"lap2d:10:10", "spmv", 2}, {"lap2d:10:10", "cg", 3}, {"lap2d:10:10", "gmres", 1}}
+}
+
 func TestRun(t *testing.T) {
 	out := filepath.Join(t.TempDir(), "perf.md")
 	var so, se bytes.Buffer
@@ -62,7 +66,7 @@ func TestRun(t *testing.T) {
 	}
 	b, _ := os.ReadFile(out)
 	text := string(b)
-	for _, want := range []string{"| lap2d:150:150 |", "spmv", "cg", "gmres", "cycles x 30", "iterations", "products"} {
+	for _, want := range []string{"| lap2d:10:10 |", "spmv", "cg", "gmres", "cycles x 30", "iterations", "products"} {
 		if !strings.Contains(text, want) {
 			t.Errorf("table lacks %q", want)
 		}

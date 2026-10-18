@@ -33,6 +33,22 @@ func (a *COO[T]) Append(i, j int, v T) error {
 	return nil
 }
 
+// Validate checks a COO matrix assembled by hand (for example from
+// untrusted arrays): equal slice lengths, non-negative dimensions and every
+// index inside the matrix. Matrices built with Append, Transpose or mtx.Read
+// are valid by construction; ToCSR and ToCSC assume validity.
+func (a *COO[T]) Validate() error {
+	if a.Rows < 0 || a.Cols < 0 || len(a.I) != len(a.V) || len(a.J) != len(a.V) {
+		return fmt.Errorf("%w: COO dimensions or slice lengths", ErrFormat)
+	}
+	for k := range a.V {
+		if a.I[k] < 0 || a.I[k] >= a.Rows || a.J[k] < 0 || a.J[k] >= a.Cols {
+			return fmt.Errorf("%w: entry %d at (%d,%d) in %dx%d", ErrIndex, k, a.I[k], a.J[k], a.Rows, a.Cols)
+		}
+	}
+	return nil
+}
+
 // compress turns coordinate triplets into a compressed structure with major
 // dimension nmajor, column (minor) indices strictly increasing inside each
 // major slice and duplicates summed. It is two stable counting sorts, O(nnz).

@@ -208,7 +208,8 @@ func (a *CSR[T]) Dense() []T {
 
 // FromDense builds a CSR matrix from a row-major dense slice, dropping zeros.
 func FromDense[T Scalar](rows, cols int, d []T) (*CSR[T], error) {
-	if len(d) != rows*cols {
+	// rows*cols is checked without overflowing (32-bit ints, hostile sizes)
+	if rows < 0 || cols < 0 || (cols != 0 && rows > math.MaxInt/cols) || len(d) != rows*cols {
 		return nil, shapeErr("FromDense", [2]int{rows, cols}, len(d))
 	}
 	a := &CSR[T]{Rows: rows, Cols: cols, Indptr: make([]int, rows+1)}
