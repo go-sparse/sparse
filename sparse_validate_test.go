@@ -30,8 +30,8 @@ func TestCOOValidate(t *testing.T) {
 }
 
 func TestFromDenseHostileSizes(t *testing.T) {
-	// 1<<32 x 1<<32 overflows int64; 1<<17 x 1<<16 overflows int32
-	for _, rc := range [][2]int{{-1, 2}, {2, -1}, {math.MaxInt, 2}, {1 << 31, 1 << 31}} {
+	// the products overflow int (of any width)
+	for _, rc := range [][2]int{{-1, 2}, {2, -1}, {math.MaxInt, 2}, {math.MaxInt/2 + 1, 2}, {math.MaxInt, math.MaxInt}} {
 		if _, err := FromDense(rc[0], rc[1], []float64{1}); !errors.Is(err, ErrShape) {
 			t.Errorf("%v accepted", rc)
 		}

@@ -4,8 +4,6 @@ import (
 	"bytes"
 	"compress/gzip"
 	"errors"
-	"net/http"
-	"net/http/httptest"
 	"os"
 	"path/filepath"
 	"strings"
@@ -97,27 +95,6 @@ func TestFetchAndLoad(t *testing.T) {
 	os.WriteFile(cpx, gz("%%MatrixMarket matrix coordinate complex general\n1 1 1\n1 1 1 1\n"), 0o644)
 	if _, err := LoadCorpus([]string{cpx}); err == nil {
 		t.Fatal("complex")
-	}
-}
-
-func TestHTTPGet(t *testing.T) {
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path == "/missing" {
-			http.NotFound(w, r)
-			return
-		}
-		w.Write([]byte("hello"))
-	}))
-	b, err := HTTPGet(srv.URL + "/ok")
-	if err != nil || string(b) != "hello" {
-		t.Fatal(string(b), err)
-	}
-	if _, err := HTTPGet(srv.URL + "/missing"); err == nil {
-		t.Fatal("404")
-	}
-	srv.Close()
-	if _, err := HTTPGet(srv.URL + "/ok"); err == nil {
-		t.Fatal("closed server")
 	}
 }
 

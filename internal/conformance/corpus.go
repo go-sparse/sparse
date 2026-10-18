@@ -4,12 +4,9 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
-	"io"
-	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
-	"time"
 
 	"github.com/go-sparse/sparse/mtx"
 )
@@ -52,20 +49,6 @@ func CorpusDir(getenv func(string) string, userCache func() (string, error)) (st
 			return dir, nil
 		}
 	}
-}
-
-// HTTPGet fetches a URL with a timeout.
-func HTTPGet(url string) ([]byte, error) {
-	c := http.Client{Timeout: 60 * time.Second}
-	r, err := c.Get(url)
-	if err != nil {
-		return nil, err
-	}
-	defer r.Body.Close()
-	if r.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("conformance: GET %s: %s", url, r.Status)
-	}
-	return io.ReadAll(r.Body)
 }
 
 // Fetch makes sure every entry is in dir (as <name>.mtx.gz) and returns the
