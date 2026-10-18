@@ -41,7 +41,14 @@ type Matrix struct {
 
 // FromCSR converts a real CSR matrix to its wire form (no copy).
 func FromCSR(a *sparse.CSR[float64]) Matrix {
-	return Matrix{M: a.Rows, N: a.Cols, Indptr: a.Indptr, Indices: a.Indices, Data: a.Data}
+	m := Matrix{M: a.Rows, N: a.Cols, Indptr: a.Indptr, Indices: a.Indices, Data: a.Data}
+	if m.Indices == nil { // a nil slice would be JSON null
+		m.Indices = []int{}
+	}
+	if m.Data == nil {
+		m.Data = []float64{}
+	}
+	return m
 }
 
 // Session is a running oracle process.
