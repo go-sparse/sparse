@@ -120,6 +120,8 @@ jobs:
             os=${t%/*}; arch=${t#*/}
             case $os in android|ios) mode="vet" ;; *) mode="test" ;; esac
             for p in $(go list ./...); do
+              # a main package on android/ios needs the cgo runtime to link
+              if [ $mode = vet ] && [ "$(go list -f '{{.Name}}' "$p")" = main ]; then continue; fi
               if [ $mode = test ]; then
                 out=$(CGO_ENABLED=0 GOOS=$os GOARCH=$arch go test -c -o /dev/null "$p" 2>&1) || { echo "::error::$t $p: $out"; fail=1; }
               else
