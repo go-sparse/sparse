@@ -190,6 +190,29 @@ func (p *parser) next() (string, error) {
 	return string(b), nil
 }
 
+// noMoreEntries enforces that the entry count is exact: after the declared
+// entries only blank and comment lines may follow (the read stays bounded by
+// Limits.MaxBytes).
+func (p *parser) noMoreEntries(declared int) error {
+	for {
+		s, err := p.next()
+		if err != nil {
+			return p.trailingErr(err)
+		}
+		if t := strings.TrimSpace(s); t != "" && !strings.HasPrefix(t, "%") {
+			return p.errf("more entries than the %d declared", declared)
+		}
+	}
+}
+
+// trailingErr is nil at a clean end of input and the error otherwise.
+func (p *parser) trailingErr(err error) error {
+	if errors.Is(err, ErrFormat) {
+		return err
+	}
+	return nil
+}
+
 // nextData returns the next non-blank, non-comment line.
 func (p *parser) nextData() ([]string, error) {
 	for {
@@ -299,6 +322,9 @@ func (p *parser) parse() (*Matrix, error) {
 		err = p.readCoordinate(&h, coo)
 	} else {
 		err = p.readArray(&h, coo)
+	}
+	if err == nil {
+		err = p.noMoreEntries(h.Entries)
 	}
 	if err != nil {
 		return nil, err

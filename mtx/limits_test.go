@@ -61,3 +61,23 @@ func TestGzipBomb(t *testing.T) {
 		t.Fatalf("bomb accepted: %v", err)
 	}
 }
+
+func TestEntryCountIsExact(t *testing.T) {
+	hd := "%%MatrixMarket matrix coordinate real general\n"
+	for name, src := range map[string]string{
+		"extra entry":       hd + "2 2 1\n1 1 1\n2 2 2\n",
+		"extra after blank": hd + "2 2 1\n1 1 1\n\n% c\n2 2 2\n",
+		"extra array value": "%%MatrixMarket matrix array real general\n1 1\n1\n2\n",
+		"too few":           hd + "2 2 2\n1 1 1\n",
+		"extra long line":   hd + "2 2 1\n1 1 1\n" + strings.Repeat("x", 300) + "\n",
+	} {
+		lim := Limits{MaxLine: 100}
+		if _, err := ReadLimited(strings.NewReader(src), lim); !errors.Is(err, ErrFormat) {
+			t.Errorf("%s accepted: %v", name, err)
+		}
+	}
+	// trailing blank and comment lines are fine
+	if _, err := Read(strings.NewReader(hd + "2 2 1\n1 1 1\n\n% done\n  \n")); err != nil {
+		t.Fatal(err)
+	}
+}
