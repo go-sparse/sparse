@@ -63,7 +63,9 @@ SuperLU's COLAMD; RCM bandwidth equals SciPy's.
 `go run ./cmd/perfbench` measures SpMV, CG and GMRES(30) on 2-D Laplacians of
 1e5 and 1e6 nonzeros against SciPy on one core, interleaved, one at a time,
 and refuses to measure while the host's load average is above 8. The table
-is `docs/perf.md`.
+is `docs/perf.md`. **Status: not yet measured** — the development host's load
+average was 20 to 110 throughout, so every cell is empty rather than wrong;
+re-run the command on an idle machine and commit the table.
 
 ## Quality gates
 

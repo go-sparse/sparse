@@ -121,63 +121,73 @@ Downloaded into a cache outside the repository (licence unstated), checked again
 | bcsstk01 | cg | ssor | 28 | 28 | 0 | 0 | 4.53e-09 | 4.53e-09 |
 | bcsstk01 | cg | ic0 | 18 | 18 | 0 | 0 | 8.90e-10 | 8.91e-10 |
 | bcsstk01 | minres | none | 113 | 118 | 0 | 0 | 3.63e-03 | 2.22e-03 |
-| bcsstk01 | bicgstab | none | 480 | 480 | 480 | 480 | 4.56e-05 | 2.89e-06 |
-| bcsstk01 | gmres | none | 9001 | 9454 | 0 | 0 | 9.38e-09 | 9.98e-09 |
+| bcsstk01 | bicgstab | none | 668 | 535 | 0 | 0 | 7.22e-09 | 8.70e-09 |
+| bcsstk01 | gmres | none | 900 | 900 | 30 | 30 | 9.11e-03 | 9.15e-03 |
 | bcsstk01 | bicgstab | jacobi | 68 | 58 | 0 | 0 | 3.63e-09 | 3.65e-09 |
 | bcsstk01 | gmres | jacobi | 326 | 326 | 0 | 0 | 8.22e-09 | 8.22e-09 |
 | bcsstk01 | bicgstab | ilu0 | 14 | 14 | 0 | 0 | 4.14e-09 | 6.80e-09 |
 | bcsstk01 | gmres | ilu0 | 27 | 27 | 0 | 0 | 1.57e-09 | 1.57e-09 |
+| bcsstk01 | bicgstab | ilut | 35 | 33 | 0 | 0 | 4.92e-09 | 8.52e-09 |
+| bcsstk01 | gmres | ilut | 53 | 53 | 0 | 0 | 1.92e-09 | 1.92e-09 |
 | bcsstk04 | cg | none | 643 | 652 | 0 | 0 | 3.87e-09 | 7.96e-09 |
 | bcsstk04 | cg | jacobi | 85 | 86 | 0 | 0 | 8.92e-09 | 3.22e-09 |
 | bcsstk04 | cg | ssor | 41 | 41 | 0 | 0 | 7.24e-09 | 7.24e-09 |
 | bcsstk04 | cg | ic0 | 35 | 35 | 0 | 0 | 9.89e-09 | 9.88e-09 |
 | bcsstk04 | minres | none | 357 | 358 | 0 | 0 | 2.49e-02 | 2.51e-02 |
-| bcsstk04 | bicgstab | none | 1320 | 1320 | 1320 | 1320 | 4.93e-03 | 4.92e-03 |
-| bcsstk04 | gmres | none | 39600 | 39600 | 1320 | 1320 | 1.21e-03 | 1.21e-03 |
+| bcsstk04 | bicgstab | none | 900 | 900 | 900 | 900 | 3.69e-02 | 2.81e-02 |
+| bcsstk04 | gmres | none | 900 | 900 | 30 | 30 | 1.24e-01 | 1.24e-01 |
 | bcsstk04 | bicgstab | jacobi | 127 | 105 | 0 | 0 | 8.90e-09 | 4.96e-09 |
 | bcsstk04 | gmres | jacobi | 450 | 450 | 0 | 0 | 7.63e-09 | 7.63e-09 |
 | bcsstk04 | bicgstab | ilu0 | 41 | 38 | 0 | 0 | 7.03e-09 | 8.77e-09 |
 | bcsstk04 | gmres | ilu0 | 47 | 47 | 0 | 0 | 1.57e-09 | 1.57e-09 |
+| bcsstk04 | bicgstab | ilut | 44 | 47 | 0 | 0 | 4.73e-09 | 7.47e-09 |
+| bcsstk04 | gmres | ilut | 143 | 143 | 0 | 0 | 5.74e-09 | 5.74e-09 |
 | bcsstk05 | cg | none | 284 | 285 | 0 | 0 | 7.74e-09 | 9.87e-09 |
 | bcsstk05 | cg | jacobi | 138 | 138 | 0 | 0 | 6.99e-09 | 8.49e-09 |
 | bcsstk05 | cg | ssor | 54 | 54 | 0 | 0 | 5.34e-09 | 5.34e-09 |
 | bcsstk05 | cg | ic0 | 38 | 38 | 0 | 0 | 4.46e-09 | 4.46e-09 |
 | bcsstk05 | minres | none | 226 | 228 | 0 | 0 | 7.31e-05 | 7.04e-05 |
 | bcsstk05 | bicgstab | none | 275 | 277 | 0 | 0 | 5.97e-09 | 6.72e-09 |
-| bcsstk05 | gmres | none | 3151 | 3151 | 0 | 0 | 9.99e-09 | 9.98e-09 |
+| bcsstk05 | gmres | none | 900 | 900 | 30 | 30 | 8.08e-04 | 8.08e-04 |
 | bcsstk05 | bicgstab | jacobi | 123 | 121 | 0 | 0 | 7.02e-09 | 5.03e-09 |
 | bcsstk05 | gmres | jacobi | 869 | 869 | 0 | 0 | 4.55e-09 | 4.58e-09 |
 | bcsstk05 | bicgstab | ilu0 | 32 | 32 | 0 | 0 | 1.34e-09 | 2.03e-09 |
 | bcsstk05 | gmres | ilu0 | 62 | 62 | 0 | 0 | 3.55e-09 | 3.55e-09 |
-| nos1 | cg | none | 2370 | 2370 | 2370 | 2370 | 2.56e-02 | 1.06e-02 |
+| bcsstk05 | bicgstab | ilut | 65 | 64 | 0 | 0 | 8.84e-09 | 9.66e-09 |
+| bcsstk05 | gmres | ilut | 278 | 278 | 0 | 0 | 3.72e-09 | 3.72e-09 |
+| nos1 | cg | none | 900 | 900 | 900 | 900 | 3.14e+00 | 7.41e-01 |
 | nos1 | cg | jacobi | 511 | 513 | 0 | 0 | 8.49e-09 | 6.01e-09 |
 | nos1 | cg | ssor | 264 | 259 | 0 | 0 | 2.53e-09 | 4.32e-09 |
 | nos1 | minres | none | 687 | 696 | 0 | 0 | 3.90e-02 | 3.93e-02 |
-| nos1 | bicgstab | none | 2370 | 2370 | 2370 | 2370 | 1.59e-02 | 1.50e-02 |
-| nos1 | gmres | none | 71100 | 71100 | 2370 | 2370 | 1.82e-02 | 1.82e-02 |
-| nos1 | bicgstab | jacobi | 2370 | 1289 | 2370 | 0 | 1.04e-07 | 4.65e-09 |
-| nos1 | gmres | jacobi | 71100 | 71100 | 2370 | 2370 | 5.00e-05 | 5.05e-05 |
-| nos1 | bicgstab | ilu0 | 2370 | 2370 | 2370 | 2370 | 2.40e+00 | 1.03e+00 |
-| nos1 | gmres | ilu0 | 71100 | 71100 | 2370 | 2370 | 1.00e+00 | 8.55e-01 |
-| nos2 | cg | none | 9570 | 9570 | 9570 | 9570 | 1.61e+00 | 5.53e+00 |
-| nos2 | cg | jacobi | 6591 | 6609 | 0 | 0 | 1.16e-07 | 1.26e-07 |
-| nos2 | cg | ssor | 3215 | 2999 | 0 | 0 | 8.44e-08 | 8.02e-08 |
-| nos2 | minres | none | 976 | 993 | 0 | 0 | 1.69e-01 | 1.70e-01 |
-| nos2 | bicgstab | none | 9570 | 9570 | 9570 | 9570 | 1.12e-01 | 1.13e-01 |
-| nos2 | gmres | none | 287100 | 287100 | 9570 | 9570 | 1.15e-01 | 1.15e-01 |
-| nos2 | bicgstab | jacobi | 2225 | 9570 | -10 | 9570 | 3.40e+02 | 8.78e-01 |
-| nos2 | gmres | jacobi | 287100 | 287100 | 9570 | 9570 | 7.57e-02 | 7.48e-02 |
-| nos2 | bicgstab | ilu0 | 9570 | 9570 | 9570 | 9570 | 4.45e+00 | 4.58e+00 |
-| nos2 | gmres | ilu0 | 287100 | 287100 | 9570 | 9570 | 1.54e+01 | 1.54e+01 |
+| nos1 | bicgstab | none | 900 | 900 | 900 | 900 | 5.33e-02 | 4.45e-02 |
+| nos1 | gmres | none | 900 | 900 | 30 | 30 | 2.57e-01 | 2.57e-01 |
+| nos1 | bicgstab | jacobi | 900 | 900 | 900 | 900 | 6.75e-03 | 1.54e-04 |
+| nos1 | gmres | jacobi | 900 | 900 | 30 | 30 | 1.35e-01 | 1.35e-01 |
+| nos1 | bicgstab | ilu0 | 900 | 900 | 900 | 900 | 1.84e+00 | 1.87e+00 |
+| nos1 | gmres | ilu0 | 900 | 900 | 30 | 30 | 8.69e-01 | 8.69e-01 |
+| nos1 | bicgstab | ilut | 742 | 751 | 0 | 0 | 6.93e-09 | 1.22e-09 |
+| nos1 | gmres | ilut | 900 | 900 | 30 | 30 | 5.92e-02 | 6.70e-02 |
+| nos2 | cg | none | 900 | 900 | 900 | 900 | 1.92e+01 | 1.60e+01 |
+| nos2 | cg | jacobi | 900 | 900 | 900 | 900 | 4.40e+00 | 4.48e+00 |
+| nos2 | cg | ssor | 900 | 900 | 900 | 900 | 3.72e+00 | 4.05e+00 |
+| nos2 | minres | none | 900 | 900 | 900 | 900 | 1.76e-01 | 1.78e-01 |
+| nos2 | bicgstab | none | 900 | 900 | 900 | 900 | 3.21e-01 | 2.56e-01 |
+| nos2 | gmres | none | 900 | 900 | 30 | 30 | 4.99e-01 | 4.99e-01 |
+| nos2 | bicgstab | jacobi | 900 | 900 | 900 | 900 | 4.03e-01 | 3.57e-01 |
+| nos2 | gmres | jacobi | 900 | 900 | 30 | 30 | 3.57e-01 | 3.57e-01 |
+| nos2 | bicgstab | ilu0 | 900 | 900 | 900 | 900 | 1.81e+01 | 2.72e+01 |
+| nos2 | gmres | ilu0 | 900 | 900 | 30 | 30 | 1.54e+01 | 1.54e+01 |
+| nos2 | bicgstab | ilut | 900 | 900 | 900 | 900 | 8.68e-01 | 5.43e-01 |
+| nos2 | gmres | ilut | 900 | 900 | 30 | 30 | 2.69e-01 | 2.79e-01 |
 | nos3 | cg | none | 261 | 261 | 0 | 0 | 8.80e-09 | 9.34e-09 |
 | nos3 | cg | jacobi | 230 | 229 | 0 | 0 | 7.36e-09 | 9.36e-09 |
 | nos3 | cg | ssor | 64 | 64 | 0 | 0 | 9.01e-09 | 9.01e-09 |
 | nos3 | cg | ic0 | 49 | 49 | 0 | 0 | 6.89e-09 | 6.89e-09 |
 | nos3 | minres | none | 197 | 197 | 0 | 0 | 7.10e-05 | 7.30e-05 |
 | nos3 | bicgstab | none | 204 | 203 | 0 | 0 | 7.28e-09 | 1.00e-08 |
-| nos3 | gmres | none | 6599 | 6599 | 0 | 0 | 9.98e-09 | 9.98e-09 |
+| nos3 | gmres | none | 900 | 900 | 30 | 30 | 3.52e-03 | 3.52e-03 |
 | nos3 | bicgstab | jacobi | 185 | 170 | 0 | 0 | 6.94e-09 | 9.53e-09 |
-| nos3 | gmres | jacobi | 2652 | 2340 | 0 | 0 | 8.82e-09 | 9.94e-09 |
+| nos3 | gmres | jacobi | 900 | 900 | 30 | 30 | 3.62e-04 | 3.62e-04 |
 | nos3 | bicgstab | ilu0 | 35 | 35 | 0 | 0 | 8.03e-09 | 9.70e-09 |
 | nos3 | gmres | ilu0 | 118 | 118 | 0 | 0 | 4.58e-09 | 4.58e-09 |
 | nos3 | bicgstab | ilut | 60 | 58 | 0 | 0 | 6.30e-09 | 6.70e-09 |
@@ -188,45 +198,47 @@ Downloaded into a cache outside the repository (licence unstated), checked again
 | nos5 | cg | ic0 | 48 | 48 | 0 | 0 | 3.15e-09 | 3.15e-09 |
 | nos5 | minres | none | 333 | 333 | 0 | 0 | 6.89e-05 | 7.18e-05 |
 | nos5 | bicgstab | none | 457 | 404 | 0 | 0 | 9.77e-09 | 8.38e-09 |
-| nos5 | gmres | none | 2556 | 2549 | 0 | 0 | 9.96e-09 | 1.00e-08 |
+| nos5 | gmres | none | 900 | 900 | 30 | 30 | 2.11e-04 | 2.11e-04 |
 | nos5 | bicgstab | jacobi | 231 | 226 | 0 | 0 | 9.38e-09 | 9.12e-09 |
 | nos5 | gmres | jacobi | 569 | 569 | 0 | 0 | 8.71e-09 | 8.71e-09 |
 | nos5 | bicgstab | ilu0 | 35 | 35 | 0 | 0 | 3.17e-09 | 3.17e-09 |
 | nos5 | gmres | ilu0 | 70 | 70 | 0 | 0 | 4.39e-09 | 4.39e-09 |
-| nos6 | cg | none | 1483 | 1511 | 0 | 0 | 9.97e-09 | 9.68e-09 |
+| nos5 | bicgstab | ilut | 108 | 104 | 0 | 0 | 7.73e-09 | 5.84e-09 |
+| nos5 | gmres | ilut | 204 | 204 | 0 | 0 | 9.82e-09 | 9.82e-09 |
+| nos6 | cg | none | 900 | 900 | 900 | 900 | 8.47e-05 | 6.14e-04 |
 | nos6 | cg | jacobi | 104 | 104 | 0 | 0 | 7.97e-09 | 7.97e-09 |
 | nos6 | cg | ssor | 39 | 39 | 0 | 0 | 7.62e-09 | 7.61e-09 |
 | nos6 | cg | ic0 | 31 | 31 | 0 | 0 | 9.00e-09 | 9.00e-09 |
 | nos6 | minres | none | 171 | 182 | 0 | 0 | 3.23e-01 | 3.34e-01 |
-| nos6 | bicgstab | none | 6750 | 6750 | 6750 | 6750 | 4.83e-01 | 7.01e-01 |
-| nos6 | gmres | none | 202500 | 202500 | 6750 | 6750 | 6.96e-02 | 6.96e-02 |
+| nos6 | bicgstab | none | 900 | 900 | 900 | 900 | 1.35e-01 | 8.81e-02 |
+| nos6 | gmres | none | 900 | 900 | 30 | 30 | 8.28e-01 | 8.28e-01 |
 | nos6 | bicgstab | jacobi | 72 | 72 | 0 | 0 | 1.26e-09 | 2.68e-09 |
-| nos6 | gmres | jacobi | 202500 | 202500 | 6750 | 6750 | 3.47e-02 | 3.47e-02 |
+| nos6 | gmres | jacobi | 900 | 900 | 30 | 30 | 3.47e-02 | 3.47e-02 |
 | nos6 | bicgstab | ilu0 | 21 | 21 | 0 | 0 | 3.08e-09 | 3.08e-09 |
 | nos6 | gmres | ilu0 | 51 | 51 | 0 | 0 | 4.67e-09 | 4.67e-09 |
 | nos6 | bicgstab | ilut | 39 | 38 | 0 | 0 | 8.92e-09 | 5.61e-09 |
-| nos6 | gmres | ilut | 4320 | 5068 | 0 | 0 | 9.55e-09 | 9.96e-09 |
-| nos7 | cg | none | 4452 | 4529 | 0 | 0 | 1.83e-08 | 2.01e-08 |
+| nos6 | gmres | ilut | 900 | 900 | 30 | 30 | 1.24e-03 | 1.69e-03 |
+| nos7 | cg | none | 900 | 900 | 900 | 900 | 1.74e+00 | 2.45e-01 |
 | nos7 | cg | jacobi | 97 | 97 | 0 | 0 | 6.71e-09 | 7.08e-09 |
 | nos7 | cg | ssor | 37 | 37 | 0 | 0 | 1.77e-09 | 2.08e-09 |
 | nos7 | cg | ic0 | 30 | 30 | 0 | 0 | 6.90e-09 | 7.09e-09 |
 | nos7 | minres | none | 156 | 159 | 0 | 0 | 5.49e-01 | 5.48e-01 |
-| nos7 | bicgstab | none | 7290 | 7290 | 7290 | 7290 | 8.41e+03 | 1.02e-01 |
-| nos7 | gmres | none | 218700 | 218700 | 7290 | 7290 | 2.00e-02 | 2.62e-02 |
+| nos7 | bicgstab | none | 900 | 900 | 900 | 900 | 2.45e+00 | 1.57e+00 |
+| nos7 | gmres | none | 900 | 900 | 30 | 30 | 5.63e-01 | 5.63e-01 |
 | nos7 | bicgstab | jacobi | 59 | 60 | 0 | 0 | 8.35e-09 | 3.17e-09 |
-| nos7 | gmres | jacobi | 218700 | 218700 | 7290 | 7290 | 1.09e-01 | 1.09e-01 |
+| nos7 | gmres | jacobi | 900 | 900 | 30 | 30 | 1.09e-01 | 1.09e-01 |
 | nos7 | bicgstab | ilu0 | 21 | 21 | 0 | 0 | 7.51e-09 | 8.20e-09 |
 | nos7 | gmres | ilu0 | 48 | 48 | 0 | 0 | 5.69e-09 | 6.08e-09 |
 | nos7 | bicgstab | ilut | 31 | 31 | 0 | 0 | 1.77e-09 | 1.70e-09 |
 | nos7 | gmres | ilut | 145 | 145 | 0 | 0 | 3.96e-09 | 5.78e-09 |
-| west0067 | bicgstab | none | 105 | 670 | -10 | 670 | 1.93e+01 | 1.42e+01 |
-| west0067 | gmres | none | 20100 | 20100 | 670 | 670 | 7.48e-01 | 7.48e-01 |
-| west0479 | bicgstab | none | 185 | 4790 | -10 | 4790 | 8.27e+04 | 1.05e+08 |
-| west0479 | gmres | none | 143700 | 143700 | 4790 | 4790 | 9.69e-01 | 9.69e-01 |
+| west0067 | bicgstab | none | 105 | 900 | -10 | 900 | 1.93e+01 | 1.44e+01 |
+| west0067 | gmres | none | 900 | 900 | 30 | 30 | 7.48e-01 | 7.48e-01 |
+| west0479 | bicgstab | none | 185 | 900 | -10 | 900 | 8.27e+04 | 6.56e+05 |
+| west0479 | gmres | none | 900 | 900 | 30 | 30 | 9.69e-01 | 9.69e-01 |
 | sherman1 | bicgstab | none | 387 | 418 | 0 | 0 | 8.45e-09 | 9.99e-09 |
-| sherman1 | gmres | none | 3629 | 3629 | 0 | 0 | 9.98e-09 | 9.98e-09 |
+| sherman1 | gmres | none | 900 | 900 | 30 | 30 | 4.96e-04 | 4.96e-04 |
 | sherman1 | bicgstab | jacobi | 213 | 199 | 0 | 0 | 3.57e-09 | 3.88e-09 |
-| sherman1 | gmres | jacobi | 1311 | 1308 | 0 | 0 | 9.93e-09 | 9.79e-09 |
+| sherman1 | gmres | jacobi | 900 | 900 | 30 | 30 | 8.68e-07 | 8.68e-07 |
 | sherman1 | bicgstab | ilu0 | 33 | 33 | 0 | 0 | 7.50e-09 | 7.51e-09 |
 | sherman1 | gmres | ilu0 | 61 | 61 | 0 | 0 | 6.61e-09 | 6.61e-09 |
 | sherman1 | bicgstab | ilut | 5 | 5 | 0 | 0 | 4.55e-09 | 4.55e-09 |
@@ -239,24 +251,30 @@ Downloaded into a cache outside the repository (licence unstated), checked again
 | sherman4 | gmres | ilu0 | 38 | 38 | 0 | 0 | 4.19e-09 | 4.19e-09 |
 | sherman4 | bicgstab | ilut | 12 | 12 | 0 | 0 | 7.27e-10 | 7.27e-10 |
 | sherman4 | gmres | ilut | 18 | 18 | 0 | 0 | 1.48e-09 | 1.48e-09 |
-| pores_3 | bicgstab | none | 2302 | 2357 | 0 | 0 | 4.18e-09 | 5.86e-09 |
-| pores_3 | gmres | none | 23387 | 24022 | 0 | 0 | 1.00e-08 | 9.99e-09 |
+| pores_3 | bicgstab | none | 900 | 900 | 900 | 900 | 7.98e-04 | 1.27e-03 |
+| pores_3 | gmres | none | 900 | 900 | 30 | 30 | 2.19e-02 | 2.19e-02 |
 | pores_3 | bicgstab | jacobi | 401 | 379 | 0 | 0 | 8.99e-10 | 9.11e-09 |
-| pores_3 | gmres | jacobi | 159600 | 159600 | 5320 | 5320 | 3.72e-02 | 3.69e-02 |
+| pores_3 | gmres | jacobi | 900 | 900 | 30 | 30 | 3.80e-02 | 3.80e-02 |
 | pores_3 | bicgstab | ilu0 | 21 | 21 | 0 | 0 | 3.36e-10 | 3.36e-10 |
 | pores_3 | gmres | ilu0 | 32 | 32 | 0 | 0 | 2.42e-09 | 2.42e-09 |
-| orsirr_1 | bicgstab | none | 1391 | 1321 | 0 | 0 | 9.82e-09 | 6.45e-09 |
-| orsirr_1 | gmres | none | 3733 | 3965 | 0 | 0 | 9.99e-09 | 9.56e-09 |
+| pores_3 | bicgstab | ilut | 235 | 233 | 0 | 0 | 9.68e-11 | 2.90e-10 |
+| pores_3 | gmres | ilut | 900 | 900 | 30 | 30 | 3.15e-02 | 3.26e-02 |
+| orsirr_1 | bicgstab | none | 900 | 900 | 900 | 900 | 1.65e-05 | 2.02e-05 |
+| orsirr_1 | gmres | none | 900 | 900 | 30 | 30 | 4.21e-03 | 4.22e-03 |
 | orsirr_1 | bicgstab | jacobi | 462 | 459 | 0 | 0 | 9.75e-09 | 8.71e-09 |
 | orsirr_1 | gmres | jacobi | 570 | 570 | 0 | 0 | 4.03e-09 | 4.03e-09 |
 | orsirr_1 | bicgstab | ilu0 | 33 | 33 | 0 | 0 | 3.86e-09 | 3.86e-09 |
 | orsirr_1 | gmres | ilu0 | 63 | 63 | 0 | 0 | 2.59e-09 | 2.59e-09 |
+| orsirr_1 | bicgstab | ilut | 206 | 212 | 0 | 0 | 8.63e-09 | 9.68e-09 |
+| orsirr_1 | gmres | ilut | 289 | 289 | 0 | 0 | 8.67e-09 | 8.67e-09 |
 | orsreg_1 | bicgstab | none | 803 | 389 | 0 | 0 | 3.20e-09 | 8.59e-09 |
 | orsreg_1 | gmres | none | 619 | 619 | 0 | 0 | 9.86e-09 | 9.86e-09 |
 | orsreg_1 | bicgstab | jacobi | 440 | 613 | 0 | 0 | 8.88e-09 | 5.48e-09 |
 | orsreg_1 | gmres | jacobi | 603 | 603 | 0 | 0 | 9.90e-09 | 9.90e-09 |
 | orsreg_1 | bicgstab | ilu0 | 37 | 37 | 0 | 0 | 6.71e-09 | 6.71e-09 |
 | orsreg_1 | gmres | ilu0 | 60 | 60 | 0 | 0 | 9.62e-09 | 9.62e-09 |
+| orsreg_1 | bicgstab | ilut | 214 | 208 | 0 | 0 | 9.09e-09 | 9.65e-09 |
+| orsreg_1 | gmres | ilut | 270 | 270 | 0 | 0 | 9.55e-09 | 9.55e-09 |
 
 | matrix | n | nnz | RCM bandwidth Go / SciPy | RCM profile Go / SciPy | Cholesky nnz, AMD Go / SuiteSparse AMD | LU nnz, AMD-ordered Go / SuperLU MMD(A+Aᵀ) | LU nnz, COLAMD Go / SuperLU COLAMD (natural) |
 |---|---:|---:|---:|---:|---:|---:|---:|
@@ -277,20 +295,8 @@ Downloaded into a cache outside the repository (licence unstated), checked again
 | orsirr_1 | 1030 | 6858 | 122 / 146 | 83795 / 98981 | – | – | 95867 / 96265 (130691) |
 | orsreg_1 | 2205 | 14133 | 102 / 102 | 158465 / 158465 | – | – | 297438 / 305311 (1385578) |
 
-- skipped bcsstk01/bicgstab/ilut: scipy oracle: TypeError("int() argument must be a string, a bytes-like object or a real number, not 'NoneType'")
-- skipped bcsstk01/gmres/ilut: scipy oracle: TypeError("int() argument must be a string, a bytes-like object or a real number, not 'NoneType'")
-- skipped bcsstk04/bicgstab/ilut: scipy oracle: TypeError("int() argument must be a string, a bytes-like object or a real number, not 'NoneType'")
-- skipped bcsstk04/gmres/ilut: scipy oracle: TypeError("int() argument must be a string, a bytes-like object or a real number, not 'NoneType'")
-- skipped bcsstk05/bicgstab/ilut: scipy oracle: TypeError("int() argument must be a string, a bytes-like object or a real number, not 'NoneType'")
-- skipped bcsstk05/gmres/ilut: scipy oracle: TypeError("int() argument must be a string, a bytes-like object or a real number, not 'NoneType'")
 - skipped nos1/cg/ic0: iter: factorisation breakdown: non-positive pivot -1.71553246753246e+08 at row 10
-- skipped nos1/bicgstab/ilut: scipy oracle: TypeError("int() argument must be a string, a bytes-like object or a real number, not 'NoneType'")
-- skipped nos1/gmres/ilut: scipy oracle: TypeError("int() argument must be a string, a bytes-like object or a real number, not 'NoneType'")
 - skipped nos2/cg/ic0: iter: factorisation breakdown: non-positive pivot -1.0979407792207745e+10 at row 10
-- skipped nos2/bicgstab/ilut: scipy oracle: TypeError("int() argument must be a string, a bytes-like object or a real number, not 'NoneType'")
-- skipped nos2/gmres/ilut: scipy oracle: TypeError("int() argument must be a string, a bytes-like object or a real number, not 'NoneType'")
-- skipped nos5/bicgstab/ilut: scipy oracle: TypeError("int() argument must be a string, a bytes-like object or a real number, not 'NoneType'")
-- skipped nos5/gmres/ilut: scipy oracle: TypeError("int() argument must be a string, a bytes-like object or a real number, not 'NoneType'")
 - skipped west0067/bicgstab/jacobi: iter: factorisation breakdown: zero diagonal at 0
 - skipped west0067/gmres/jacobi: iter: factorisation breakdown: zero diagonal at 0
 - skipped west0067/bicgstab/ilu0: iter: factorisation breakdown: missing diagonal at 0
@@ -303,9 +309,3 @@ Downloaded into a cache outside the repository (licence unstated), checked again
 - skipped west0479/gmres/ilu0: iter: factorisation breakdown: missing diagonal at 0
 - skipped west0479/bicgstab/ilut: iter: factorisation breakdown: zero pivot at row 0
 - skipped west0479/gmres/ilut: iter: factorisation breakdown: zero pivot at row 0
-- skipped pores_3/bicgstab/ilut: scipy oracle: TypeError("int() argument must be a string, a bytes-like object or a real number, not 'NoneType'")
-- skipped pores_3/gmres/ilut: scipy oracle: TypeError("int() argument must be a string, a bytes-like object or a real number, not 'NoneType'")
-- skipped orsirr_1/bicgstab/ilut: scipy oracle: TypeError("int() argument must be a string, a bytes-like object or a real number, not 'NoneType'")
-- skipped orsirr_1/gmres/ilut: scipy oracle: TypeError("int() argument must be a string, a bytes-like object or a real number, not 'NoneType'")
-- skipped orsreg_1/bicgstab/ilut: scipy oracle: TypeError("int() argument must be a string, a bytes-like object or a real number, not 'NoneType'")
-- skipped orsreg_1/gmres/ilut: scipy oracle: TypeError("int() argument must be a string, a bytes-like object or a real number, not 'NoneType'")
