@@ -1,0 +1,2 @@
+go test fuzz v1
+[]byte("%%MatrixMarket matrix coordinate real general\n2 2 1\n1 1 1\n2 2 2\n")

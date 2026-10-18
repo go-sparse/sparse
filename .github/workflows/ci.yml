@@ -1,0 +1,142 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+# The fleet's CI shape (go-numerics/special): a 100% statement-coverage gate
+# with -race on three operating systems, native amd64/arm64, the other
+# 64-bit architectures and 32-bit arm under qemu (386 natively), every
+# GOOS/GOARCH pair compiling the tests, and govulncheck.
+#
+# The SciPy comparison runs from the committed fixture
+# (internal/conformance/testdata/oracle.json): no Python and no network are
+# needed here. Regenerate it with `go run ./cmd/genfixtures`.
+jobs:
+  test:
+    name: test (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version: 1.27.2
+      - run: go version
+      - run: gofmt -l .
+        shell: bash
+      - run: go vet ./...
+      - run: go build ./...
+      - name: Test + 100% coverage gate
+        shell: bash
+        run: |
+          COVERPKG=$(go list ./... | paste -sd, -)
+          go test -race -coverpkg="$COVERPKG" -coverprofile=cover.out ./...
+          go tool cover -func=cover.out | tail -n 40
+          go tool cover -func=cover.out | tail -1 | grep -q '100.0%' || {
+            echo "::error::coverage below 100%"; exit 1; }
+
+  arch-native:
+    name: arch ${{ matrix.label }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { os: ubuntu-latest,    label: amd64 }
+          - { os: ubuntu-24.04-arm, label: arm64 }
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version: 1.27.2
+      - run: go env GOARCH
+      - name: Vet + build + run
+        run: |
+          go vet ./...
+          go build ./...
+          go test ./...
+
+  arch-qemu:
+    name: arch ${{ matrix.goarch }} (qemu)
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { goarch: riscv64, qemu: qemu-riscv64-static }
+          - { goarch: loong64, qemu: qemu-loongarch64-static }
+          - { goarch: ppc64le, qemu: qemu-ppc64le-static }
+          - { goarch: s390x,   qemu: qemu-s390x-static }
+          # 32-bit: int is 32 bits.
+          - { goarch: arm,     qemu: qemu-arm-static }
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version: 1.27.2
+      - run: sudo apt-get update && sudo apt-get install -y qemu-user-static
+      - name: Vet + test under qemu (${{ matrix.goarch }})
+        run: |
+          GOOS=linux GOARCH=${{ matrix.goarch }} go vet ./...
+          GOARCH=${{ matrix.goarch }} go test -timeout 30m -exec=${{ matrix.qemu }} ./...
+
+  # 386 runs natively on the amd64 runner (the kernel executes 32-bit x86
+  # binaries), not under qemu-i386.
+  arch-386:
+    name: arch 386
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version: 1.27.2
+      - name: Vet + test (GOARCH=386)
+        run: |
+          GOARCH=386 go vet ./...
+          GOARCH=386 go test ./...
+
+  # Every GOOS/GOARCH pair Go supports must at least compile the tests.
+  cross-compile:
+    name: compile tests on every target
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version: 1.27.2
+      - name: go test -c (go vet on android/ios) for each go tool dist list pair
+        run: |
+          fail=0
+          for t in $(go tool dist list); do
+            os=${t%/*}; arch=${t#*/}
+            case $os in android|ios) mode="vet" ;; *) mode="test" ;; esac
+            for p in $(go list ./...); do
+              # a main package on android/ios needs the cgo runtime to link
+              if [ $mode = vet ] && [ "$(go list -f '{{.Name}}' "$p")" = main ]; then continue; fi
+              if [ $mode = test ]; then
+                out=$(CGO_ENABLED=0 GOOS=$os GOARCH=$arch go test -c -o /dev/null "$p" 2>&1) || { echo "::error::$t $p: $out"; fail=1; }
+              else
+                out=$(CGO_ENABLED=1 CC=false GOOS=$os GOARCH=$arch go vet "$p" 2>&1) || { echo "::error::$t $p: $out"; fail=1; }
+              fi
+            done
+          done
+          exit $fail
+
+  govulncheck:
+    name: govulncheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version: 1.27.2
+      - run: go run golang.org/x/vuln/cmd/govulncheck@latest ./...
