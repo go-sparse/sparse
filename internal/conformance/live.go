@@ -16,6 +16,9 @@ type LiveReport struct {
 	Orders []OrderRow
 }
 
+// LiveMaxIter bounds the iterations of a live (report-only) run.
+const LiveMaxIter = 900
+
 // RunLive compares Go and the oracle matrix by matrix, skipping (with a
 // note) any case that cannot be set up, such as an IC(0) breakdown or a
 // singular matrix for SuperLU.
@@ -23,6 +26,12 @@ func RunLive(s *scipy.Session, matrices []Named) LiveReport {
 	var rep LiveReport
 	for _, m := range matrices {
 		for _, c := range DefaultSolveCases([]Named{m}) {
+			// ill-conditioned matrices would run SciPy for minutes at the
+			// default limits (10n iterations; GMRES cycles of 30): cap them
+			c.Case.MaxIter = LiveMaxIter
+			if c.Case.Solver == "gmres" {
+				c.Case.MaxIter = LiveMaxIter / 30
+			}
 			label := fmt.Sprintf("%s/%s/%s", m.Name, c.Case.Solver, c.Case.Precond)
 			_, sp, err := build(m.A, PrecondSpec(c.Case.Precond))
 			if err != nil {
@@ -30,7 +39,7 @@ func RunLive(s *scipy.Session, matrices []Named) LiveReport {
 				continue
 			}
 			resp, err := s.Solve(scipy.SolveRequest{Solver: c.Case.Solver, A: scipy.FromCSR(m.A), B: RHS(m.A.Rows),
-				M: sp, RTol: c.Case.RTol, Restart: c.Case.Restart})
+				M: sp, RTol: c.Case.RTol, Restart: c.Case.Restart, MaxIter: iterPtr(c.Case.MaxIter)})
 			if err != nil {
 				rep.Notes = append(rep.Notes, "skipped "+label+": "+err.Error())
 				continue

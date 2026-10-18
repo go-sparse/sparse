@@ -126,6 +126,15 @@ type SolveCase struct {
 	Precond string  `json:"precond"`
 	RTol    float64 `json:"rtol"`
 	Restart int     `json:"restart,omitempty"`
+	MaxIter int     `json:"maxiter,omitempty"` // 0: the solver default
+}
+
+// iterPtr is SciPy's maxiter argument: null for the default.
+func iterPtr(n int) *int {
+	if n == 0 {
+		return nil
+	}
+	return &n
 }
 
 // SolveFix is a SolveCase with SciPy's answer.
@@ -148,7 +157,7 @@ func RunGo(n Named, c SolveCase) (info, iters int, res float64, err error) {
 		return 0, 0, 0, err
 	}
 	b := RHS(n.A.Rows)
-	r, _ := goSolvers[c.Solver](n.A, b, &iter.Options{RTol: c.RTol, Restart: c.Restart, M: m}) // square system, matching rhs
+	r, _ := goSolvers[c.Solver](n.A, b, &iter.Options{RTol: c.RTol, Restart: c.Restart, MaxIter: c.MaxIter, M: m}) // square system, matching rhs
 	return r.Info, r.Iterations, iter.TrueResidual(n.A, b, r.X), nil
 }
 
@@ -197,7 +206,7 @@ func Generate(s *scipy.Session, matrices []Named) ([]SolveFix, error) {
 			return nil, fmt.Errorf("%s/%s/%s: %w", c.Name, c.Case.Solver, c.Case.Precond, err)
 		}
 		resp, err := s.Solve(scipy.SolveRequest{Solver: c.Case.Solver, A: scipy.FromCSR(n.A), B: RHS(n.A.Rows),
-			M: sp, RTol: c.Case.RTol, Restart: c.Case.Restart})
+			M: sp, RTol: c.Case.RTol, Restart: c.Case.Restart, MaxIter: iterPtr(c.Case.MaxIter)})
 		if err != nil {
 			return nil, fmt.Errorf("%s/%s/%s: %w", c.Name, c.Case.Solver, c.Case.Precond, err)
 		}
