@@ -21,29 +21,35 @@ func CG(a Operator, b []float64, o *Options) (Result, error) {
 	}
 	psolve := o.psolve()
 	r := make([]float64, n)
-	z := make([]float64, n)
 	p := make([]float64, n)
 	q := make([]float64, n)
+	// Without a preconditioner z is r itself (scipy's identity psolve
+	// returns its argument): no copy per iteration.
+	z := r
+	if o.M != nil {
+		z = make([]float64, n)
+	}
 	residual(a, r, b, x)
 	var rhoPrev float64
+	rr := dot(r, r) // r·r, kept up to date by the fused update below
 	for it := 0; it < maxiter; it++ {
-		if nrm2(r) < atol {
+		if sqrtNorm(rr, r) < atol {
 			return Result{X: x, Iterations: it}, nil
 		}
-		psolve(z, r)
-		rho := dot(r, z)
+		rho := rr // z is r
+		if o.M != nil {
+			psolve(z, r)
+			rho = dot(r, z)
+		}
 		if it > 0 {
-			beta := rho / rhoPrev
-			for i := range p {
-				p[i] = z[i] + beta*p[i]
-			}
+			xpby(z, rho/rhoPrev, p)
 		} else {
 			copy(p, z)
 		}
 		a.MulVec(q, p)
 		alpha := rho / dot(p, q)
 		axpy(alpha, p, x)
-		axpy(-alpha, q, r)
+		rr = axpyDot(-alpha, q, r, r) // r -= alpha q, and the next r·r in the same pass
 		rhoPrev = rho
 		if o.Callback != nil {
 			o.Callback(x)
@@ -198,15 +204,28 @@ func GMRES(a Operator, b []float64, o *Options) (Result, error) {
 		breakdown := false
 		col := 0
 		for col = 0; col < restart; col++ {
-			a.MulVec(av, v[col])
-			psolve(w, av)
-			h0 := nrm2(w)
-			for k := 0; k <= col; k++ {
-				t := dot(v[k], w)
-				h[col][k] = t
-				axpy(-t, v[k], w)
+			if o.M == nil {
+				a.MulVec(w, v[col]) // identity preconditioner: no copy
+			} else {
+				a.MulVec(av, v[col])
+				psolve(w, av)
 			}
-			h1 := nrm2(w)
+			h0 := nrm2(w)
+			// Modified Gram-Schmidt, each update fused with the next
+			// coefficient (and the last one with the norm): one pass per
+			// basis vector instead of two, the same operations in the same
+			// order.
+			t := dot(v[0], w)
+			var ww float64
+			for k := 0; k <= col; k++ {
+				h[col][k] = t
+				if k < col {
+					t = axpyDot(-t, v[k], w, v[k+1])
+				} else {
+					ww = axpyDot(-t, v[k], w, w)
+				}
+			}
+			h1 := sqrtNorm(ww, w)
 			h[col][col+1] = h1
 			copy(v[col+1], w)
 			if h1 <= eps*h0 {
@@ -224,7 +243,7 @@ func GMRES(a Operator, b []float64, o *Options) (Result, error) {
 			c, sg, mag := givens(h[col][col], h[col][col+1])
 			cs[col], sn[col] = c, sg
 			h[col][col], h[col][col+1] = mag, 0
-			t := -sg * s[col]
+			t = -sg * s[col]
 			s[col], s[col+1] = c*s[col], t
 			presid = math.Abs(t)
 			inner++

@@ -514,8 +514,8 @@ func Write[T sparse.Scalar](w io.Writer, a *sparse.CSR[T], o Options) error {
 	if o.Layout == Coordinate {
 		for i := 0; i < a.Rows; i++ {
 			for p := a.Indptr[i]; p < a.Indptr[i+1]; p++ {
-				if keep(i, a.Indices[p]) {
-					ents = append(ents, entry{i, a.Indices[p], a.Data[p]})
+				if j := int(a.Indices[p]); keep(i, j) {
+					ents = append(ents, entry{i, j, a.Data[p]})
 				}
 			}
 		}
@@ -575,7 +575,7 @@ func checkSymmetry[T sparse.Scalar](a *sparse.CSR[T], s Symmetry) error {
 	}
 	for i := 0; i < a.Rows; i++ {
 		for p := a.Indptr[i]; p < a.Indptr[i+1]; p++ {
-			j := a.Indices[p]
+			j := int(a.Indices[p])
 			v, t := toComplex(a.Data[p]), toComplex(a.At(j, i))
 			var want complex128
 			switch s {

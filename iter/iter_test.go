@@ -230,7 +230,7 @@ func TestBreakdowns(t *testing.T) {
 		t.Fatal("ic0 indefinite")
 	}
 	empty, _ := sparse.FromDense(2, 2, []float64{1, 0, 0, 0})
-	empty.Indptr, empty.Indices, empty.Data = []int{0, 1, 1}, []int{0}, []float64{1}
+	empty.Indptr, empty.Indices, empty.Data = []int{0, 1, 1}, []int32{0}, []float64{1}
 	if _, err := NewIC0(empty); !errors.Is(err, ErrBreakdown) {
 		t.Fatal("ic0 empty row")
 	}
@@ -527,7 +527,7 @@ func TestIncompleteFactorsMatchOnPattern(t *testing.T) {
 	lu, _ := sparse.Mul(l1, ilu.U())
 	for i := 0; i < a.Rows; i++ {
 		for p := a.Indptr[i]; p < a.Indptr[i+1]; p++ {
-			j := a.Indices[p]
+			j := int(a.Indices[p])
 			if math.Abs(lu.At(i, j)-a.At(i, j)) > 1e-12 {
 				t.Fatalf("ILU0 differs from A at (%d,%d)", i, j)
 			}

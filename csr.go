@@ -3,22 +3,30 @@ package sparse
 import (
 	"fmt"
 	"math"
+	"slices"
 	"sort"
 )
 
 // CSR is a compressed-sparse-row matrix. Row i occupies
 // Indices[Indptr[i]:Indptr[i+1]] / Data[...] with strictly increasing
 // column indices (canonical form, as produced by every constructor here).
+// Column indices are int32, as scipy.sparse stores them whenever they fit:
+// the products stream one index per stored value, so their width is a
+// third of the memory traffic (dimensions are limited to MaxDim).
 type CSR[T Scalar] struct {
 	Rows, Cols int
 	Indptr     []int
-	Indices    []int
+	Indices    []int32
 	Data       []T
 }
 
+// MaxDim is the largest number of rows or columns of a CSR or CSC matrix:
+// minor indices are stored as int32.
+const MaxDim = math.MaxInt32
+
 // NewCSR wraps the given arrays (without copying) after validating that they
 // form a canonical CSR matrix.
-func NewCSR[T Scalar](rows, cols int, indptr, indices []int, data []T) (*CSR[T], error) {
+func NewCSR[T Scalar](rows, cols int, indptr []int, indices []int32, data []T) (*CSR[T], error) {
 	a := &CSR[T]{Rows: rows, Cols: cols, Indptr: indptr, Indices: indices, Data: data}
 	if err := a.Validate(); err != nil {
 		return nil, err
@@ -31,9 +39,12 @@ func (a *CSR[T]) Validate() error {
 	return validate(a.Rows, a.Cols, a.Indptr, a.Indices, len(a.Data))
 }
 
-func validate(nmajor, nminor int, ptr, ind []int, ndata int) error {
+func validate(nmajor, nminor int, ptr []int, ind []int32, ndata int) error {
 	if nmajor < 0 || nminor < 0 {
 		return fmt.Errorf("%w: negative dimension", ErrFormat)
+	}
+	if nmajor > MaxDim || nminor > MaxDim {
+		return fmt.Errorf("%w: dimension above %d", ErrFormat, MaxDim)
 	}
 	if len(ptr) != nmajor+1 || ptr[0] != 0 {
 		return fmt.Errorf("%w: indptr must have length %d and start at 0", ErrFormat, nmajor+1)
@@ -46,7 +57,7 @@ func validate(nmajor, nminor int, ptr, ind []int, ndata int) error {
 			return fmt.Errorf("%w: indptr decreases at %d", ErrFormat, i)
 		}
 		for p := ptr[i]; p < ptr[i+1]; p++ {
-			if ind[p] < 0 || ind[p] >= nminor {
+			if ind[p] < 0 || int(ind[p]) >= nminor {
 				return fmt.Errorf("%w: index %d in slice %d", ErrIndex, ind[p], i)
 			}
 			if p > ptr[i] && ind[p] <= ind[p-1] {
@@ -55,6 +66,12 @@ func validate(nmajor, nminor int, ptr, ind []int, ndata int) error {
 		}
 	}
 	return nil
+}
+
+// searchIndex is sort.SearchInts for int32 indices: the first position
+// whose index is >= j.
+func searchIndex(ind []int32, j int) int {
+	return sort.Search(len(ind), func(k int) bool { return int(ind[k]) >= j })
 }
 
 // Dims returns the number of rows and columns.
@@ -67,15 +84,15 @@ func (a *CSR[T]) NNZ() int { return len(a.Data) }
 func (a *CSR[T]) Clone() *CSR[T] {
 	return &CSR[T]{Rows: a.Rows, Cols: a.Cols,
 		Indptr:  append([]int(nil), a.Indptr...),
-		Indices: append([]int(nil), a.Indices...),
+		Indices: append([]int32(nil), a.Indices...),
 		Data:    append([]T(nil), a.Data...)}
 }
 
 // At returns A[i, j] (zero when not stored) by binary search.
 func (a *CSR[T]) At(i, j int) T {
 	lo, hi := a.Indptr[i], a.Indptr[i+1]
-	p := lo + sort.SearchInts(a.Indices[lo:hi], j)
-	if p < hi && a.Indices[p] == j {
+	p := lo + searchIndex(a.Indices[lo:hi], j)
+	if p < hi && int(a.Indices[p]) == j {
 		return a.Data[p]
 	}
 	var z T
@@ -87,14 +104,17 @@ func (a *CSR[T]) MulVec(dst, x []T) {
 	if len(x) != a.Cols || len(dst) != a.Rows {
 		panic(shapeErr("MulVec", [2]int{a.Rows, a.Cols}, [2]int{len(dst), len(x)}))
 	}
-	ptr, ind, d := a.Indptr, a.Indices, a.Data
+	ptr := a.Indptr[:len(dst)+1]
+	nnz := ptr[len(dst)]
+	ind, d := a.Indices[:nnz], a.Data[:nnz]
+	// One walk over the nonzeros, row by row, summing in storage order (as
+	// scipy's csr_matvec does); no per-row re-slicing.
+	k := ptr[0]
 	for i := range dst {
+		hi := ptr[i+1]
 		var s T
-		lo, hi := ptr[i], ptr[i+1]
-		cols := ind[lo:hi]
-		vals := d[lo:hi:hi]
-		for k, j := range cols {
-			s += vals[k] * x[j]
+		for ; k < hi; k++ {
+			s += d[k] * x[ind[k]]
 		}
 		dst[i] = s
 	}
@@ -124,7 +144,8 @@ func (a *CSR[T]) MulDense(dst, b []T, k int) {
 		row := dst[i*k : (i+1)*k]
 		for p := a.Indptr[i]; p < a.Indptr[i+1]; p++ {
 			v := a.Data[p]
-			src := b[a.Indices[p]*k : (a.Indices[p]+1)*k]
+			j := int(a.Indices[p])
+			src := b[j*k : (j+1)*k]
 			for c := range row {
 				row[c] += v * src[c]
 			}
@@ -160,7 +181,7 @@ func (a *CSR[T]) H() *CSR[T] {
 
 // transposeCompressed swaps the major and minor dimensions of a compressed
 // structure; rows come out sorted because the input is walked in order.
-func transposeCompressed[T Scalar](nmajor, nminor int, ptr, ind []int, d []T) ([]int, []int, []T) {
+func transposeCompressed[T Scalar](nmajor, nminor int, ptr []int, ind []int32, d []T) ([]int, []int32, []T) {
 	p2 := make([]int, nminor+1)
 	for _, j := range ind {
 		p2[j+1]++
@@ -169,13 +190,13 @@ func transposeCompressed[T Scalar](nmajor, nminor int, ptr, ind []int, d []T) ([
 		p2[j+1] += p2[j]
 	}
 	pos := append([]int(nil), p2[:nminor]...)
-	i2 := make([]int, len(ind))
+	i2 := make([]int32, len(ind))
 	d2 := make([]T, len(ind))
 	for i := 0; i < nmajor; i++ {
 		for p := ptr[i]; p < ptr[i+1]; p++ {
 			q := pos[ind[p]]
 			pos[ind[p]]++
-			i2[q] = i
+			i2[q] = int32(i)
 			d2[q] = d[p]
 		}
 	}
@@ -185,8 +206,11 @@ func transposeCompressed[T Scalar](nmajor, nminor int, ptr, ind []int, d []T) ([
 // ToCOO converts to coordinate format.
 func (a *CSR[T]) ToCOO() *COO[T] {
 	c := &COO[T]{Rows: a.Rows, Cols: a.Cols,
-		I: make([]int, len(a.Data)), J: append([]int(nil), a.Indices...),
+		I: make([]int, len(a.Data)), J: make([]int, len(a.Data)),
 		V: append([]T(nil), a.Data...)}
+	for p, j := range a.Indices {
+		c.J[p] = int(j)
+	}
 	for i := 0; i < a.Rows; i++ {
 		for p := a.Indptr[i]; p < a.Indptr[i+1]; p++ {
 			c.I[p] = i
@@ -200,7 +224,7 @@ func (a *CSR[T]) Dense() []T {
 	out := make([]T, a.Rows*a.Cols)
 	for i := 0; i < a.Rows; i++ {
 		for p := a.Indptr[i]; p < a.Indptr[i+1]; p++ {
-			out[i*a.Cols+a.Indices[p]] = a.Data[p]
+			out[i*a.Cols+int(a.Indices[p])] = a.Data[p]
 		}
 	}
 	return out
@@ -209,7 +233,7 @@ func (a *CSR[T]) Dense() []T {
 // FromDense builds a CSR matrix from a row-major dense slice, dropping zeros.
 func FromDense[T Scalar](rows, cols int, d []T) (*CSR[T], error) {
 	// rows*cols is checked without overflowing (32-bit ints, hostile sizes)
-	if rows < 0 || cols < 0 || (cols != 0 && rows > math.MaxInt/cols) || len(d) != rows*cols {
+	if rows < 0 || cols < 0 || rows > MaxDim || cols > MaxDim || (cols != 0 && rows > math.MaxInt/cols) || len(d) != rows*cols {
 		return nil, shapeErr("FromDense", [2]int{rows, cols}, len(d))
 	}
 	a := &CSR[T]{Rows: rows, Cols: cols, Indptr: make([]int, rows+1)}
@@ -217,7 +241,7 @@ func FromDense[T Scalar](rows, cols int, d []T) (*CSR[T], error) {
 	for i := 0; i < rows; i++ {
 		for j := 0; j < cols; j++ {
 			if v := d[i*cols+j]; v != z {
-				a.Indices = append(a.Indices, j)
+				a.Indices = append(a.Indices, int32(j))
 				a.Data = append(a.Data, v)
 			}
 		}
@@ -285,7 +309,7 @@ func Axpby[T Scalar](alpha T, a *CSR[T], beta T, b *CSR[T]) (*CSR[T], error) {
 		return nil, shapeErr("Axpby", [2]int{a.Rows, a.Cols}, [2]int{b.Rows, b.Cols})
 	}
 	c := &CSR[T]{Rows: a.Rows, Cols: a.Cols, Indptr: make([]int, a.Rows+1),
-		Indices: make([]int, 0, len(a.Data)+len(b.Data)),
+		Indices: make([]int32, 0, len(a.Data)+len(b.Data)),
 		Data:    make([]T, 0, len(a.Data)+len(b.Data))}
 	for i := 0; i < a.Rows; i++ {
 		p, pe := a.Indptr[i], a.Indptr[i+1]
@@ -334,7 +358,7 @@ func Mul[T Scalar](a, b *CSR[T]) (*CSR[T], error) {
 	for j := range mark {
 		mark[j] = -1
 	}
-	var cols []int
+	var cols []int32
 	for i := 0; i < a.Rows; i++ {
 		cols = cols[:0]
 		for p := a.Indptr[i]; p < a.Indptr[i+1]; p++ {
@@ -350,7 +374,7 @@ func Mul[T Scalar](a, b *CSR[T]) (*CSR[T], error) {
 				acc[j] += av * b.Data[q]
 			}
 		}
-		sort.Ints(cols)
+		slices.Sort(cols)
 		for _, j := range cols {
 			c.Indices = append(c.Indices, j)
 			c.Data = append(c.Data, acc[j])
@@ -389,7 +413,7 @@ func (a *CSR[T]) filter(keep func(i, j int) bool) *CSR[T] {
 	c := &CSR[T]{Rows: a.Rows, Cols: a.Cols, Indptr: make([]int, a.Rows+1)}
 	for i := 0; i < a.Rows; i++ {
 		for p := a.Indptr[i]; p < a.Indptr[i+1]; p++ {
-			if keep(i, a.Indices[p]) {
+			if keep(i, int(a.Indices[p])) {
 				c.Indices = append(c.Indices, a.Indices[p])
 				c.Data = append(c.Data, a.Data[p])
 			}
@@ -429,7 +453,7 @@ func (a *CSR[T]) Permute(p, q []int) (*CSR[T], error) {
 		}
 		sort.Slice(row, func(x, y int) bool { return row[x].j < row[y].j })
 		for _, e := range row {
-			c.Indices = append(c.Indices, e.j)
+			c.Indices = append(c.Indices, int32(e.j))
 			c.Data = append(c.Data, e.v)
 		}
 		c.Indptr[i+1] = len(c.Data)
@@ -444,7 +468,7 @@ func (a *CSR[T]) IsSymmetric(tol float64) bool {
 	}
 	for i := 0; i < a.Rows; i++ {
 		for p := a.Indptr[i]; p < a.Indptr[i+1]; p++ {
-			if abs(a.Data[p]-a.At(a.Indices[p], i)) > tol {
+			if abs(a.Data[p]-a.At(int(a.Indices[p]), i)) > tol {
 				return false
 			}
 		}
@@ -490,11 +514,11 @@ func (a *CSR[T]) NormFro() float64 {
 
 // Eye returns the n x n identity.
 func Eye[T Scalar](n int) *CSR[T] {
-	a := &CSR[T]{Rows: n, Cols: n, Indptr: make([]int, n+1), Indices: make([]int, n), Data: make([]T, n)}
+	a := &CSR[T]{Rows: n, Cols: n, Indptr: make([]int, n+1), Indices: make([]int32, n), Data: make([]T, n)}
 	one := fromReal[T](1)
 	for i := 0; i < n; i++ {
 		a.Indptr[i+1] = i + 1
-		a.Indices[i] = i
+		a.Indices[i] = int32(i)
 		a.Data[i] = one
 	}
 	return a

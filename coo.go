@@ -52,7 +52,7 @@ func (a *COO[T]) Validate() error {
 // compress turns coordinate triplets into a compressed structure with major
 // dimension nmajor, column (minor) indices strictly increasing inside each
 // major slice and duplicates summed. It is two stable counting sorts, O(nnz).
-func compress[T Scalar](nmajor, nminor int, maj, min []int, v []T) (ptr, ind []int, data []T) {
+func compress[T Scalar](nmajor, nminor int, maj, min []int, v []T) (ptr []int, ind []int32, data []T) {
 	nnz := len(v)
 	// pass 1: stable sort by minor
 	cnt := make([]int, nminor+1)
@@ -76,11 +76,11 @@ func compress[T Scalar](nmajor, nminor int, maj, min []int, v []T) (ptr, ind []i
 		ptr[i+1] += ptr[i]
 	}
 	pos := append([]int(nil), ptr[:nmajor]...)
-	ind = make([]int, nnz)
+	ind = make([]int32, nnz)
 	data = make([]T, nnz)
 	for _, k := range order {
 		i := maj[k]
-		ind[pos[i]] = min[k]
+		ind[pos[i]] = int32(min[k])
 		data[pos[i]] = v[k]
 		pos[i]++
 	}

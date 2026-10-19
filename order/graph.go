@@ -52,7 +52,7 @@ func symGraph[T sparse.Scalar](a *sparse.CSR[T]) (*graph, error) {
 	coo := sparse.NewCOO[float64](n, n)
 	for i := 0; i < n; i++ {
 		for p := a.Indptr[i]; p < a.Indptr[i+1]; p++ {
-			if j := a.Indices[p]; j != i {
+			if j := int(a.Indices[p]); j != i {
 				coo.I = append(coo.I, i, j)
 				coo.J = append(coo.J, j, i)
 				coo.V = append(coo.V, 1, 1)
@@ -60,7 +60,11 @@ func symGraph[T sparse.Scalar](a *sparse.CSR[T]) (*graph, error) {
 		}
 	}
 	s := coo.ToCSR()
-	return &graph{n: n, ptr: s.Indptr, adj: s.Indices}, nil
+	adj := make([]int, len(s.Indices))
+	for k, j := range s.Indices {
+		adj[k] = int(j)
+	}
+	return &graph{n: n, ptr: s.Indptr, adj: adj}, nil
 }
 
 // isPermutation reports whether p is a permutation of 0..len(p)-1.
