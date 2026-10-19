@@ -397,6 +397,10 @@ func TestValidate(t *testing.T) {
 	if _, err := NewCSC(2, 2, p, i, d); err != nil {
 		t.Fatal(err)
 	}
+	// MaxDim+1 does not fit a 32-bit int: computed at run time it wraps to
+	// a negative dimension there, refused all the same.
+	tooLarge := int64(MaxDim)
+	tooLarge++
 	bad := []struct {
 		name       string
 		rows, cols int
@@ -406,7 +410,7 @@ func TestValidate(t *testing.T) {
 		want       error
 	}{
 		{"negative", -1, 2, []int{0}, nil, nil, ErrFormat},
-		{"too large", MaxDim + 1, 2, []int{0}, nil, nil, ErrFormat}, // refused before indptr is looked at
+		{"too large", int(tooLarge), 2, []int{0}, nil, nil, ErrFormat}, // refused before indptr is looked at
 		{"ptr len", 3, 2, []int{0, 1, 2}, []int32{0, 1}, []float64{1, 2}, ErrFormat},
 		{"ptr start", 2, 2, []int{1, 1, 2}, []int32{0, 1}, []float64{1, 2}, ErrFormat},
 		{"nnz", 2, 2, []int{0, 1, 3}, []int32{0, 1}, []float64{1, 2}, ErrFormat},
