@@ -62,13 +62,19 @@ SuperLU's COLAMD; RCM bandwidth equals SciPy's.
 
 `go run ./cmd/perfbench` measures SpMV, CG and GMRES(30) on 2-D Laplacians of
 1e5 and 1e6 nonzeros against SciPy on one core, interleaved, one at a time,
-and refuses to measure while the host's load average is above 8. The table
-is `docs/perf.md`, measured on 2026-10-19 at load 4–5 (Go time / SciPy time):
+and refuses to measure while the host's load average is above 8. Each batch
+lasts about 200 ms on both sides, after one untimed call: shorter batches,
+each run after waiting on the other process, measured macOS waking the
+process on an efficiency core more than the kernel. The table is
+`docs/perf.md`, measured on 2026-10-20 at load 5 (Go time / SciPy time):
 
 | work | SpMV | CG | GMRES(30) |
 |---|---:|---:|---:|
-| 2-D Laplacian, 1.1e5 nonzeros | 1.05 | **0.84** | **0.75** |
-| 2-D Laplacian, 1.0e6 nonzeros | 1.01 | 1.15 | 1.14 |
+| 2-D Laplacian, 1.1e5 nonzeros | **0.97** | **0.70** | **0.56** |
+| 2-D Laplacian, 1.0e6 nonzeros | **0.98** | **0.89** | **0.82** |
+
+SpMV sums four terms per loop step, still one chain in storage order, so the
+result is bit-identical to SciPy's `csr_matvec` order.
 
 Column indices are `int32`, as in scipy.sparse: SpMV streams one index per
 value, so their width is a third of its memory traffic. Dot products and the
@@ -78,9 +84,6 @@ added there for this package). The Krylov solvers fuse each vector update
 with the dot product that follows it (CG: r −= αq with the next r·r, one
 `AxpyDot`; GMRES: each Gram–Schmidt step with the next coefficient), one pass
 instead of two; without a preconditioner no copy is made.
-
-The 1e6 row above was measured with scalar vector updates (15% behind SciPy,
-memory-bound); `docs/perf.md` has the measurement with the SIMD kernels.
 
 ## Untrusted input
 
