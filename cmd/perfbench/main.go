@@ -62,19 +62,27 @@ type workload struct {
 	reps   int
 }
 
+// Each batch lasts about 200 ms on both sides: between batches each process
+// waits on the other, and macOS may wake it on an efficiency core; a 25 ms
+// batch measured that migration more than the kernel (Go SpMV read 72 µs a
+// product here against 57 µs in a lone test).
 var workloads = []workload{
-	{"lap2d:150:150", "spmv", 400}, {"lap2d:150:150", "cg", 200}, {"lap2d:150:150", "gmres", 10},
-	{"lap2d:450:450", "spmv", 50}, {"lap2d:450:450", "cg", 40}, {"lap2d:450:450", "gmres", 2},
+	{"lap2d:150:150", "spmv", 4000}, {"lap2d:150:150", "cg", 2000}, {"lap2d:150:150", "gmres", 30},
+	{"lap2d:450:450", "spmv", 400}, {"lap2d:450:450", "cg", 250}, {"lap2d:450:450", "gmres", 4},
 }
 
 const restart = 30
 
 func goTime(a conformance.Named, w workload) float64 {
 	b := conformance.RHS(a.A.Rows)
+	// One untimed product first, as the SciPy side does: the batch is
+	// measured warm on both sides, not after the other process has had the
+	// caches and the core.
+	y := make([]float64, len(b))
+	a.A.MulVec(y, b)
 	t0 := time.Now()
 	switch w.what {
 	case "spmv":
-		y := make([]float64, len(b))
 		for i := 0; i < w.reps; i++ {
 			a.A.MulVec(y, b)
 		}
