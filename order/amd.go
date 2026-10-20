@@ -341,7 +341,7 @@ func COLAMD[T sparse.Scalar](a *sparse.CSR[T]) ([]int, error) {
 		id := n + i
 		var vars []int
 		for p := a.Indptr[i]; p < a.Indptr[i+1]; p++ {
-			if j := a.Indices[p]; e.nv[j] > 0 {
+			if j := int(a.Indices[p]); e.nv[j] > 0 {
 				vars = append(vars, j)
 			}
 		}

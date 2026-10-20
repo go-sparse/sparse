@@ -102,6 +102,7 @@ def load(req):
 def timeit(req):
     A, b = store[req["name"]]
     what = req["what"]; reps = req["reps"]
+    y = A @ b  # untimed, as the Go side: both batches are measured warm
     if what == "spmv":
         t0 = time.perf_counter()
         for _ in range(reps):

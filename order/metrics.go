@@ -11,7 +11,7 @@ func Bandwidth[T sparse.Scalar](a *sparse.CSR[T]) int {
 	bw := 0
 	for i := 0; i < a.Rows; i++ {
 		for p := a.Indptr[i]; p < a.Indptr[i+1]; p++ {
-			d := a.Indices[p] - i
+			d := int(a.Indices[p]) - i
 			if d < 0 {
 				d = -d
 			}
@@ -27,7 +27,7 @@ func Profile[T sparse.Scalar](a *sparse.CSR[T]) int {
 	prof := 0
 	for i := 0; i < a.Rows; i++ {
 		if a.Indptr[i] < a.Indptr[i+1] {
-			if first := a.Indices[a.Indptr[i]]; first < i {
+			if first := int(a.Indices[a.Indptr[i]]); first < i {
 				prof += i - first
 			}
 		}

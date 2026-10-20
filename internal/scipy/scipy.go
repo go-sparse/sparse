@@ -35,7 +35,7 @@ type Matrix struct {
 	M       int       `json:"m"`
 	N       int       `json:"n"`
 	Indptr  []int     `json:"indptr"`
-	Indices []int     `json:"indices"`
+	Indices []int32   `json:"indices"`
 	Data    []float64 `json:"data"`
 }
 
@@ -43,7 +43,7 @@ type Matrix struct {
 func FromCSR(a *sparse.CSR[float64]) Matrix {
 	m := Matrix{M: a.Rows, N: a.Cols, Indptr: a.Indptr, Indices: a.Indices, Data: a.Data}
 	if m.Indices == nil { // a nil slice would be JSON null
-		m.Indices = []int{}
+		m.Indices = []int32{}
 	}
 	if m.Data == nil {
 		m.Data = []float64{}

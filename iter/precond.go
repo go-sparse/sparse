@@ -67,7 +67,7 @@ func (s *SSOR) Solve(dst, r []float64) {
 	// (D + ωL) y = r
 	for i := 0; i < n; i++ {
 		t := r[i]
-		for p := a.Indptr[i]; p < a.Indptr[i+1] && a.Indices[p] < i; p++ {
+		for p := a.Indptr[i]; p < a.Indptr[i+1] && int(a.Indices[p]) < i; p++ {
 			t -= w * a.Data[p] * dst[a.Indices[p]]
 		}
 		dst[i] = t / s.diag[i]
@@ -78,7 +78,7 @@ func (s *SSOR) Solve(dst, r []float64) {
 	}
 	for i := n - 1; i >= 0; i-- {
 		t := dst[i]
-		for p := a.Indptr[i+1] - 1; p >= a.Indptr[i] && a.Indices[p] > i; p-- {
+		for p := a.Indptr[i+1] - 1; p >= a.Indptr[i] && int(a.Indices[p]) > i; p-- {
 			t -= w * a.Data[p] * dst[a.Indices[p]]
 		}
 		dst[i] = t / s.diag[i]
@@ -109,7 +109,7 @@ func NewIC0(a *sparse.CSR[float64]) (*IC0, error) {
 	diag := make([]int, n)
 	for i := 0; i < n; i++ {
 		lo, hi := l.Indptr[i], l.Indptr[i+1]
-		if lo == hi || l.Indices[hi-1] != i {
+		if lo == hi || int(l.Indices[hi-1]) != i {
 			return nil, fmt.Errorf("%w: missing diagonal at %d", ErrBreakdown, i)
 		}
 		diag[i] = hi - 1
@@ -169,11 +169,13 @@ func (c *IC0) Solve(dst, r []float64) {
 // (strict part stored), U upper triangular with the diagonal stored first
 // in each row. It is produced by NewILU0 and NewILUT.
 type ILU struct {
-	n      int
-	lp, li []int
-	lx     []float64
-	up, ui []int
-	ux     []float64
+	n  int
+	lp []int
+	li []int32
+	lx []float64
+	up []int
+	ui []int32
+	ux []float64
 }
 
 // L returns the strict lower factor (the unit diagonal is implicit).
@@ -221,7 +223,7 @@ func NewILU0(a *sparse.CSR[float64]) (*ILU, error) {
 		diag[i] = -1
 		for p := lo; p < hi; p++ {
 			pos[w.Indices[p]] = p
-			if w.Indices[p] == i {
+			if int(w.Indices[p]) == i {
 				diag[i] = p
 			}
 		}
@@ -298,7 +300,7 @@ func NewILUT(a *sparse.CSR[float64], droptol float64, lfil int) (*ILU, error) {
 		lower, upper = lower[:0], upper[:0]
 		rn := 0.0
 		for p := a.Indptr[i]; p < a.Indptr[i+1]; p++ {
-			j := a.Indices[p]
+			j := int(a.Indices[p])
 			w[j] = a.Data[p]
 			seen[j] = true
 			rn += a.Data[p] * a.Data[p]
@@ -323,7 +325,7 @@ func NewILUT(a *sparse.CSR[float64], droptol float64, lfil int) (*ILU, error) {
 			m := w[k]
 			lrow = append(lrow, ent{k, m})
 			for q := f.up[k] + 1; q < f.up[k+1]; q++ {
-				j := f.ui[q]
+				j := int(f.ui[q])
 				if !seen[j] {
 					seen[j] = true
 					w[j] = 0
@@ -365,11 +367,11 @@ func NewILUT(a *sparse.CSR[float64], droptol float64, lfil int) (*ILU, error) {
 		}
 		lrow, urow = keepLargest(lrow), keepLargest(urow)
 		for _, e := range lrow {
-			f.li, f.lx = append(f.li, e.j), append(f.lx, e.v)
+			f.li, f.lx = append(f.li, int32(e.j)), append(f.lx, e.v)
 		}
-		f.ui, f.ux = append(f.ui, i), append(f.ux, dv)
+		f.ui, f.ux = append(f.ui, int32(i)), append(f.ux, dv)
 		for _, e := range urow {
-			f.ui, f.ux = append(f.ui, e.j), append(f.ux, e.v)
+			f.ui, f.ux = append(f.ui, int32(e.j)), append(f.ux, e.v)
 		}
 		f.lp[i+1], f.up[i+1] = len(f.li), len(f.ui)
 	}

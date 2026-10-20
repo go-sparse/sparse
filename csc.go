@@ -5,12 +5,12 @@ package sparse
 type CSC[T Scalar] struct {
 	Rows, Cols int
 	Indptr     []int
-	Indices    []int
+	Indices    []int32
 	Data       []T
 }
 
 // NewCSC wraps the given arrays (without copying) after validation.
-func NewCSC[T Scalar](rows, cols int, indptr, indices []int, data []T) (*CSC[T], error) {
+func NewCSC[T Scalar](rows, cols int, indptr []int, indices []int32, data []T) (*CSC[T], error) {
 	a := &CSC[T]{Rows: rows, Cols: cols, Indptr: indptr, Indices: indices, Data: data}
 	if err := validate(cols, rows, indptr, indices, len(data)); err != nil {
 		return nil, err

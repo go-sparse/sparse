@@ -389,7 +389,7 @@ func TestErrors(t *testing.T) {
 }
 
 func TestValidate(t *testing.T) {
-	good := func() ([]int, []int, []float64) { return []int{0, 1, 2}, []int{0, 1}, []float64{1, 2} }
+	good := func() ([]int, []int32, []float64) { return []int{0, 1, 2}, []int32{0, 1}, []float64{1, 2} }
 	p, i, d := good()
 	if _, err := NewCSR(2, 2, p, i, d); err != nil {
 		t.Fatal(err)
@@ -397,21 +397,27 @@ func TestValidate(t *testing.T) {
 	if _, err := NewCSC(2, 2, p, i, d); err != nil {
 		t.Fatal(err)
 	}
+	// MaxDim+1 does not fit a 32-bit int: computed at run time it wraps to
+	// a negative dimension there, refused all the same.
+	tooLarge := int64(MaxDim)
+	tooLarge++
 	bad := []struct {
 		name       string
 		rows, cols int
-		p, i       []int
+		p          []int
+		i          []int32
 		d          []float64
 		want       error
 	}{
 		{"negative", -1, 2, []int{0}, nil, nil, ErrFormat},
-		{"ptr len", 3, 2, []int{0, 1, 2}, []int{0, 1}, []float64{1, 2}, ErrFormat},
-		{"ptr start", 2, 2, []int{1, 1, 2}, []int{0, 1}, []float64{1, 2}, ErrFormat},
-		{"nnz", 2, 2, []int{0, 1, 3}, []int{0, 1}, []float64{1, 2}, ErrFormat},
-		{"decreasing", 2, 2, []int{0, 2, 1}, []int{0}, []float64{1}, ErrFormat},
-		{"range", 2, 2, []int{0, 1, 2}, []int{0, 2}, []float64{1, 2}, ErrIndex},
-		{"negidx", 2, 2, []int{0, 1, 2}, []int{-1, 1}, []float64{1, 2}, ErrIndex},
-		{"order", 2, 2, []int{0, 2, 2}, []int{1, 0}, []float64{1, 2}, ErrFormat},
+		{"too large", int(tooLarge), 2, []int{0}, nil, nil, ErrFormat}, // refused before indptr is looked at
+		{"ptr len", 3, 2, []int{0, 1, 2}, []int32{0, 1}, []float64{1, 2}, ErrFormat},
+		{"ptr start", 2, 2, []int{1, 1, 2}, []int32{0, 1}, []float64{1, 2}, ErrFormat},
+		{"nnz", 2, 2, []int{0, 1, 3}, []int32{0, 1}, []float64{1, 2}, ErrFormat},
+		{"decreasing", 2, 2, []int{0, 2, 1}, []int32{0}, []float64{1}, ErrFormat},
+		{"range", 2, 2, []int{0, 1, 2}, []int32{0, 2}, []float64{1, 2}, ErrIndex},
+		{"negidx", 2, 2, []int{0, 1, 2}, []int32{-1, 1}, []float64{1, 2}, ErrIndex},
+		{"order", 2, 2, []int{0, 2, 2}, []int32{1, 0}, []float64{1, 2}, ErrFormat},
 	}
 	for _, c := range bad {
 		if _, err := NewCSR(c.rows, c.cols, c.p, c.i, c.d); !errors.Is(err, c.want) {
