@@ -29,7 +29,7 @@ jobs:
       - uses: actions/checkout@v7
       - uses: actions/setup-go@v7
         with:
-          go-version: 1.27.2
+          go-version: 1.27.3
       - run: go version
       - run: gofmt -l .
         shell: bash
@@ -57,7 +57,7 @@ jobs:
       - uses: actions/checkout@v7
       - uses: actions/setup-go@v7
         with:
-          go-version: 1.27.2
+          go-version: 1.27.3
       - run: go env GOARCH
       - name: Vet + build + run
         run: |
@@ -82,7 +82,7 @@ jobs:
       - uses: actions/checkout@v7
       - uses: actions/setup-go@v7
         with:
-          go-version: 1.27.2
+          go-version: 1.27.3
       - run: sudo apt-get update && sudo apt-get install -y qemu-user-static
       - name: Vet + test under qemu (${{ matrix.goarch }})
         run: |
@@ -98,7 +98,7 @@ jobs:
       - uses: actions/checkout@v7
       - uses: actions/setup-go@v7
         with:
-          go-version: 1.27.2
+          go-version: 1.27.3
       - name: Vet + test (GOARCH=386)
         run: |
           GOARCH=386 go vet ./...
@@ -112,7 +112,7 @@ jobs:
       - uses: actions/checkout@v7
       - uses: actions/setup-go@v7
         with:
-          go-version: 1.27.2
+          go-version: 1.27.3
       - name: go test -c (go vet on android/ios) for each go tool dist list pair
         run: |
           fail=0
@@ -138,5 +138,5 @@ jobs:
       - uses: actions/checkout@v7
       - uses: actions/setup-go@v7
         with:
-          go-version: 1.27.2
+          go-version: 1.27.3
       - run: go run golang.org/x/vuln/cmd/govulncheck@latest ./...

@@ -4,6 +4,10 @@ Sparse matrices, fill-reducing orderings and iterative solvers in pure Go
 (`CGO_ENABLED=0`, every architecture the fleet's CI tests). Module
 `github.com/go-sparse/sparse`, BSD-3-Clause.
 
+Released: **v0.1.0**. Documentation: <https://go-sparse.github.io/docs/latest/sparse/>
+· organisation: <https://go-sparse.github.io/> · part of
+[go-scikit](https://go-scikit.github.io/).
+
 ```go
 a := gallery.Laplacian2D(100, 100)           // *sparse.CSR[float64]
 b := make([]float64, a.Rows)
