@@ -1,0 +1,14 @@
+go-sparse/sparse is licensed under the BSD 3-Clause License (see LICENSE).
+
+The package ldl is a Go port of QDLDL v0.1.9 (https://github.com/osqp/qdldl):
+Copyright 2018, Paul Goulart, Bartolomeo Stellato, Goran Banjac, Ian McInerney
+and the OSQP developers, licensed under the Apache License, Version 2.0
+(http://www.apache.org/licenses/LICENSE-2.0). The elimination-tree, numeric
+factorisation and solve routines of ldl/ldl.go follow QDLDL_etree, QDLDL_factor,
+QDLDL_Lsolve, QDLDL_Ltsolve and QDLDL_solve; the test cases in
+ldl/ldl_test.go (TestQDLDLCases) are the data of QDLDL's tests/test_*.h. The
+Apache-2.0 terms apply to those portions; the licence text is
+ldl/LICENSE-APACHE-2.0.
+
+ldl/testdata/qdldl_bench.c is a timing driver written for this repository that
+links against a QDLDL checkout supplied by the user; QDLDL is not vendored.
