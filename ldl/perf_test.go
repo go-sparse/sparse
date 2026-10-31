@@ -122,7 +122,7 @@ func TestPerfVsQDLDL(t *testing.T) {
 
 	var rows strings.Builder
 	rows.WriteString("| matrix (order, nnz(K), nnz(L)) | phase | QDLDL C | Go | Go / C |\n|---|---|---:|---:|---:|\n")
-	for _, g := range []int{10, 30, 60} {
+	for _, g := range []int{6, 12, 20} {
 		a := gridKKT(g)
 		path := filepath.Join(dir, fmt.Sprintf("k%d.bin", g))
 		must(t, writeMatrix(path, a))

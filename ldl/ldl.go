@@ -387,6 +387,7 @@ func (f *Factor) Refactor(a *sparse.CSC[float64]) error {
 			yc := yval[cidx]
 			cols := li[lp[cidx]:tmp]
 			vals := lx[lp[cidx]:tmp]
+			vals = vals[:len(cols)] // lets the compiler drop the bounds check on vals[j]
 			for j, r := range cols {
 				yval[r] -= vals[j] * yc
 			}
