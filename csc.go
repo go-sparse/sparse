@@ -38,6 +38,35 @@ func (a *CSC[T]) At(i, j int) T { return a.view().At(j, i) }
 // MulVec computes dst = A x (column-oriented scatter).
 func (a *CSC[T]) MulVec(dst, x []T) { a.view().MulVecT(dst, x) }
 
+// MulVecSymUpper computes dst = S x for the symmetric matrix S whose upper
+// triangle (diagonal included) is stored in A, as OSQP stores its cost matrix
+// P: entry (i, j) with i < j also acts as (j, i), so the lower half need not be
+// stored. Entries stored below the diagonal are ignored. S is symmetric, not
+// Hermitian: complex entries are not conjugated. A must be square and dst, x
+// must not alias.
+func (a *CSC[T]) MulVecSymUpper(dst, x []T) {
+	if a.Rows != a.Cols || len(x) != a.Cols || len(dst) != a.Rows {
+		panic(shapeErr("MulVecSymUpper", [2]int{a.Rows, a.Cols}, [2]int{len(dst), len(x)}))
+	}
+	clear(dst)
+	ptr := a.Indptr[:len(x)+1]
+	ind, d := a.Indices[:ptr[len(x)]], a.Data[:ptr[len(x)]]
+	for j, xj := range x {
+		var s T
+		for p := ptr[j]; p < ptr[j+1]; p++ {
+			i := int(ind[p])
+			switch {
+			case i < j:
+				dst[i] += d[p] * xj
+				s += d[p] * x[i]
+			case i == j:
+				s += d[p] * xj
+			}
+		}
+		dst[j] += s
+	}
+}
+
 // MulVecT computes dst = Aᵀ x.
 func (a *CSC[T]) MulVecT(dst, x []T) { a.view().MulVec(dst, x) }
 
