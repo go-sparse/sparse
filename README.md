@@ -95,6 +95,22 @@ process on an efficiency core more than the kernel. The table is
 | 2-D Laplacian, 1.1e5 nonzeros | **0.97** | **0.70** | **0.56** |
 | 2-D Laplacian, 1.0e6 nonzeros | **0.98** | **0.89** | **0.82** |
 
+`ldl` against the C reference QDLDL v0.1.9 (`cc -O3`), one core, medians of 9
+interleaved rounds, measured on 2026-10-31 at load 7.7 (darwin/arm64; KKT
+matrices of a 2-D grid Laplacian plus coupling constraints, natural order;
+`TestPerfVsQDLDL`; Go time / C time, the solutions are checked equal):
+
+| order, nnz(K), nnz(L) | numeric factor | solve |
+|---|---:|---:|
+| 72, 204, 1 516 | 1.10 | 1.03 |
+| 288, 840, 22 474 | 1.06 | 0.98 |
+| 800, 2 360, 168 018 | 1.04 | 1.00 |
+
+The solves are on par; the numeric factorisation is 4 to 10% slower than C and
+that is an open defect (the hot loop is a scatter-subtract through `int32`
+row indices, so no go-simd kernel applies, and Go keeps a bounds check on the
+scatter target).
+
 SpMV sums four terms per loop step, still one chain in storage order, so the
 result is bit-identical to SciPy's `csr_matvec` order.
 
