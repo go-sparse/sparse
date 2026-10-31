@@ -25,6 +25,7 @@ fmt.Println(res.Info, res.Iterations)        // 0 = converged, as in SciPy
 | `mtx` | Matrix Market read/write: coordinate and array, real/integer/pattern/complex, general/symmetric/skew-symmetric/hermitian, gzip input | `scipy.io.mmread`, `mmwrite` | `mmread.m` |
 | `order` | `RCM`, `AMD`, `COLAMD`; `Bandwidth`, `Profile`, `CholeskyNNZ`, `QRFillNNZ` | `reverse_cuthill_mckee` | `symrcm`, `amd`, `symamd`, `colamd` |
 | `iter` | `CG`, `GMRES(m)`, `BiCGSTAB`, `MINRES`, `LSQR`, `LSMR`; preconditioners `Jacobi`, `SSOR`, `IC0`, `ILU0`, `ILUT` | `cg`, `gmres`, `bicgstab`, `minres`, `lsqr`, `lsmr` | `pcg`, `gmres`, `bicgstab`, `minres`, `lsqr`, `ichol`, `ilu` |
+| `ldl` | sparse LDLᵀ of quasi-definite symmetric matrices (upper triangle, CSC), a port of [QDLDL](https://github.com/osqp/qdldl) v0.1.9: `Analyze` (elimination tree, column counts), `Factor.Refactor` (numeric phase, redone with new values on the same pattern, no allocation, returns the pivot error and `NumPositive`), `Solve`/`LSolve`/`LTSolve`/`DSolve`, `Permuted` (fill-reducing ordering such as `order.AMD`) | OSQP's `qdldl` | – |
 | `gallery` | Laplacians (1-D/2-D/3-D), convection-diffusion, seeded random sparse matrices | – | `gallery` |
 
 Solvers follow `scipy.sparse.linalg`: the stopping rule is
@@ -33,8 +34,13 @@ Solvers follow `scipy.sparse.linalg`: the stopping rule is
 reached, and negative on breakdown; GMRES uses SciPy's left preconditioning
 and inner-tolerance control. The solvers take any `sparse.LinearOperator`.
 
-Not provided yet: sparse direct factorisations (LU, Cholesky, QR), nested
+Not provided yet: sparse LU, Cholesky and QR factorisations (`ldl` covers
+quasi-definite LDLᵀ only: no pivoting, an exact zero pivot is an error), nested
 dissection, eigensolvers, algebraic multigrid, Rutherford-Boeing I/O.
+
+`(*CSC).MulVecSymUpper(dst, x)` multiplies by a symmetric matrix stored as its
+upper triangle only (OSQP's layout for the cost matrix P), without storing the
+lower half.
 
 ## Orderings: provenance
 
@@ -44,6 +50,18 @@ TOMS 30(3), 2004) on one quotient-graph engine. SuiteSparse AMD and COLAMD
 (BSD-3-Clause) are the reference algorithms; CHOLMOD, UMFPACK and CSparse
 (GPL/LGPL) were not consulted. Tie-breaking differs, so permutations differ;
 quality is compared by fill instead.
+
+`ldl` is a port of QDLDL v0.1.9 (Apache-2.0; see `NOTICE` and
+`ldl/LICENSE-APACHE-2.0`), written from its source. Davis's LDL (LGPL) was not
+consulted. It is tested against QDLDL's own nine test cases, against a dense
+unpivoted LDLᵀ (the values and signs of D) and a dense LU solve from
+[go-ndarray](https://github.com/go-ndarray/ndarray) on random quasi-definite
+KKT matrices, and fuzzed (`ldl.FuzzFactor`, corpus in `ldl/testdata/fuzz`):
+malformed or non-quasi-definite input returns an error (`ErrNotUpper`,
+`ErrEmptyColumn`, `ErrDuplicate`, `ErrZeroPivot`, `ErrNonFinite`, ...), never
+a panic. `TestPerfVsQDLDL` (needs a QDLDL checkout, `QDLDL_SRC`) times the
+numeric phase and the solve against the C reference on one core, interleaved,
+and refuses to run while the load average is above 8.
 
 ## Verification
 

@@ -152,9 +152,7 @@ func (p *Permuted) Solve(x []float64) error {
 	for k, v := range p.perm {
 		w[k] = x[v]
 	}
-	if err := p.f.Solve(w); err != nil {
-		return err
-	}
+	_ = p.f.Solve(w) // cannot fail: factored and length checked above
 	for k, v := range p.perm {
 		x[v] = w[k]
 	}

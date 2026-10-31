@@ -80,7 +80,7 @@ const unknown = -1
 
 // maxLNZ bounds nnz(L) so that 12 bytes per entry (int32 index, float64 value)
 // cannot overflow an int, whatever the platform.
-const maxLNZ = math.MaxInt / 16
+var maxLNZ = math.MaxInt / 16 // a variable so a test can lower it
 
 // Symbolic is the result of the symbolic phase: the elimination tree and the
 // structure of L. It depends on the sparsity pattern of the matrix only and is
