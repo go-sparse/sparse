@@ -14,6 +14,7 @@ import (
 	"time"
 
 	"github.com/go-sparse/sparse"
+	"github.com/go-sparse/sparse/order"
 )
 
 // gridKKT is a KKT matrix with n = g*g primal variables (5-point Laplacian +
@@ -48,6 +49,38 @@ func gridKKT(g int) *sparse.CSC[float64] {
 	}
 	N := 2 * n
 	return &sparse.CSC[float64]{Rows: N, Cols: N, Indptr: ap, Indices: ai, Data: ax}
+}
+
+// permutedGrid applies the AMD permutation of K + Kᵀ to the KKT matrix a and
+// returns the factored Permuted.
+func permutedGrid(tb testing.TB, a *sparse.CSC[float64]) *Permuted {
+	tb.Helper()
+	full := sparse.NewCOO[float64](a.Cols, a.Cols)
+	for j := 0; j < a.Cols; j++ {
+		for p := a.Indptr[j]; p < a.Indptr[j+1]; p++ {
+			i := int(a.Indices[p])
+			if err := full.Append(i, j, 1); err != nil {
+				tb.Fatal(err)
+			}
+			if i != j {
+				if err := full.Append(j, i, 1); err != nil {
+					tb.Fatal(err)
+				}
+			}
+		}
+	}
+	perm, err := order.AMD(full.ToCSR())
+	if err != nil {
+		tb.Fatal(err)
+	}
+	pm, err := NewPermuted(a, perm)
+	if err != nil {
+		tb.Fatal(err)
+	}
+	if err := pm.Refactor(a); err != nil {
+		tb.Fatal(err)
+	}
+	return pm
 }
 
 func writeMatrix(path string, a *sparse.CSC[float64]) error {
@@ -122,12 +155,26 @@ func TestPerfVsQDLDL(t *testing.T) {
 
 	var rows strings.Builder
 	rows.WriteString("| matrix (order, nnz(K), nnz(L)) | phase | QDLDL C | Go | Go / C |\n|---|---|---:|---:|---:|\n")
-	for _, g := range []int{6, 12, 20} {
+	// natural order on the small grids, the AMD permutation applied on both
+	// sides (the C side reads the permuted upper triangle, so both factor the
+	// same pattern) on the larger ones.
+	for _, c := range []struct {
+		g   int
+		amd bool
+	}{{6, false}, {12, false}, {20, false}, {20, true}, {40, true}, {70, true}} {
+		g := c.g
 		a := gridKKT(g)
-		path := filepath.Join(dir, fmt.Sprintf("k%d.bin", g))
+		var f *Factor
+		var err error
+		if c.amd {
+			pm := permutedGrid(t, a)
+			a, f = pm.pa, pm.f // permuted upper triangle: what both sides factor
+		} else {
+			f, err = Factorize(a)
+			must(t, err)
+		}
+		path := filepath.Join(dir, fmt.Sprintf("k%d%v.bin", g, c.amd))
 		must(t, writeMatrix(path, a))
-		f, err := Factorize(a)
-		must(t, err)
 		N := a.Cols
 		b := make([]float64, N)
 		for i := range b {
@@ -168,6 +215,9 @@ func TestPerfVsQDLDL(t *testing.T) {
 			gS = append(gS, float64(time.Since(t0).Nanoseconds())/float64(repsS))
 		}
 		label := fmt.Sprintf("%d, %d, %d", N, a.Indptr[N], f.NNZL())
+		if c.amd {
+			label += ", AMD"
+		}
 		for _, r := range []struct {
 			name string
 			c, g []float64
