@@ -112,8 +112,9 @@ func (s *Symbolic) ColCounts() []int32 { return s.lnz }
 // checkCSC validates the structure of the upper triangle a: square, indptr
 // well formed, indices in range and on or above the diagonal, no duplicates,
 // at least one entry per column. It accepts unsorted columns, as QDLDL does.
-// stamp is scratch of length n.
-func checkCSC(a *sparse.CSC[float64]) (stamp []int32, err error) {
+// The returned stamp is scratch of length n, in the storage of buf when it is
+// large enough.
+func checkCSC(a *sparse.CSC[float64], buf []int32) (stamp []int32, err error) {
 	if a == nil {
 		return nil, fmt.Errorf("%w: nil matrix", ErrDimension)
 	}
@@ -124,7 +125,7 @@ func checkCSC(a *sparse.CSC[float64]) (stamp []int32, err error) {
 	if n < 0 || n > math.MaxInt32-1 {
 		return nil, fmt.Errorf("%w: order %d", ErrOverflow, n)
 	}
-	stamp = make([]int32, n)
+	stamp = zeroed(buf, n)
 	return stamp, checkStructure(a, stamp)
 }
 
@@ -168,20 +169,31 @@ func checkStructure(a *sparse.CSC[float64], stamp []int32) error {
 // L itself is allocated by [Symbolic.NewFactor], so a caller can refuse a
 // factor that is too large by looking at NNZL first.
 func Analyze(a *sparse.CSC[float64]) (*Symbolic, error) {
-	work, err := checkCSC(a)
+	work, err := checkCSC(a, nil)
 	if err != nil {
 		return nil, err
 	}
+	s := new(Symbolic)
+	if err := s.fill(a, work, false); err != nil {
+		return nil, err
+	}
+	return s, nil
+}
+
+// fill is the symbolic phase proper on the already validated upper triangle a,
+// into the storage of s (reused when large enough). With share the pattern of
+// a is referenced instead of copied: the caller guarantees it is never
+// modified. work is scratch of length n.
+func (s *Symbolic) fill(a *sparse.CSC[float64], work []int32, share bool) error {
 	n := a.Cols
 	nnz := a.Indptr[n]
-	s := &Symbolic{
-		n:     n,
-		ap:    append([]int(nil), a.Indptr...),
-		ai:    append([]int32(nil), a.Indices[:nnz]...),
-		etree: make([]int32, n),
-		lnz:   make([]int32, n),
-		lp:    make([]int, n+1),
+	s.n = n
+	if share {
+		s.ap, s.ai = a.Indptr, a.Indices[:nnz]
+	} else {
+		s.ap, s.ai = append(s.ap[:0], a.Indptr...), append(s.ai[:0], a.Indices[:nnz]...)
 	}
+	s.etree, s.lnz, s.lp = grown(s.etree, n), zeroed(s.lnz, n), zeroed(s.lp, n+1)
 	etree, lnz := s.etree, s.lnz
 	for i := range work {
 		work[i] = 0
@@ -204,12 +216,28 @@ func Analyze(a *sparse.CSC[float64]) (*Symbolic, error) {
 	sum := 0
 	for i, c := range lnz {
 		if int(c) > maxLNZ-sum {
-			return nil, fmt.Errorf("%w: nnz(L) above %d", ErrOverflow, maxLNZ)
+			return fmt.Errorf("%w: nnz(L) above %d", ErrOverflow, maxLNZ)
 		}
 		sum += int(c)
 		s.lp[i+1] = sum
 	}
-	return s, nil
+	return nil
+}
+
+// grown returns s with length n, reusing its storage when it is large enough
+// (the contents are unspecified).
+func grown[E any](s []E, n int) []E {
+	if cap(s) >= n {
+		return s[:n]
+	}
+	return make([]E, n)
+}
+
+// zeroed is grown with every element cleared.
+func zeroed[E any](s []E, n int) []E {
+	s = grown(s, n)
+	clear(s)
+	return s
 }
 
 // samePattern reports whether a has exactly the analysed pattern.
@@ -263,19 +291,20 @@ func (s *Symbolic) NewFactor() *Factor {
 	if s == nil {
 		return nil
 	}
+	f := new(Factor)
+	f.reinit(s)
+	return f
+}
+
+// reinit points f at s and sizes its storage for it, reusing what is large
+// enough. f is not factored afterwards.
+func (f *Factor) reinit(s *Symbolic) {
 	nl := s.lp[s.n]
-	return &Factor{
-		sym:   s,
-		li:    make([]int32, nl),
-		lx:    make([]float64, nl),
-		d:     make([]float64, s.n),
-		dinv:  make([]float64, s.n),
-		ymark: make([]bool, s.n),
-		yidx:  make([]int32, s.n),
-		elim:  make([]int32, s.n),
-		next:  make([]int, s.n),
-		yval:  make([]float64, s.n),
-	}
+	f.sym, f.ok, f.npos = s, false, 0
+	f.li, f.lx = grown(f.li, nl), grown(f.lx, nl)
+	f.d, f.dinv = grown(f.d, s.n), grown(f.dinv, s.n)
+	f.ymark, f.yidx, f.elim = grown(f.ymark, s.n), grown(f.yidx, s.n), grown(f.elim, s.n)
+	f.next, f.yval = grown(f.next, s.n), grown(f.yval, s.n)
 }
 
 // Factorize is Analyze followed by NewFactor and Refactor.
@@ -312,17 +341,22 @@ func (f *Factor) NNZL() int { return len(f.li) }
 // not usable until a later Refactor succeeds.
 func (f *Factor) Refactor(a *sparse.CSC[float64]) error {
 	f.ok = false
-	s := f.sym
-	if err := s.samePattern(a); err != nil {
+	if err := f.sym.samePattern(a); err != nil {
 		return err
 	}
+	return f.numeric(a.Data)
+}
+
+// numeric is the numeric phase on the values ax of a matrix known to have the
+// analysed pattern.
+func (f *Factor) numeric(ax []float64) error {
+	s := f.sym
 	n := s.n
 	if n == 0 {
 		f.npos = 0
 		f.ok = true
 		return nil
 	}
-	ax := a.Data
 	lp := s.lp
 	d, dinv := f.d, f.dinv
 	ymark, next, yval := f.ymark, f.next, f.yval
