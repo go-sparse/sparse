@@ -251,7 +251,7 @@ func maxAbs(x []float64) float64 {
 	return m
 }
 
-func must(t *testing.T, err error) {
+func must(t testing.TB, err error) {
 	t.Helper()
 	if err != nil {
 		t.Fatal(err)

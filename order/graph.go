@@ -24,6 +24,7 @@ package order
 import (
 	"errors"
 	"fmt"
+	"slices"
 	"sort"
 
 	"github.com/go-sparse/sparse"
@@ -43,28 +44,92 @@ type graph struct {
 func (g *graph) neighbours(i int) []int { return g.adj[g.ptr[i]:g.ptr[i+1]] }
 func (g *graph) degree(i int) int       { return g.ptr[i+1] - g.ptr[i] }
 
-// symGraph builds the graph of the pattern of A + Aᵀ.
+// symGraph builds the graph of the pattern of A + Aᵀ in fresh storage.
 func symGraph[T sparse.Scalar](a *sparse.CSR[T]) (*graph, error) {
+	return symGraphOf(new(Workspace), a)
+}
+
+// symGraphOf builds the graph of the pattern of A + Aᵀ (no self loops, sorted
+// duplicate-free neighbour lists) in the storage of w, by counting: every
+// off-diagonal entry (i, j) contributes j to the list of i and i to the list of
+// j, then each list is sorted and compacted. The graph is valid until the next
+// call on w.
+func symGraphOf[T sparse.Scalar](w *Workspace, a *sparse.CSR[T]) (*graph, error) {
 	if a.Rows != a.Cols {
 		return nil, fmt.Errorf("%w: %dx%d", ErrNotSquare, a.Rows, a.Cols)
 	}
 	n := a.Rows
-	coo := sparse.NewCOO[float64](n, n)
+	if len(a.Indptr) != n+1 || a.Indptr[0] != 0 || a.Indptr[n] < 0 || a.Indptr[n] > len(a.Indices) {
+		return nil, fmt.Errorf("%w: indptr of length %d for %d rows", sparse.ErrFormat, len(a.Indptr), n)
+	}
+	ptr := zeroed(w.gptr, n+1)
+	fill := zeroed(w.gfill, n+1)
+	w.gptr, w.gfill = ptr, fill
 	for i := 0; i < n; i++ {
-		for p := a.Indptr[i]; p < a.Indptr[i+1]; p++ {
-			if j := int(a.Indices[p]); j != i {
-				coo.I = append(coo.I, i, j)
-				coo.J = append(coo.J, j, i)
-				coo.V = append(coo.V, 1, 1)
+		lo, hi := a.Indptr[i], a.Indptr[i+1]
+		if lo > hi || hi > a.Indptr[n] {
+			return nil, fmt.Errorf("%w: indptr decreases at row %d", sparse.ErrFormat, i)
+		}
+		for _, j := range a.Indices[lo:hi] {
+			if j < 0 || int(j) >= n {
+				return nil, fmt.Errorf("%w: column %d in row %d", sparse.ErrIndex, j, i)
+			}
+			if int(j) != i {
+				ptr[i+1]++
+				ptr[j+1]++
 			}
 		}
 	}
-	s := coo.ToCSR()
-	adj := make([]int, len(s.Indices))
-	for k, j := range s.Indices {
-		adj[k] = int(j)
+	for i := 0; i < n; i++ {
+		ptr[i+1] += ptr[i]
 	}
-	return &graph{n: n, ptr: s.Indptr, adj: adj}, nil
+	copy(fill, ptr)
+	adj := grown(w.gadj, ptr[n])
+	w.gadj = adj
+	for i := 0; i < n; i++ {
+		for _, j := range a.Indices[a.Indptr[i]:a.Indptr[i+1]] {
+			if int(j) != i {
+				adj[fill[i]] = int(j)
+				fill[i]++
+				adj[fill[j]] = i
+				fill[j]++
+			}
+		}
+	}
+	// fill[i] is now the end of row i; compact each sorted row in place.
+	out, lo := 0, 0
+	for i := 0; i < n; i++ {
+		hi := fill[i]
+		row := adj[lo:hi]
+		slices.Sort(row)
+		ptr[i] = out
+		for k, v := range row {
+			if k == 0 || v != row[k-1] {
+				adj[out] = v
+				out++
+			}
+		}
+		lo = hi
+	}
+	ptr[n] = out
+	w.g = graph{n: n, ptr: ptr, adj: adj[:out]}
+	return &w.g, nil
+}
+
+// grown returns s with length n, reusing its storage when it is large enough
+// (the contents are unspecified).
+func grown[E any](s []E, n int) []E {
+	if cap(s) >= n {
+		return s[:n]
+	}
+	return make([]E, n)
+}
+
+// zeroed is grown with every element cleared.
+func zeroed[E any](s []E, n int) []E {
+	s = grown(s, n)
+	clear(s)
+	return s
 }
 
 // isPermutation reports whether p is a permutation of 0..len(p)-1.
