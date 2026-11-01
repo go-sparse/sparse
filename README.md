@@ -4,7 +4,7 @@ Sparse matrices, fill-reducing orderings and iterative solvers in pure Go
 (`CGO_ENABLED=0`, every architecture the fleet's CI tests). Module
 `github.com/go-sparse/sparse`, BSD-3-Clause.
 
-Released: **v0.2.0** (adds `ldl`, the QDLDL port, and `MulVecSymUpper`). Documentation: <https://go-sparse.github.io/docs/latest/sparse/>
+Released: **v0.2.1** (`ldl` numeric phase 3 to 6% faster on AMD-ordered matrices; v0.2.0 added `ldl`, the QDLDL port, and `MulVecSymUpper`). Documentation: <https://go-sparse.github.io/docs/latest/sparse/>
 · organisation: <https://go-sparse.github.io/> · part of
 [go-scikit](https://go-scikit.github.io/).
 
@@ -96,20 +96,26 @@ process on an efficiency core more than the kernel. The table is
 | 2-D Laplacian, 1.0e6 nonzeros | **0.98** | **0.89** | **0.82** |
 
 `ldl` against the C reference QDLDL v0.1.9 (`cc -O3`), one core, medians of 9
-interleaved rounds, measured on 2026-10-31 at load 7.7 (darwin/arm64; KKT
-matrices of a 2-D grid Laplacian plus coupling constraints, natural order;
+interleaved rounds, measured on 2026-11-01 at load 2.3 (darwin/arm64, Apple M4
+Max, `GOMAXPROCS=1`; KKT matrices of a 2-D grid Laplacian plus coupling
+constraints, natural order, then the AMD permutation applied on both sides, the C
+side reading the permuted upper triangle so both factor the same pattern;
 `TestPerfVsQDLDL`; Go time / C time, the solutions are checked equal):
 
-| order, nnz(K), nnz(L) | numeric factor | solve |
-|---|---:|---:|
-| 72, 204, 1 516 | 1.10 | 1.03 |
-| 288, 840, 22 474 | 1.06 | 0.98 |
-| 800, 2 360, 168 018 | 1.04 | 1.00 |
+| order, nnz(K), nnz(L) | ordering | numeric factor | solve |
+|---|---|---:|---:|
+| 72, 204, 1 516 | natural | 1.06 | 0.96 |
+| 288, 840, 22 474 | natural | 0.99 | 1.01 |
+| 800, 2 360, 168 018 | natural | 1.00 | 1.01 |
+| 800, 2 360, 4 885 | AMD | 1.21 | 1.13 |
+| 3 200, 9 520, 28 309 | AMD | 1.13 | 0.96 |
+| 9 800, 29 260, 102 299 | AMD | 1.11 | 1.10 |
 
-The solves are on par; the numeric factorisation is 4 to 10% slower than C and
-that is an open defect (the hot loop is a scatter-subtract through `int32`
-row indices, so no go-simd kernel applies, and Go keeps a bounds check on the
-scatter target).
+With long columns of L (natural order) Go is on par with C. With the short
+columns that AMD produces (about 6 to 10 entries each) the numeric factorisation
+is 11 to 21% slower and the solve up to 13% slower: an **open defect**, written
+up with its cause in [docs/perf.md](docs/perf.md). v0.2.1 split the row loop of
+the numeric phase into two functions, which removed 3 to 6% of it.
 
 SpMV sums four terms per loop step, still one chain in storage order, so the
 result is bit-identical to SciPy's `csr_matvec` order.

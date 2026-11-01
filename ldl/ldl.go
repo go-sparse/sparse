@@ -322,11 +322,10 @@ func (f *Factor) Refactor(a *sparse.CSC[float64]) error {
 		f.ok = true
 		return nil
 	}
-	ap, ai, ax := s.ap, s.ai, a.Data
-	lp, li, lx := s.lp, f.li, f.lx
+	ax := a.Data
+	lp := s.lp
 	d, dinv := f.d, f.dinv
-	etree := s.etree
-	ymark, yidx, elim, next, yval := f.ymark, f.yidx, f.elim, f.next, f.yval
+	ymark, next, yval := f.ymark, f.next, f.yval
 
 	for i := 0; i < n; i++ {
 		ymark[i] = false
@@ -350,55 +349,8 @@ func (f *Factor) Refactor(a *sparse.CSC[float64]) error {
 		// Row k of L is the solution of L[0:k,0:k] y = A[0:k,k]; its pattern
 		// is found by walking the elimination tree from each nonzero of the
 		// column, its values by the sparse triangular solve below.
-		nnzY := 0
-		for p := ap[k]; p < ap[k+1]; p++ {
-			bidx := int(ai[p])
-			if bidx == k {
-				d[k] = ax[p]
-				continue
-			}
-			yval[bidx] = ax[p]
-			if !ymark[bidx] {
-				ymark[bidx] = true
-				elim[0] = int32(bidx)
-				nnzE := 1
-				nx := etree[bidx]
-				for nx != unknown && int(nx) < k {
-					if ymark[nx] {
-						break
-					}
-					ymark[nx] = true
-					elim[nnzE] = nx
-					nnzE++
-					nx = etree[nx]
-				}
-				for nnzE > 0 {
-					nnzE--
-					yidx[nnzY] = elim[nnzE]
-					nnzY++
-				}
-			}
-		}
-
-		dk := d[k]
-		for i := nnzY - 1; i >= 0; i-- {
-			cidx := int(yidx[i])
-			tmp := next[cidx]
-			yc := yval[cidx]
-			cols := li[lp[cidx]:tmp]
-			vals := lx[lp[cidx]:tmp]
-			vals = vals[:len(cols)] // lets the compiler drop the bounds check on vals[j]
-			for j, r := range cols {
-				yval[r] -= vals[j] * yc
-			}
-			li[tmp] = int32(k)
-			l := yc * dinv[cidx]
-			lx[tmp] = l
-			dk -= yc * l
-			next[cidx] = tmp + 1
-			yval[cidx] = 0
-			ymark[cidx] = false
-		}
+		nnzY, dk := f.pattern(k, ax)
+		dk = f.eliminate(k, nnzY, dk)
 		d[k] = dk
 		if err := checkPivot(dk, k); err != nil {
 			return err
@@ -411,6 +363,76 @@ func (f *Factor) Refactor(a *sparse.CSC[float64]) error {
 	f.npos = npos
 	f.ok = true
 	return nil
+}
+
+// pattern is the symbolic half of row k of Refactor: it scatters the column k
+// of the matrix (values ax) into yval, lists in yidx, in elimination order, the
+// columns of L that row k touches, and returns their number and the diagonal
+// entry of column k (zero if the column has none). Its own function for the
+// same register-pressure reason as eliminate.
+func (f *Factor) pattern(k int, ax []float64) (nnzY int, dk float64) {
+	s := f.sym
+	ap, ai, etree := s.ap, s.ai, s.etree
+	ymark, yidx, elim, yval := f.ymark, f.yidx, f.elim, f.yval
+	for p := ap[k]; p < ap[k+1]; p++ {
+		bidx := int(ai[p])
+		if bidx == k {
+			dk = ax[p]
+			continue
+		}
+		yval[bidx] = ax[p]
+		if !ymark[bidx] {
+			ymark[bidx] = true
+			elim[0] = int32(bidx)
+			nnzE := 1
+			nx := etree[bidx]
+			for nx != unknown && int(nx) < k {
+				if ymark[nx] {
+					break
+				}
+				ymark[nx] = true
+				elim[nnzE] = nx
+				nnzE++
+				nx = etree[nx]
+			}
+			for nnzE > 0 {
+				nnzE--
+				yidx[nnzY] = elim[nnzE]
+				nnzY++
+			}
+		}
+	}
+	return nnzY, dk
+}
+
+// eliminate is the numeric half of row k of Refactor: the sparse triangular
+// solve over the nnzY columns listed in yidx, appending row k to those columns
+// of L. It returns D[k] after the updates (dk on entry). It is a function of
+// its own so that the register allocator, which has no other slice to keep
+// alive here, does not spill the loop's operands to the stack.
+func (f *Factor) eliminate(k, nnzY int, dk float64) float64 {
+	lp, li, lx := f.sym.lp, f.li, f.lx
+	dinv := f.dinv
+	ymark, yidx, next, yval := f.ymark, f.yidx, f.next, f.yval
+	for i := nnzY - 1; i >= 0; i-- {
+		cidx := int(yidx[i])
+		tmp := next[cidx]
+		yc := yval[cidx]
+		cols := li[lp[cidx]:tmp]
+		vals := lx[lp[cidx]:tmp]
+		vals = vals[:len(cols)] // lets the compiler drop the bounds check on vals[j]
+		for j, r := range cols {
+			yval[r] -= vals[j] * yc
+		}
+		li[tmp] = int32(k)
+		l := yc * dinv[cidx]
+		lx[tmp] = l
+		dk -= yc * l
+		next[cidx] = tmp + 1
+		yval[cidx] = 0
+		ymark[cidx] = false
+	}
+	return dk
 }
 
 func checkPivot(v float64, k int) error {
@@ -439,9 +461,11 @@ func (f *Factor) LSolve(x []float64) error {
 		return err
 	}
 	lp, li, lx := f.sym.lp, f.li, f.lx
+	lp = lp[:len(x)+1] // one bounds check here instead of two per column
 	for i, v := range x {
 		lo, hi := lp[i], lp[i+1]
 		cols, vals := li[lo:hi], lx[lo:hi]
+		vals = vals[:len(cols)] // lets the compiler drop the bounds check on vals[j]
 		for j, r := range cols {
 			x[r] -= vals[j] * v
 		}
@@ -455,9 +479,11 @@ func (f *Factor) LTSolve(x []float64) error {
 		return err
 	}
 	lp, li, lx := f.sym.lp, f.li, f.lx
+	lp = lp[:len(x)+1]
 	for i := len(x) - 1; i >= 0; i-- {
 		lo, hi := lp[i], lp[i+1]
 		cols, vals := li[lo:hi], lx[lo:hi]
+		vals = vals[:len(cols)]
 		v := x[i]
 		for j, r := range cols {
 			v -= vals[j] * x[r]
