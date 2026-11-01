@@ -455,8 +455,19 @@ func (f *Factor) eliminate(k, nnzY int, dk float64) float64 {
 		cols := li[lp[cidx]:tmp]
 		vals := lx[lp[cidx]:tmp]
 		vals = vals[:len(cols)] // lets the compiler drop the bounds check on vals[j]
-		for j, r := range cols {
-			yval[r] -= vals[j] * yc
+		// Four entries per trip: one loop test and one induction update for
+		// four scatter updates. The rows of a column are distinct, and each
+		// yval[r] is updated once, so the values are those of the plain loop.
+		j := 0
+		for ; j+4 <= len(cols); j += 4 {
+			c, w := cols[j:j+4:j+4], vals[j:j+4:j+4]
+			yval[c[0]] -= w[0] * yc
+			yval[c[1]] -= w[1] * yc
+			yval[c[2]] -= w[2] * yc
+			yval[c[3]] -= w[3] * yc
+		}
+		for ; j < len(cols); j++ {
+			yval[cols[j]] -= vals[j] * yc
 		}
 		li[tmp] = int32(k)
 		l := yc * dinv[cidx]
@@ -542,9 +553,51 @@ func (f *Factor) DSolve(x []float64) error {
 // Solve solves K y = x in place, where K = L D Lᵀ is the factored matrix
 // (QDLDL_solve).
 func (f *Factor) Solve(x []float64) error {
-	if err := f.LSolve(x); err != nil {
+	if err := f.check(x); err != nil {
 		return err
 	}
-	_ = f.DSolve(x)
-	return f.LTSolve(x)
+	f.lsolveD(x)
+	f.ltsolveTo(x, nil, nil)
+	return nil
+}
+
+// lsolveD is LSolve followed by DSolve in one sweep: when column i is reached
+// x[i] is final, so the columns below it are updated with it and x[i] itself
+// is then scaled. The values are those of the two separate passes. The
+// length of x is the order of the factor.
+func (f *Factor) lsolveD(x []float64) {
+	lp, li, lx := f.sym.lp, f.li, f.lx
+	lp = lp[:len(x)+1]
+	dinv := f.dinv[:len(x)]
+	for i, v := range x {
+		lo, hi := lp[i], lp[i+1]
+		cols, vals := li[lo:hi], lx[lo:hi]
+		vals = vals[:len(cols)]
+		for j, r := range cols {
+			x[r] -= vals[j] * v
+		}
+		x[i] = v * dinv[i]
+	}
+}
+
+// ltsolveTo is LTSolve on x; when out is not nil the final x[i] is also
+// stored in out[perm[i]] (the scatter of a permuted solve, fused into the
+// sweep). The length of x is the order of the factor, and perm and out are
+// that long.
+func (f *Factor) ltsolveTo(x []float64, perm []int, out []float64) {
+	lp, li, lx := f.sym.lp, f.li, f.lx
+	lp = lp[:len(x)+1]
+	for i := len(x) - 1; i >= 0; i-- {
+		lo, hi := lp[i], lp[i+1]
+		cols, vals := li[lo:hi], lx[lo:hi]
+		vals = vals[:len(cols)]
+		v := x[i]
+		for j, r := range cols {
+			v -= vals[j] * x[r]
+		}
+		x[i] = v
+		if out != nil {
+			out[perm[i]] = v
+		}
+	}
 }

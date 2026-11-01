@@ -194,14 +194,15 @@ func (p *Permuted) Solve(x []float64) error {
 	if err := p.f.check(x); err != nil {
 		return err
 	}
-	w := p.work
-	for k, v := range p.perm {
+	w := p.work[:len(x)]
+	perm := p.perm[:len(x)]
+	for k, v := range perm {
 		w[k] = x[v]
 	}
-	_ = p.f.Solve(w) // cannot fail: factored and length checked above
-	for k, v := range p.perm {
-		x[v] = w[k]
-	}
+	// Two sweeps: L and D together, then Lᵀ with the result scattered back
+	// into x as each entry becomes final. Allocation-free.
+	p.f.lsolveD(w)
+	p.f.ltsolveTo(w, perm, x)
 	return nil
 }
 
