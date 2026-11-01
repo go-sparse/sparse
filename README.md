@@ -4,7 +4,7 @@ Sparse matrices, fill-reducing orderings and iterative solvers in pure Go
 (`CGO_ENABLED=0`, every architecture the fleet's CI tests). Module
 `github.com/go-sparse/sparse`, BSD-3-Clause.
 
-Released: **v0.2.1** (`ldl` numeric phase 3 to 6% faster on AMD-ordered matrices; v0.2.0 added `ldl`, the QDLDL port, and `MulVecSymUpper`). Documentation: <https://go-sparse.github.io/docs/latest/sparse/>
+Released: **v0.3.0** (`order.AMDWith`/`COLAMDWith` on a reusable `order.Workspace` and `ldl.Permuted.Reset`: the ordering and the symbolic phase allocate nothing once sized, about 2x faster than v0.2.1 even with fresh storage; `Solve` fused into two sweeps; v0.2.1: `ldl` numeric phase 3 to 6% faster on AMD-ordered matrices; v0.2.0 added `ldl`, the QDLDL port, and `MulVecSymUpper`). Documentation: <https://go-sparse.github.io/docs/latest/sparse/>
 · organisation: <https://go-sparse.github.io/> · part of
 [go-scikit](https://go-scikit.github.io/).
 
@@ -115,7 +115,20 @@ With long columns of L (natural order) Go is on par with C. With the short
 columns that AMD produces (about 6 to 10 entries each) the numeric factorisation
 is 11 to 21% slower and the solve up to 13% slower: an **open defect**, written
 up with its cause in [docs/perf.md](docs/perf.md). v0.2.1 split the row loop of
-the numeric phase into two functions, which removed 3 to 6% of it.
+the numeric phase into two functions, which removed 3 to 6% of it. The table
+above is v0.2.1's; v0.3.0 fused `Solve` into two sweeps (2 to 4% faster) and
+its numbers against QDLDL are re-measured in [docs/perf.md](docs/perf.md) when
+the machine is quiet.
+
+The symbolic side of a solver setup (AMD ordering plus `ldl.NewPermuted`, same
+KKT grids, `BenchmarkSetupAMD`, one core; the machine was busy, so read the
+ratios) in v0.3.0 against v0.2.1:
+
+| order | v0.2.1 | v0.3.0, fresh storage | v0.3.0, reused `order.Workspace` + `Permuted.Reset` |
+|---|---|---|---|
+| 72 | 28.5 µs, 652 allocs | 15.4 µs, 79 allocs | 9.8 µs, 0 allocs |
+| 800 | 280 to 440 µs, 6 323 allocs | 160 µs, 94 allocs | 121 µs, 0 allocs |
+| 3 200 | 1.40 ms, 24 952 allocs | 0.70 ms, 103 allocs | 0.54 ms, 0 allocs |
 
 SpMV sums four terms per loop step, still one chain in storage order, so the
 result is bit-identical to SciPy's `csr_matvec` order.
