@@ -1,8 +1,8 @@
 {
   "schema": 1,
-  "status": "deferred",
-  "date": "2026-11-08T12:18:00+01:00",
-  "commit": "w3",
+  "status": "measured",
+  "date": "2026-11-08T12:19:53+01:00",
+  "commit": "w3-pr16",
   "repo": "go-sparse/sparse",
   "go_version": "go1.27.3",
   "machine": "darwin/arm64, 16 CPUs",
@@ -13,11 +13,11 @@
   },
   "max_load": 8,
   "load": {
-    "min": 0,
-    "median": 0,
-    "max": 0
+    "min": 6.26171875,
+    "median": 7.118896484375,
+    "max": 10.68701171875
   },
-  "valid": true,
+  "valid": false,
   "rows": [
     {
       "name": "CSR.MulVec/lap2d-100",
@@ -25,17 +25,71 @@
       "reference": "scipy.sparse 1.18.1",
       "parity": "tolerance",
       "allocs": 0,
+      "go_iters": 5879,
+      "ref_iters": 5276,
+      "rounds": [
+        {
+          "load_before": 7.77734375,
+          "load_after": 7.77734375,
+          "go_first": true,
+          "go_ns": 18722.770199013437,
+          "ref_ns": 20866.652388172857
+        },
+        {
+          "load_before": 7.77734375,
+          "load_after": 7.77734375,
+          "go_first": false,
+          "go_ns": 18719.084878380676,
+          "ref_ns": 21306.26099317665
+        },
+        {
+          "load_before": 7.77734375,
+          "load_after": 7.77734375,
+          "go_first": true,
+          "go_ns": 18283.048477632252,
+          "ref_ns": 20553.473275208493
+        },
+        {
+          "load_before": 7.77734375,
+          "load_after": 7.77734375,
+          "go_first": false,
+          "go_ns": 18414.3490389522,
+          "ref_ns": 20422.447498104626
+        },
+        {
+          "load_before": 7.77734375,
+          "load_after": 7.77734375,
+          "go_first": true,
+          "go_ns": 18543.82837217214,
+          "ref_ns": 20772.476118271417
+        },
+        {
+          "load_before": 7.77734375,
+          "load_after": 7.77734375,
+          "go_first": false,
+          "go_ns": 19181.94709984691,
+          "ref_ns": 20566.14859742229
+        },
+        {
+          "load_before": 7.77734375,
+          "load_after": 7.77734375,
+          "go_first": true,
+          "go_ns": 19045.99710835176,
+          "ref_ns": 20839.72232752085
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 18719.084878380676,
+        "q1": 18479.08870556217,
+        "q3": 18884.3836536826
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 20772.476118271417,
+        "q1": 20559.810936315393,
+        "q3": 20853.18735784685
       },
-      "ratio": 0
+      "ratio": 0.901148460674624,
+      "verdict": "faster"
     },
     {
       "name": "CSR.MulVecT/lap2d-100",
@@ -43,17 +97,71 @@
       "reference": "scipy.sparse 1.18.1 (A.T@x)",
       "parity": "tolerance",
       "allocs": 0,
+      "go_iters": 2674,
+      "ref_iters": 3100,
+      "rounds": [
+        {
+          "load_before": 7.77734375,
+          "load_after": 7.77734375,
+          "go_first": true,
+          "go_ns": 41110.6335078534,
+          "ref_ns": 35570.81967741936
+        },
+        {
+          "load_before": 7.77734375,
+          "load_after": 7.77734375,
+          "go_first": false,
+          "go_ns": 40917.64846671653,
+          "ref_ns": 34250.95419354839
+        },
+        {
+          "load_before": 7.77734375,
+          "load_after": 7.77734375,
+          "go_first": true,
+          "go_ns": 40413.58152580404,
+          "ref_ns": 34620.4570967742
+        },
+        {
+          "load_before": 7.77734375,
+          "load_after": 7.77734375,
+          "go_first": false,
+          "go_ns": 40680.285340314134,
+          "ref_ns": 34280.24193548387
+        },
+        {
+          "load_before": 7.77734375,
+          "load_after": 7.77734375,
+          "go_first": true,
+          "go_ns": 40537.64659685864,
+          "ref_ns": 34489.69064516129
+        },
+        {
+          "load_before": 7.77734375,
+          "load_after": 7.794921875,
+          "go_first": false,
+          "go_ns": 42003.02281226627,
+          "ref_ns": 34987.01612903226
+        },
+        {
+          "load_before": 7.794921875,
+          "load_after": 7.794921875,
+          "go_first": true,
+          "go_ns": 41007.44839192221,
+          "ref_ns": 35257.83612903226
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 40917.64846671653,
+        "q1": 40608.96596858639,
+        "q3": 41059.04094988781
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 34620.4570967742,
+        "q1": 34384.96629032258,
+        "q3": 35122.42612903226
       },
-      "ratio": 0
+      "ratio": 1.1818922076141243,
+      "verdict": "slower"
     },
     {
       "name": "CSC.MulVec/lap2d-100",
@@ -61,17 +169,71 @@
       "reference": "scipy.sparse 1.18.1",
       "parity": "tolerance",
       "allocs": 0,
+      "go_iters": 2603,
+      "ref_iters": 5622,
+      "rounds": [
+        {
+          "load_before": 7.794921875,
+          "load_after": 7.794921875,
+          "go_first": true,
+          "go_ns": 42660.984248943525,
+          "ref_ns": 28840.49270722163
+        },
+        {
+          "load_before": 7.794921875,
+          "load_after": 7.794921875,
+          "go_first": false,
+          "go_ns": 42620.13369189397,
+          "ref_ns": 28874.15510494486
+        },
+        {
+          "load_before": 7.794921875,
+          "load_after": 7.794921875,
+          "go_first": true,
+          "go_ns": 48514.48636189013,
+          "ref_ns": 28951.722340803983
+        },
+        {
+          "load_before": 7.794921875,
+          "load_after": 7.794921875,
+          "go_first": false,
+          "go_ns": 42680.46484825201,
+          "ref_ns": 28919.28281750267
+        },
+        {
+          "load_before": 7.794921875,
+          "load_after": 7.794921875,
+          "go_first": true,
+          "go_ns": 42795.620437956204,
+          "ref_ns": 29142.772500889365
+        },
+        {
+          "load_before": 7.794921875,
+          "load_after": 7.794921875,
+          "go_first": false,
+          "go_ns": 42313.96465616596,
+          "ref_ns": 28771.255780860905
+        },
+        {
+          "load_before": 7.794921875,
+          "load_after": 7.794921875,
+          "go_first": true,
+          "go_ns": 42163.62543219362,
+          "ref_ns": 28733.50231234436
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 42660.984248943525,
+        "q1": 42467.04917402996,
+        "q3": 42738.04264310411
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 28874.15510494486,
+        "q1": 28805.874244041268,
+        "q3": 28935.502579153326
       },
-      "ratio": 0
+      "ratio": 1.4774799156508511,
+      "verdict": "slower"
     },
     {
       "name": "CSC.MulVecT/lap2d-100",
@@ -79,17 +241,71 @@
       "reference": "scipy.sparse 1.18.1 (A.T@x)",
       "parity": "tolerance",
       "allocs": 0,
+      "go_iters": 5558,
+      "ref_iters": 4184,
+      "rounds": [
+        {
+          "load_before": 7.794921875,
+          "load_after": 7.794921875,
+          "go_first": true,
+          "go_ns": 18388.643936667868,
+          "ref_ns": 26715.43379541109
+        },
+        {
+          "load_before": 7.794921875,
+          "load_after": 7.794921875,
+          "go_first": false,
+          "go_ns": 18455.611910759268,
+          "ref_ns": 26593.859464627152
+        },
+        {
+          "load_before": 7.794921875,
+          "load_after": 7.794921875,
+          "go_first": true,
+          "go_ns": 18452.620906801007,
+          "ref_ns": 25968.31190248566
+        },
+        {
+          "load_before": 7.794921875,
+          "load_after": 7.794921875,
+          "go_first": false,
+          "go_ns": 18848.529147175243,
+          "ref_ns": 26201.252868068834
+        },
+        {
+          "load_before": 7.794921875,
+          "load_after": 7.794921875,
+          "go_first": true,
+          "go_ns": 18874.77509895646,
+          "ref_ns": 26159.0086042065
+        },
+        {
+          "load_before": 7.794921875,
+          "load_after": 7.794921875,
+          "go_first": false,
+          "go_ns": 18955.342029507017,
+          "ref_ns": 26119.502868068834
+        },
+        {
+          "load_before": 7.794921875,
+          "load_after": 7.794921875,
+          "go_first": true,
+          "go_ns": 19086.369557394748,
+          "ref_ns": 26451.30258126195
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 18848.529147175243,
+        "q1": 18454.116408780137,
+        "q3": 18915.05856423174
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 26201.252868068834,
+        "q1": 26139.255736137668,
+        "q3": 26522.58102294455
       },
-      "ratio": 0
+      "ratio": 0.7193751093538633,
+      "verdict": "faster"
     },
     {
       "name": "CSC.MulVecSymUpper/lap2d-100",
@@ -97,17 +313,71 @@
       "reference": "scipy.sparse 1.18.1 (U@x + U.T@x - diag(U)*x)",
       "parity": "tolerance",
       "allocs": 0,
+      "go_iters": 5009,
+      "ref_iters": 2582,
+      "rounds": [
+        {
+          "load_before": 7.794921875,
+          "load_after": 7.57080078125,
+          "go_first": true,
+          "go_ns": 22441.91295667798,
+          "ref_ns": 71164.8752904725
+        },
+        {
+          "load_before": 7.57080078125,
+          "load_after": 7.57080078125,
+          "go_first": false,
+          "go_ns": 22965.14593731284,
+          "ref_ns": 92007.21340046475
+        },
+        {
+          "load_before": 7.57080078125,
+          "load_after": 7.57080078125,
+          "go_first": true,
+          "go_ns": 22278.44040726692,
+          "ref_ns": 95527.4659178931
+        },
+        {
+          "load_before": 7.57080078125,
+          "load_after": 7.57080078125,
+          "go_first": false,
+          "go_ns": 22917.332202036334,
+          "ref_ns": 99505.14794732766
+        },
+        {
+          "load_before": 7.57080078125,
+          "load_after": 7.57080078125,
+          "go_first": true,
+          "go_ns": 24707.55140746656,
+          "ref_ns": 101138.49070487994
+        },
+        {
+          "load_before": 7.57080078125,
+          "load_after": 7.57080078125,
+          "go_first": false,
+          "go_ns": 23322.22838889998,
+          "ref_ns": 91451.18474051123
+        },
+        {
+          "load_before": 7.57080078125,
+          "load_after": 7.57080078125,
+          "go_first": true,
+          "go_ns": 22880.431822719107,
+          "ref_ns": 96557.99767621998
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 22917.332202036334,
+        "q1": 22661.172389698542,
+        "q3": 23143.68716310641
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 95527.4659178931,
+        "q1": 91729.19907048799,
+        "q3": 98031.57281177382
       },
-      "ratio": 0
+      "ratio": 0.2399030685241251,
+      "verdict": "faster"
     },
     {
       "name": "CSR.MulDense/lap2d-100x4",
@@ -115,17 +385,71 @@
       "reference": "scipy.sparse 1.18.1",
       "parity": "tolerance",
       "allocs": 0,
+      "go_iters": 1128,
+      "ref_iters": 1006,
+      "rounds": [
+        {
+          "load_before": 7.57080078125,
+          "load_after": 7.57080078125,
+          "go_first": true,
+          "go_ns": 155713.20921985817,
+          "ref_ns": 169184.351888668
+        },
+        {
+          "load_before": 7.57080078125,
+          "load_after": 7.57080078125,
+          "go_first": false,
+          "go_ns": 153055.18617021278,
+          "ref_ns": 161330.93141153082
+        },
+        {
+          "load_before": 7.57080078125,
+          "load_after": 7.57080078125,
+          "go_first": true,
+          "go_ns": 153498.00531914894,
+          "ref_ns": 147551.40059642147
+        },
+        {
+          "load_before": 7.57080078125,
+          "load_after": 7.57080078125,
+          "go_first": false,
+          "go_ns": 153970.26507092197,
+          "ref_ns": 110788.47813121273
+        },
+        {
+          "load_before": 7.57080078125,
+          "load_after": 7.57080078125,
+          "go_first": true,
+          "go_ns": 156954.52836879433,
+          "ref_ns": 157910.66103379722
+        },
+        {
+          "load_before": 7.57080078125,
+          "load_after": 7.57080078125,
+          "go_first": false,
+          "go_ns": 155603.76063829788,
+          "ref_ns": 207856.23757455268
+        },
+        {
+          "load_before": 7.57080078125,
+          "load_after": 9.12646484375,
+          "go_first": true,
+          "go_ns": 154381.20567375887,
+          "ref_ns": 129478.9184890656
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 154381.20567375887,
+        "q1": 153734.13519503546,
+        "q3": 155658.48492907803
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 157910.66103379722,
+        "q1": 138515.15954274352,
+        "q3": 165257.64165009942
       },
-      "ratio": 0
+      "ratio": 0.9776490368862242,
+      "verdict": "tie"
     },
     {
       "name": "Add/lap2d+tri",
@@ -133,17 +457,71 @@
       "reference": "scipy.sparse 1.18.1",
       "parity": "tolerance",
       "allocs": 4,
+      "go_iters": 1044,
+      "ref_iters": 1210,
+      "rounds": [
+        {
+          "load_before": 7.57421875,
+          "load_after": 7.57421875,
+          "go_first": true,
+          "go_ns": 138164.55172413794,
+          "ref_ns": 97247.7958677686
+        },
+        {
+          "load_before": 7.57421875,
+          "load_after": 7.57421875,
+          "go_first": false,
+          "go_ns": 129349.5775862069,
+          "ref_ns": 90412.36280991735
+        },
+        {
+          "load_before": 7.57421875,
+          "load_after": 7.57421875,
+          "go_first": true,
+          "go_ns": 123749.04214559386,
+          "ref_ns": 90143.18181818182
+        },
+        {
+          "load_before": 7.57421875,
+          "load_after": 7.57421875,
+          "go_first": false,
+          "go_ns": 141630.66762452107,
+          "ref_ns": 91460.05537190083
+        },
+        {
+          "load_before": 7.57421875,
+          "load_after": 7.57421875,
+          "go_first": true,
+          "go_ns": 125064.77490421456,
+          "ref_ns": 92919.14545454546
+        },
+        {
+          "load_before": 7.57421875,
+          "load_after": 7.57421875,
+          "go_first": false,
+          "go_ns": 131563.6570881226,
+          "ref_ns": 89546.59090909091
+        },
+        {
+          "load_before": 7.57421875,
+          "load_after": 7.57421875,
+          "go_first": true,
+          "go_ns": 136451.94827586206,
+          "ref_ns": 91178.85702479338
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 131563.6570881226,
+        "q1": 127207.17624521072,
+        "q3": 137308.25
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 91178.85702479338,
+        "q1": 90277.7723140496,
+        "q3": 92189.60041322315
       },
-      "ratio": 0
+      "ratio": 1.4429184723421984,
+      "verdict": "slower"
     },
     {
       "name": "Sub/lap2d-tri",
@@ -151,17 +529,71 @@
       "reference": "scipy.sparse 1.18.1",
       "parity": "tolerance",
       "allocs": 4,
+      "go_iters": 1474,
+      "ref_iters": 1129,
+      "rounds": [
+        {
+          "load_before": 7.57421875,
+          "load_after": 7.57421875,
+          "go_first": true,
+          "go_ns": 134813.82835820896,
+          "ref_ns": 119844.92205491585
+        },
+        {
+          "load_before": 7.57421875,
+          "load_after": 7.57421875,
+          "go_first": false,
+          "go_ns": 127822.62008141112,
+          "ref_ns": 104341.15677590789
+        },
+        {
+          "load_before": 7.57421875,
+          "load_after": 7.57421875,
+          "go_first": true,
+          "go_ns": 135470.40366350068,
+          "ref_ns": 99729.51727192206
+        },
+        {
+          "load_before": 7.57421875,
+          "load_after": 7.57421875,
+          "go_first": false,
+          "go_ns": 135115.53052917233,
+          "ref_ns": 98697.03985828167
+        },
+        {
+          "load_before": 7.57421875,
+          "load_after": 7.57421875,
+          "go_first": true,
+          "go_ns": 129476.65061058344,
+          "ref_ns": 97901.9415411869
+        },
+        {
+          "load_before": 7.57421875,
+          "load_after": 7.57421875,
+          "go_first": false,
+          "go_ns": 126975.26526458617,
+          "ref_ns": 99472.98494242692
+        },
+        {
+          "load_before": 7.57421875,
+          "load_after": 7.57421875,
+          "go_first": true,
+          "go_ns": 136240.7564450475,
+          "ref_ns": 97979.3330380868
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 134813.82835820896,
+        "q1": 128649.63534599729,
+        "q3": 135292.9670963365
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 99472.98494242692,
+        "q1": 98338.18644818423,
+        "q3": 102035.33702391497
       },
-      "ratio": 0
+      "ratio": 1.3552808175630464,
+      "verdict": "slower"
     },
     {
       "name": "Mul/lap2d*tri",
@@ -169,17 +601,71 @@
       "reference": "scipy.sparse 1.18.1",
       "parity": "tolerance",
       "allocs": 15,
+      "go_iters": 201,
+      "ref_iters": 229,
+      "rounds": [
+        {
+          "load_before": 7.28759765625,
+          "load_after": 7.28759765625,
+          "go_first": true,
+          "go_ns": 544000.4129353234,
+          "ref_ns": 487879.36681222706
+        },
+        {
+          "load_before": 7.28759765625,
+          "load_after": 7.28759765625,
+          "go_first": false,
+          "go_ns": 549532.3383084578,
+          "ref_ns": 496107.711790393
+        },
+        {
+          "load_before": 7.28759765625,
+          "load_after": 7.28759765625,
+          "go_first": true,
+          "go_ns": 538930.9701492537,
+          "ref_ns": 487383.9126637555
+        },
+        {
+          "load_before": 7.28759765625,
+          "load_after": 7.28759765625,
+          "go_first": false,
+          "go_ns": 535415.4228855722,
+          "ref_ns": 485910.2969432314
+        },
+        {
+          "load_before": 7.28759765625,
+          "load_after": 7.28759765625,
+          "go_first": true,
+          "go_ns": 541549.960199005,
+          "ref_ns": 486287.11790393014
+        },
+        {
+          "load_before": 7.28759765625,
+          "load_after": 7.28759765625,
+          "go_first": false,
+          "go_ns": 538250.6218905472,
+          "ref_ns": 488044.943231441
+        },
+        {
+          "load_before": 7.28759765625,
+          "load_after": 7.28759765625,
+          "go_first": true,
+          "go_ns": 535106.3432835821,
+          "ref_ns": 487776.02183406113
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 538930.9701492537,
+        "q1": 536833.0223880596,
+        "q3": 542775.1865671643
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 487776.02183406113,
+        "q1": 486835.5152838428,
+        "q3": 487962.15502183407
       },
-      "ratio": 0
+      "ratio": 1.1048738478838045,
+      "verdict": "slower"
     },
     {
       "name": "Axpby/2lap2d+3tri",
@@ -187,17 +673,71 @@
       "reference": "scipy.sparse 1.18.1 (2.0*A + 3.0*B)",
       "parity": "tolerance",
       "allocs": 4,
+      "go_iters": 852,
+      "ref_iters": 891,
+      "rounds": [
+        {
+          "load_before": 7.28759765625,
+          "load_after": 7.28759765625,
+          "go_first": true,
+          "go_ns": 127623.0927230047,
+          "ref_ns": 122113.40179573513
+        },
+        {
+          "load_before": 7.28759765625,
+          "load_after": 7.28759765625,
+          "go_first": false,
+          "go_ns": 133392.84976525823,
+          "ref_ns": 120681.81818181818
+        },
+        {
+          "load_before": 7.28759765625,
+          "load_after": 7.28759765625,
+          "go_first": true,
+          "go_ns": 114134.43896713616,
+          "ref_ns": 121857.46352413019
+        },
+        {
+          "load_before": 7.28759765625,
+          "load_after": 7.28759765625,
+          "go_first": false,
+          "go_ns": 142489.38732394367,
+          "ref_ns": 124258.27721661056
+        },
+        {
+          "load_before": 7.28759765625,
+          "load_after": 7.28759765625,
+          "go_first": true,
+          "go_ns": 160132.28755868544,
+          "ref_ns": 131447.29741863074
+        },
+        {
+          "load_before": 7.28759765625,
+          "load_after": 7.28759765625,
+          "go_first": false,
+          "go_ns": 152285.99295774646,
+          "ref_ns": 121417.92929292929
+        },
+        {
+          "load_before": 7.28759765625,
+          "load_after": 7.28759765625,
+          "go_first": true,
+          "go_ns": 142693.71126760563,
+          "ref_ns": 123440.46913580247
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 142489.38732394367,
+        "q1": 130507.97124413146,
+        "q3": 147489.85211267605
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 122113.40179573513,
+        "q1": 121637.69640852974,
+        "q3": 123849.37317620651
       },
-      "ratio": 0
+      "ratio": 1.1668611735368113,
+      "verdict": "slower"
     },
     {
       "name": "CSR.ToCSC/lap2d-100",
@@ -205,17 +745,71 @@
       "reference": "scipy.sparse 1.18.1",
       "parity": "tolerance",
       "allocs": 5,
+      "go_iters": 1556,
+      "ref_iters": 1810,
+      "rounds": [
+        {
+          "load_before": 7.28759765625,
+          "load_after": 7.28759765625,
+          "go_first": true,
+          "go_ns": 75816.8913881748,
+          "ref_ns": 72229.00552486187
+        },
+        {
+          "load_before": 7.28759765625,
+          "load_after": 7.28759765625,
+          "go_first": false,
+          "go_ns": 74361.58419023137,
+          "ref_ns": 72262.24696132596
+        },
+        {
+          "load_before": 7.28759765625,
+          "load_after": 7.28759765625,
+          "go_first": true,
+          "go_ns": 73952.20115681234,
+          "ref_ns": 71695.30386740332
+        },
+        {
+          "load_before": 7.28759765625,
+          "load_after": 7.28759765625,
+          "go_first": false,
+          "go_ns": 73947.2474293059,
+          "ref_ns": 72228.06132596685
+        },
+        {
+          "load_before": 7.28759765625,
+          "load_after": 7.10400390625,
+          "go_first": true,
+          "go_ns": 73976.86375321337,
+          "ref_ns": 72100.66740331492
+        },
+        {
+          "load_before": 7.10400390625,
+          "load_after": 7.10400390625,
+          "go_first": false,
+          "go_ns": 74625.16066838046,
+          "ref_ns": 72538.99668508288
+        },
+        {
+          "load_before": 7.10400390625,
+          "load_after": 7.10400390625,
+          "go_first": true,
+          "go_ns": 73250.58933161954,
+          "ref_ns": 71585.29005524862
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 73976.86375321337,
+        "q1": 73949.72429305912,
+        "q3": 74493.37242930592
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 72228.06132596685,
+        "q1": 71897.98563535912,
+        "q3": 72245.62624309392
       },
-      "ratio": 0
+      "ratio": 1.0242122299164884,
+      "verdict": "slower"
     },
     {
       "name": "CSC.ToCSR/lap2d-100",
@@ -223,17 +817,71 @@
       "reference": "scipy.sparse 1.18.1",
       "parity": "tolerance",
       "allocs": 5,
+      "go_iters": 1524,
+      "ref_iters": 1534,
+      "rounds": [
+        {
+          "load_before": 7.10400390625,
+          "load_after": 7.10400390625,
+          "go_first": true,
+          "go_ns": 74844.2690288714,
+          "ref_ns": 71415.41720990873
+        },
+        {
+          "load_before": 7.10400390625,
+          "load_after": 7.10400390625,
+          "go_first": false,
+          "go_ns": 75898.48556430446,
+          "ref_ns": 71870.32790091264
+        },
+        {
+          "load_before": 7.10400390625,
+          "load_after": 7.10400390625,
+          "go_first": true,
+          "go_ns": 75048.9934383202,
+          "ref_ns": 71913.05410691004
+        },
+        {
+          "load_before": 7.10400390625,
+          "load_after": 7.10400390625,
+          "go_first": false,
+          "go_ns": 76319.00721784777,
+          "ref_ns": 72599.25032594524
+        },
+        {
+          "load_before": 7.10400390625,
+          "load_after": 7.10400390625,
+          "go_first": true,
+          "go_ns": 76330.21653543306,
+          "ref_ns": 71654.55215123859
+        },
+        {
+          "load_before": 7.10400390625,
+          "load_after": 7.10400390625,
+          "go_first": false,
+          "go_ns": 75645.9153543307,
+          "ref_ns": 72488.129726206
+        },
+        {
+          "load_before": 7.10400390625,
+          "load_after": 7.10400390625,
+          "go_first": true,
+          "go_ns": 73891.26771653544,
+          "ref_ns": 73964.98826597132
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 75645.9153543307,
+        "q1": 74946.6312335958,
+        "q3": 76108.74639107611
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 71913.05410691004,
+        "q1": 71762.44002607561,
+        "q3": 72543.69002607561
       },
-      "ratio": 0
+      "ratio": 1.0519079782353726,
+      "verdict": "slower"
     },
     {
       "name": "CSR.T/lap2d-100",
@@ -241,17 +889,71 @@
       "reference": "scipy.sparse 1.18.1 (A.T.tocsr())",
       "parity": "tolerance",
       "allocs": 5,
+      "go_iters": 1650,
+      "ref_iters": 1466,
+      "rounds": [
+        {
+          "load_before": 7.10400390625,
+          "load_after": 7.10400390625,
+          "go_first": true,
+          "go_ns": 79382.9793939394,
+          "ref_ns": 77625
+        },
+        {
+          "load_before": 7.10400390625,
+          "load_after": 7.10400390625,
+          "go_first": false,
+          "go_ns": 73667.5,
+          "ref_ns": 76213.05115961801
+        },
+        {
+          "load_before": 7.10400390625,
+          "load_after": 7.10400390625,
+          "go_first": true,
+          "go_ns": 73421.71757575758,
+          "ref_ns": 76856.58253751705
+        },
+        {
+          "load_before": 7.10400390625,
+          "load_after": 7.10400390625,
+          "go_first": false,
+          "go_ns": 72915.83333333333,
+          "ref_ns": 76248.94815825376
+        },
+        {
+          "load_before": 7.10400390625,
+          "load_after": 7.10400390625,
+          "go_first": true,
+          "go_ns": 72951.31272727273,
+          "ref_ns": 76766.91132332878
+        },
+        {
+          "load_before": 7.10400390625,
+          "load_after": 7.10400390625,
+          "go_first": false,
+          "go_ns": 73280.88363636364,
+          "ref_ns": 76396.68622100956
+        },
+        {
+          "load_before": 7.10400390625,
+          "load_after": 7.10400390625,
+          "go_first": true,
+          "go_ns": 76379.59575757576,
+          "ref_ns": 76050.90381991814
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 73421.71757575758,
+        "q1": 73116.09818181818,
+        "q3": 75023.54787878788
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 76396.68622100956,
+        "q1": 76230.99965893588,
+        "q3": 76811.74693042292
       },
-      "ratio": 0
+      "ratio": 0.9610589307938615,
+      "verdict": "faster"
     },
     {
       "name": "CSR.Transpose/lap2d-100",
@@ -259,17 +961,71 @@
       "reference": "scipy.sparse 1.18.1 (A.transpose(), a view)",
       "parity": "tolerance",
       "allocs": 1,
+      "go_iters": 4874292,
+      "ref_iters": 23939,
+      "rounds": [
+        {
+          "load_before": 7.10400390625,
+          "load_after": 7.10400390625,
+          "go_first": true,
+          "go_ns": 21.308334010354734,
+          "ref_ns": 4596.060111115753
+        },
+        {
+          "load_before": 7.10400390625,
+          "load_after": 6.77490234375,
+          "go_first": false,
+          "go_ns": 21.066769081540457,
+          "ref_ns": 4493.493880279043
+        },
+        {
+          "load_before": 6.77490234375,
+          "load_after": 6.77490234375,
+          "go_first": true,
+          "go_ns": 20.760485009925546,
+          "ref_ns": 4493.199715944693
+        },
+        {
+          "load_before": 6.77490234375,
+          "load_after": 6.77490234375,
+          "go_first": false,
+          "go_ns": 21.63212441930028,
+          "ref_ns": 4425.271857638164
+        },
+        {
+          "load_before": 6.77490234375,
+          "load_after": 6.77490234375,
+          "go_first": true,
+          "go_ns": 21.006905618292873,
+          "ref_ns": 4441.1942854755835
+        },
+        {
+          "load_before": 6.77490234375,
+          "load_after": 6.77490234375,
+          "go_first": false,
+          "go_ns": 21.423598545183587,
+          "ref_ns": 4449.2338443544
+        },
+        {
+          "load_before": 6.77490234375,
+          "load_after": 6.77490234375,
+          "go_first": true,
+          "go_ns": 20.918961153742945,
+          "ref_ns": 4583.3890304524
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 21.066769081540457,
+        "q1": 20.96293338601791,
+        "q3": 21.36596627776916
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 4493.199715944693,
+        "q1": 4445.2140649149915,
+        "q3": 4538.441455365722
       },
-      "ratio": 0
+      "ratio": 0.0046885895160151325,
+      "verdict": "faster"
     },
     {
       "name": "CSR.ToCOO/lap2d-100",
@@ -277,17 +1033,71 @@
       "reference": "scipy.sparse 1.18.1",
       "parity": "tolerance",
       "allocs": 4,
+      "go_iters": 2940,
+      "ref_iters": 3451,
+      "rounds": [
+        {
+          "load_before": 6.77490234375,
+          "load_after": 6.77490234375,
+          "go_first": true,
+          "go_ns": 52905.498639455785,
+          "ref_ns": 31544.238481599536
+        },
+        {
+          "load_before": 6.77490234375,
+          "load_after": 6.77490234375,
+          "go_first": false,
+          "go_ns": 55211.30952380953,
+          "ref_ns": 31570.25731671979
+        },
+        {
+          "load_before": 6.77490234375,
+          "load_after": 6.77490234375,
+          "go_first": true,
+          "go_ns": 62752.622108843534,
+          "ref_ns": 32641.287742683282
+        },
+        {
+          "load_before": 6.77490234375,
+          "load_after": 6.77490234375,
+          "go_first": false,
+          "go_ns": 55948.45510204082,
+          "ref_ns": 31802.569110402783
+        },
+        {
+          "load_before": 6.77490234375,
+          "load_after": 6.77490234375,
+          "go_first": true,
+          "go_ns": 83812.06054421769,
+          "ref_ns": 32988.662706461895
+        },
+        {
+          "load_before": 6.77490234375,
+          "load_after": 6.77490234375,
+          "go_first": false,
+          "go_ns": 52553.24557823129,
+          "ref_ns": 32070.100550565054
+        },
+        {
+          "load_before": 6.77490234375,
+          "load_after": 6.77490234375,
+          "go_first": true,
+          "go_ns": 52587.5850340136,
+          "ref_ns": 31947.286004056794
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 55211.30952380953,
+        "q1": 52746.541836734694,
+        "q3": 59350.538605442176
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 31947.286004056794,
+        "q1": 31686.41321356129,
+        "q3": 32355.69414662417
       },
-      "ratio": 0
+      "ratio": 1.7282003083704378,
+      "verdict": "slower"
     },
     {
       "name": "COO.ToCSR/lap2d-100",
@@ -295,17 +1105,71 @@
       "reference": "scipy.sparse 1.18.1",
       "parity": "tolerance",
       "allocs": 7,
+      "go_iters": 452,
+      "ref_iters": 1006,
+      "rounds": [
+        {
+          "load_before": 6.77490234375,
+          "load_after": 6.77490234375,
+          "go_first": true,
+          "go_ns": 262065.17256637168,
+          "ref_ns": 151537.81510934394
+        },
+        {
+          "load_before": 6.77490234375,
+          "load_after": 6.77490234375,
+          "go_first": false,
+          "go_ns": 257442.29203539822,
+          "ref_ns": 149957.9194831014
+        },
+        {
+          "load_before": 6.77490234375,
+          "load_after": 6.77490234375,
+          "go_first": true,
+          "go_ns": 253650.71902654867,
+          "ref_ns": 149970.17892644135
+        },
+        {
+          "load_before": 6.77490234375,
+          "load_after": 6.77490234375,
+          "go_first": false,
+          "go_ns": 254468.5663716814,
+          "ref_ns": 149855.03578528826
+        },
+        {
+          "load_before": 6.77490234375,
+          "load_after": 6.55224609375,
+          "go_first": true,
+          "go_ns": 258038.07079646018,
+          "ref_ns": 148890.6153081511
+        },
+        {
+          "load_before": 6.55224609375,
+          "load_after": 6.55224609375,
+          "go_first": false,
+          "go_ns": 254873.70796460178,
+          "ref_ns": 148676.06858846918
+        },
+        {
+          "load_before": 6.55224609375,
+          "load_after": 6.55224609375,
+          "go_first": true,
+          "go_ns": 250722.8053097345,
+          "ref_ns": 150811.13320079522
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 254873.70796460178,
+        "q1": 254059.64269911504,
+        "q3": 257740.1814159292
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 149957.9194831014,
+        "q1": 149372.82554671966,
+        "q3": 150390.65606361828
       },
-      "ratio": 0
+      "ratio": 1.6996348631878906,
+      "verdict": "slower"
     },
     {
       "name": "COO.ToCSC/lap2d-100",
@@ -313,17 +1177,71 @@
       "reference": "scipy.sparse 1.18.1",
       "parity": "tolerance",
       "allocs": 7,
+      "go_iters": 324,
+      "ref_iters": 1601,
+      "rounds": [
+        {
+          "load_before": 6.55224609375,
+          "load_after": 6.55224609375,
+          "go_first": true,
+          "go_ns": 314159.0802469136,
+          "ref_ns": 67713.79887570269
+        },
+        {
+          "load_before": 6.55224609375,
+          "load_after": 6.55224609375,
+          "go_first": false,
+          "go_ns": 317765.1728395062,
+          "ref_ns": 68039.45471580263
+        },
+        {
+          "load_before": 6.55224609375,
+          "load_after": 6.55224609375,
+          "go_first": true,
+          "go_ns": 312964.762345679,
+          "ref_ns": 67710.8057464085
+        },
+        {
+          "load_before": 6.55224609375,
+          "load_after": 6.55224609375,
+          "go_first": false,
+          "go_ns": 313584.49074074073,
+          "ref_ns": 68178.74203622736
+        },
+        {
+          "load_before": 6.55224609375,
+          "load_after": 6.55224609375,
+          "go_first": true,
+          "go_ns": 313758.23148148146,
+          "ref_ns": 67636.1911305434
+        },
+        {
+          "load_before": 6.55224609375,
+          "load_after": 6.55224609375,
+          "go_first": false,
+          "go_ns": 311706.66049382713,
+          "ref_ns": 67317.53591505309
+        },
+        {
+          "load_before": 6.55224609375,
+          "load_after": 6.55224609375,
+          "go_first": true,
+          "go_ns": 314528.4228395062,
+          "ref_ns": 67917.62960649595
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 313758.23148148146,
+        "q1": 313274.6265432099,
+        "q3": 314343.7515432099
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 67713.79887570269,
+        "q1": 67673.49843847594,
+        "q3": 67978.5421611493
       },
-      "ratio": 0
+      "ratio": 4.633593694210314,
+      "verdict": "slower"
     },
     {
       "name": "CSR.Clone/lap2d-100",
@@ -331,17 +1249,71 @@
       "reference": "scipy.sparse 1.18.1 (A.copy())",
       "parity": "tolerance",
       "allocs": 4,
+      "go_iters": 12596,
+      "ref_iters": 7637,
+      "rounds": [
+        {
+          "load_before": 6.55224609375,
+          "load_after": 6.55224609375,
+          "go_first": true,
+          "go_ns": 15660.163226421086,
+          "ref_ns": 14099.722796909782
+        },
+        {
+          "load_before": 6.55224609375,
+          "load_after": 6.55224609375,
+          "go_first": false,
+          "go_ns": 14831.642981899016,
+          "ref_ns": 14254.070184627471
+        },
+        {
+          "load_before": 6.55224609375,
+          "load_after": 6.55224609375,
+          "go_first": true,
+          "go_ns": 13972.226659256907,
+          "ref_ns": 14129.37554013356
+        },
+        {
+          "load_before": 6.55224609375,
+          "load_after": 6.55224609375,
+          "go_first": false,
+          "go_ns": 16329.807081613211,
+          "ref_ns": 14015.352887259394
+        },
+        {
+          "load_before": 6.55224609375,
+          "load_after": 6.55224609375,
+          "go_first": true,
+          "go_ns": 15920.811527469037,
+          "ref_ns": 14438.921304177033
+        },
+        {
+          "load_before": 6.55224609375,
+          "load_after": 6.55224609375,
+          "go_first": false,
+          "go_ns": 14299.016830739918,
+          "ref_ns": 14091.893675527039
+        },
+        {
+          "load_before": 6.55224609375,
+          "load_after": 6.55224609375,
+          "go_first": true,
+          "go_ns": 13641.0996348047,
+          "ref_ns": 14062.17533062721
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 14831.642981899016,
+        "q1": 14135.621744998412,
+        "q3": 15790.48737694506
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 14099.722796909782,
+        "q1": 14077.034503077124,
+        "q3": 14191.722862380517
       },
-      "ratio": 0
+      "ratio": 1.0519102535228315,
+      "verdict": "tie"
     },
     {
       "name": "CSR.Diagonal/lap2d-100",
@@ -349,17 +1321,71 @@
       "reference": "scipy.sparse 1.18.1",
       "parity": "tolerance",
       "allocs": 2,
+      "go_iters": 4392,
+      "ref_iters": 5474,
+      "rounds": [
+        {
+          "load_before": 6.34765625,
+          "load_after": 6.34765625,
+          "go_first": true,
+          "go_ns": 24744.459471766848,
+          "ref_ns": 19585.388564121302
+        },
+        {
+          "load_before": 6.34765625,
+          "load_after": 6.34765625,
+          "go_first": false,
+          "go_ns": 26043.459699453553,
+          "ref_ns": 23942.85860431129
+        },
+        {
+          "load_before": 6.34765625,
+          "load_after": 6.34765625,
+          "go_first": true,
+          "go_ns": 25608.179644808744,
+          "ref_ns": 20287.191085129703
+        },
+        {
+          "load_before": 6.34765625,
+          "load_after": 6.34765625,
+          "go_first": false,
+          "go_ns": 39914.18101092896,
+          "ref_ns": 19902.83613445378
+        },
+        {
+          "load_before": 6.34765625,
+          "load_after": 6.34765625,
+          "go_first": true,
+          "go_ns": 34016.4410291439,
+          "ref_ns": 21917.450675922544
+        },
+        {
+          "load_before": 6.34765625,
+          "load_after": 6.34765625,
+          "go_first": false,
+          "go_ns": 25980.504326047358,
+          "ref_ns": 21028.76488856412
+        },
+        {
+          "load_before": 6.34765625,
+          "load_after": 6.34765625,
+          "go_first": true,
+          "go_ns": 25994.734744990892,
+          "ref_ns": 19691.14596273292
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 25994.734744990892,
+        "q1": 25794.34198542805,
+        "q3": 30029.950364298726
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 20287.191085129703,
+        "q1": 19796.99104859335,
+        "q3": 21473.107782243333
       },
-      "ratio": 0
+      "ratio": 1.2813373047018204,
+      "verdict": "slower"
     },
     {
       "name": "CSR.Tril/lap2d-100",
@@ -367,17 +1393,71 @@
       "reference": "scipy.sparse 1.18.1 (sp.tril, csr)",
       "parity": "tolerance",
       "allocs": 4,
+      "go_iters": 639,
+      "ref_iters": 322,
+      "rounds": [
+        {
+          "load_before": 6.34765625,
+          "load_after": 6.34765625,
+          "go_first": true,
+          "go_ns": 164058.94679186228,
+          "ref_ns": 327714.8043478261
+        },
+        {
+          "load_before": 6.34765625,
+          "load_after": 6.34765625,
+          "go_first": false,
+          "go_ns": 165579.48669796556,
+          "ref_ns": 329332.9440993789
+        },
+        {
+          "load_before": 6.34765625,
+          "load_after": 6.34765625,
+          "go_first": true,
+          "go_ns": 168882.10798122064,
+          "ref_ns": 332760.73913043475
+        },
+        {
+          "load_before": 6.34765625,
+          "load_after": 6.34765625,
+          "go_first": false,
+          "go_ns": 169464.20187793428,
+          "ref_ns": 326001.29192546586
+        },
+        {
+          "load_before": 6.34765625,
+          "load_after": 6.34765625,
+          "go_first": true,
+          "go_ns": 170542.18779342723,
+          "ref_ns": 329172.87577639753
+        },
+        {
+          "load_before": 6.34765625,
+          "load_after": 6.34765625,
+          "go_first": false,
+          "go_ns": 165907.47261345852,
+          "ref_ns": 342664.20807453414
+        },
+        {
+          "load_before": 6.34765625,
+          "load_after": 6.34765625,
+          "go_first": true,
+          "go_ns": 167188.77151799688,
+          "ref_ns": 315170.93788819876
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 167188.77151799688,
+        "q1": 165743.47965571203,
+        "q3": 169173.15492957746
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 329172.87577639753,
+        "q1": 326858.048136646,
+        "q3": 331046.8416149068
       },
-      "ratio": 0
+      "ratio": 0.5079056745597892,
+      "verdict": "faster"
     },
     {
       "name": "CSR.Triu/lap2d-100",
@@ -385,17 +1465,71 @@
       "reference": "scipy.sparse 1.18.1 (sp.triu, csr)",
       "parity": "tolerance",
       "allocs": 4,
+      "go_iters": 661,
+      "ref_iters": 506,
+      "rounds": [
+        {
+          "load_before": 6.34765625,
+          "load_after": 6.34765625,
+          "go_first": true,
+          "go_ns": 161806.98487140695,
+          "ref_ns": 327488.38932806323
+        },
+        {
+          "load_before": 6.34765625,
+          "load_after": 6.34765625,
+          "go_first": false,
+          "go_ns": 161497.16338880485,
+          "ref_ns": 318031.04347826086
+        },
+        {
+          "load_before": 6.34765625,
+          "load_after": 6.34765625,
+          "go_first": true,
+          "go_ns": 170107.79122541603,
+          "ref_ns": 326751.72924901184
+        },
+        {
+          "load_before": 6.34765625,
+          "load_after": 6.3193359375,
+          "go_first": false,
+          "go_ns": 162746.53252647503,
+          "ref_ns": 320843.2154150198
+        },
+        {
+          "load_before": 6.3193359375,
+          "load_after": 6.3193359375,
+          "go_first": true,
+          "go_ns": 172192.06959152798,
+          "ref_ns": 345900.93873517786
+        },
+        {
+          "load_before": 6.3193359375,
+          "load_after": 6.3193359375,
+          "go_first": false,
+          "go_ns": 171026.4114977307,
+          "ref_ns": 334770.4209486166
+        },
+        {
+          "load_before": 6.3193359375,
+          "load_after": 6.3193359375,
+          "go_first": true,
+          "go_ns": 172320.97881996975,
+          "ref_ns": 343413.70158102765
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 170107.79122541603,
+        "q1": 162276.75869894098,
+        "q3": 171609.24054462934
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 327488.38932806323,
+        "q1": 323797.4723320158,
+        "q3": 339092.06126482214
       },
-      "ratio": 0
+      "ratio": 0.5194315180896677,
+      "verdict": "faster"
     },
     {
       "name": "CSR.Scale/lap2d-100",
@@ -403,17 +1537,71 @@
       "reference": "scipy.sparse 1.18.1 (in place: A.data *= 1.0)",
       "parity": "tolerance",
       "allocs": 0,
+      "go_iters": 13750,
+      "ref_iters": 17837,
+      "rounds": [
+        {
+          "load_before": 6.3193359375,
+          "load_after": 6.3193359375,
+          "go_first": true,
+          "go_ns": 12467.945454545454,
+          "ref_ns": 6187.599259965241
+        },
+        {
+          "load_before": 6.3193359375,
+          "load_after": 6.3193359375,
+          "go_first": false,
+          "go_ns": 12686.296945454545,
+          "ref_ns": 6274.46459606436
+        },
+        {
+          "load_before": 6.3193359375,
+          "load_after": 6.3193359375,
+          "go_first": true,
+          "go_ns": 12649.696945454545,
+          "ref_ns": 6252.583562258227
+        },
+        {
+          "load_before": 6.3193359375,
+          "load_after": 6.3193359375,
+          "go_first": false,
+          "go_ns": 15582.715127272728,
+          "ref_ns": 6231.742109099064
+        },
+        {
+          "load_before": 6.3193359375,
+          "load_after": 6.3193359375,
+          "go_first": true,
+          "go_ns": 15643.524218181818,
+          "ref_ns": 6196.429220160341
+        },
+        {
+          "load_before": 6.3193359375,
+          "load_after": 6.3193359375,
+          "go_first": false,
+          "go_ns": 12833.257527272728,
+          "ref_ns": 8101.951000728822
+        },
+        {
+          "load_before": 6.3193359375,
+          "load_after": 6.3193359375,
+          "go_first": true,
+          "go_ns": 12691.103054545454,
+          "ref_ns": 6242.791220496721
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 12691.103054545454,
+        "q1": 12667.996945454546,
+        "q3": 14207.986327272727
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 6242.791220496721,
+        "q1": 6214.0856646297025,
+        "q3": 6263.524079161294
       },
-      "ratio": 0
+      "ratio": 2.0329212697162182,
+      "verdict": "slower"
     },
     {
       "name": "CSR.ScaleRows/lap2d-100",
@@ -421,17 +1609,71 @@
       "reference": "scipy.sparse 1.18.1 (sp.diags(d) @ A, a new matrix)",
       "parity": "tolerance",
       "allocs": 0,
+      "go_iters": 3146,
+      "ref_iters": 545,
+      "rounds": [
+        {
+          "load_before": 6.3193359375,
+          "load_after": 6.3193359375,
+          "go_first": true,
+          "go_ns": 31712.78353464717,
+          "ref_ns": 213590.82568807338
+        },
+        {
+          "load_before": 6.3193359375,
+          "load_after": 6.3193359375,
+          "go_first": false,
+          "go_ns": 32060.116020343292,
+          "ref_ns": 217987.23302752295
+        },
+        {
+          "load_before": 6.3193359375,
+          "load_after": 6.3193359375,
+          "go_first": true,
+          "go_ns": 32331.783852511126,
+          "ref_ns": 204934.9376146789
+        },
+        {
+          "load_before": 6.3193359375,
+          "load_after": 6.3193359375,
+          "go_first": false,
+          "go_ns": 32454.267323585504,
+          "ref_ns": 202552.14128440368
+        },
+        {
+          "load_before": 6.3193359375,
+          "load_after": 6.3193359375,
+          "go_first": true,
+          "go_ns": 34360.47107438016,
+          "ref_ns": 201799.61834862386
+        },
+        {
+          "load_before": 6.3193359375,
+          "load_after": 6.53369140625,
+          "go_first": false,
+          "go_ns": 31686.9173553719,
+          "ref_ns": 202350.45871559632
+        },
+        {
+          "load_before": 6.53369140625,
+          "load_after": 6.53369140625,
+          "go_first": true,
+          "go_ns": 32298.778766687858,
+          "ref_ns": 204742.96513761466
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 32298.778766687858,
+        "q1": 31886.449777495232,
+        "q3": 32393.025588048316
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 204742.96513761466,
+        "q1": 202451.3,
+        "q3": 209262.88165137614
       },
-      "ratio": 0
+      "ratio": 0.15775281336273878,
+      "verdict": "faster"
     },
     {
       "name": "CSR.ScaleCols/lap2d-100",
@@ -439,17 +1681,71 @@
       "reference": "scipy.sparse 1.18.1 (A @ sp.diags(d), a new matrix)",
       "parity": "tolerance",
       "allocs": 0,
+      "go_iters": 7456,
+      "ref_iters": 490,
+      "rounds": [
+        {
+          "load_before": 6.53369140625,
+          "load_after": 6.53369140625,
+          "go_first": true,
+          "go_ns": 21920.248792918454,
+          "ref_ns": 222142.0918367347
+        },
+        {
+          "load_before": 6.53369140625,
+          "load_after": 6.53369140625,
+          "go_first": false,
+          "go_ns": 21842.755230686696,
+          "ref_ns": 221150.3387755102
+        },
+        {
+          "load_before": 6.53369140625,
+          "load_after": 6.53369140625,
+          "go_first": true,
+          "go_ns": 21432.93991416309,
+          "ref_ns": 229047.11020408163
+        },
+        {
+          "load_before": 6.53369140625,
+          "load_after": 6.53369140625,
+          "go_first": false,
+          "go_ns": 21412.51448497854,
+          "ref_ns": 217919.89795918367
+        },
+        {
+          "load_before": 6.53369140625,
+          "load_after": 6.53369140625,
+          "go_first": true,
+          "go_ns": 23464.033530042918,
+          "ref_ns": 213870.57959183672
+        },
+        {
+          "load_before": 6.53369140625,
+          "load_after": 6.53369140625,
+          "go_first": false,
+          "go_ns": 22988.946351931332,
+          "ref_ns": 211503.99591836735
+        },
+        {
+          "load_before": 6.53369140625,
+          "load_after": 6.53369140625,
+          "go_first": true,
+          "go_ns": 21381.253353004293,
+          "ref_ns": 220382.14285714287
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 21842.755230686696,
+        "q1": 21422.727199570814,
+        "q3": 22454.597572424893
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 220382.14285714287,
+        "q1": 215895.2387755102,
+        "q3": 221646.21530612244
       },
-      "ratio": 0
+      "ratio": 0.09911309032350098,
+      "verdict": "faster"
     },
     {
       "name": "CSR.Norm1/lap2d-100",
@@ -457,17 +1753,71 @@
       "reference": "scipy.sparse.linalg 1.18.1",
       "parity": "tolerance",
       "allocs": 2,
+      "go_iters": 771,
+      "ref_iters": 2050,
+      "rounds": [
+        {
+          "load_before": 6.53369140625,
+          "load_after": 6.53369140625,
+          "go_first": true,
+          "go_ns": 144433.7989623865,
+          "ref_ns": 72889.41073170732
+        },
+        {
+          "load_before": 6.53369140625,
+          "load_after": 6.53369140625,
+          "go_first": false,
+          "go_ns": 145005.51232166018,
+          "ref_ns": 64677.03268292683
+        },
+        {
+          "load_before": 6.53369140625,
+          "load_after": 6.53369140625,
+          "go_first": true,
+          "go_ns": 157912.775616083,
+          "ref_ns": 66815.83365853659
+        },
+        {
+          "load_before": 6.53369140625,
+          "load_after": 6.53369140625,
+          "go_first": false,
+          "go_ns": 145743.83916990922,
+          "ref_ns": 66162.0931707317
+        },
+        {
+          "load_before": 6.53369140625,
+          "load_after": 6.53369140625,
+          "go_first": true,
+          "go_ns": 145683.1504539559,
+          "ref_ns": 67647.58146341464
+        },
+        {
+          "load_before": 6.53369140625,
+          "load_after": 6.53369140625,
+          "go_first": false,
+          "go_ns": 149232.43709468222,
+          "ref_ns": 68170.63024390244
+        },
+        {
+          "load_before": 6.53369140625,
+          "load_after": 6.53369140625,
+          "go_first": true,
+          "go_ns": 173602.03242542152,
+          "ref_ns": 68156.24
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 145743.83916990922,
+        "q1": 145344.33138780802,
+        "q3": 153572.6063553826
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 67647.58146341464,
+        "q1": 66488.96341463414,
+        "q3": 68163.43512195122
       },
-      "ratio": 0
+      "ratio": 2.1544574989533194,
+      "verdict": "slower"
     },
     {
       "name": "CSR.NormInf/lap2d-100",
@@ -475,17 +1825,71 @@
       "reference": "scipy.sparse.linalg 1.18.1",
       "parity": "tolerance",
       "allocs": 1,
+      "go_iters": 1763,
+      "ref_iters": 995,
+      "rounds": [
+        {
+          "load_before": 6.53369140625,
+          "load_after": 6.33056640625,
+          "go_first": true,
+          "go_ns": 61862.9466817924,
+          "ref_ns": 123667.0432160804
+        },
+        {
+          "load_before": 6.33056640625,
+          "load_after": 6.33056640625,
+          "go_first": false,
+          "go_ns": 61475.86954055587,
+          "ref_ns": 106715.11658291458
+        },
+        {
+          "load_before": 6.33056640625,
+          "load_after": 6.33056640625,
+          "go_first": true,
+          "go_ns": 61742.46057855927,
+          "ref_ns": 110802.17688442211
+        },
+        {
+          "load_before": 6.33056640625,
+          "load_after": 6.33056640625,
+          "go_first": false,
+          "go_ns": 65301.380034032896,
+          "ref_ns": 108217.50452261306
+        },
+        {
+          "load_before": 6.33056640625,
+          "load_after": 6.33056640625,
+          "go_first": true,
+          "go_ns": 61842.76347135565,
+          "ref_ns": 115552.17688442211
+        },
+        {
+          "load_before": 6.33056640625,
+          "load_after": 6.33056640625,
+          "go_first": false,
+          "go_ns": 62328.18094157686,
+          "ref_ns": 115880.10854271357
+        },
+        {
+          "load_before": 6.33056640625,
+          "load_after": 6.33056640625,
+          "go_first": true,
+          "go_ns": 62192.616562677256,
+          "ref_ns": 129223.36683417085
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 61862.9466817924,
+        "q1": 61792.61202495746,
+        "q3": 62260.39875212706
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 115552.17688442211,
+        "q1": 109509.84070351758,
+        "q3": 119773.57587939699
       },
-      "ratio": 0
+      "ratio": 0.535368076567429,
+      "verdict": "faster"
     },
     {
       "name": "CSR.NormFro/lap2d-100",
@@ -493,17 +1897,71 @@
       "reference": "scipy.sparse.linalg 1.18.1",
       "parity": "tolerance",
       "allocs": 1,
+      "go_iters": 2222,
+      "ref_iters": 71334,
+      "rounds": [
+        {
+          "load_before": 6.33056640625,
+          "load_after": 6.33056640625,
+          "go_first": true,
+          "go_ns": 46651.5900090009,
+          "ref_ns": 2622.725488546836
+        },
+        {
+          "load_before": 6.33056640625,
+          "load_after": 6.33056640625,
+          "go_first": false,
+          "go_ns": 46073.88253825383,
+          "ref_ns": 2950.242282782404
+        },
+        {
+          "load_before": 6.33056640625,
+          "load_after": 6.33056640625,
+          "go_first": true,
+          "go_ns": 46060.26867686769,
+          "ref_ns": 2635.5571396529003
+        },
+        {
+          "load_before": 6.33056640625,
+          "load_after": 6.33056640625,
+          "go_first": false,
+          "go_ns": 47317.431593159316,
+          "ref_ns": 2619.6151204194352
+        },
+        {
+          "load_before": 6.33056640625,
+          "load_after": 6.33056640625,
+          "go_first": true,
+          "go_ns": 50693.27542754276,
+          "ref_ns": 2596.5983962766704
+        },
+        {
+          "load_before": 6.33056640625,
+          "load_after": 6.33056640625,
+          "go_first": false,
+          "go_ns": 46330.72682268227,
+          "ref_ns": 2605.3535761348026
+        },
+        {
+          "load_before": 6.33056640625,
+          "load_after": 6.33056640625,
+          "go_first": true,
+          "go_ns": 46311.86228622862,
+          "ref_ns": 2589.7368996551436
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 46330.72682268227,
+        "q1": 46192.872412241224,
+        "q3": 46984.510801080105
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 2619.6151204194352,
+        "q1": 2600.9759862057363,
+        "q3": 2629.1413140998684
       },
-      "ratio": 0
+      "ratio": 17.686081616166618,
+      "verdict": "slower"
     },
     {
       "name": "CSR.Prune/lap2d-100",
@@ -511,17 +1969,71 @@
       "reference": "scipy.sparse 1.18.1 (A.eliminate_zeros(), in place)",
       "parity": "tolerance",
       "allocs": 0,
+      "go_iters": 1094,
+      "ref_iters": 5057,
+      "rounds": [
+        {
+          "load_before": 6.33056640625,
+          "load_after": 6.33056640625,
+          "go_first": true,
+          "go_ns": 97652.84186471664,
+          "ref_ns": 21482.11231955705
+        },
+        {
+          "load_before": 6.33056640625,
+          "load_after": 6.33056640625,
+          "go_first": false,
+          "go_ns": 97903.90767824497,
+          "ref_ns": 21592.97350207633
+        },
+        {
+          "load_before": 6.33056640625,
+          "load_after": 6.33056640625,
+          "go_first": true,
+          "go_ns": 98207.53290676417,
+          "ref_ns": 21528.94502669567
+        },
+        {
+          "load_before": 6.33056640625,
+          "load_after": 6.3837890625,
+          "go_first": false,
+          "go_ns": 109864.10694698355,
+          "ref_ns": 24593.105200711885
+        },
+        {
+          "load_before": 6.3837890625,
+          "load_after": 6.3837890625,
+          "go_first": true,
+          "go_ns": 98402.042047532,
+          "ref_ns": 21724.35080087008
+        },
+        {
+          "load_before": 6.3837890625,
+          "load_after": 6.3837890625,
+          "go_first": false,
+          "go_ns": 98203.53382084095,
+          "ref_ns": 21492.75756377299
+        },
+        {
+          "load_before": 6.3837890625,
+          "load_after": 6.3837890625,
+          "go_first": true,
+          "go_ns": 98093.54021937842,
+          "ref_ns": 21896.348230175994
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 98203.53382084095,
+        "q1": 97998.7239488117,
+        "q3": 98304.78747714809
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 21592.97350207633,
+        "q1": 21510.85129523433,
+        "q3": 21810.349515523038
       },
-      "ratio": 0
+      "ratio": 4.547939347556645,
+      "verdict": "slower"
     },
     {
       "name": "CSR.IsSymmetric/lap2d-100",
@@ -529,17 +2041,71 @@
       "reference": "scipy.sparse 1.18.1 ((A != A.T).nnz == 0)",
       "parity": "tolerance",
       "allocs": 0,
+      "go_iters": 689,
+      "ref_iters": 540,
+      "rounds": [
+        {
+          "load_before": 6.3837890625,
+          "load_after": 6.3837890625,
+          "go_first": true,
+          "go_ns": 159589.25979680696,
+          "ref_ns": 189608.87407407406
+        },
+        {
+          "load_before": 6.3837890625,
+          "load_after": 6.3837890625,
+          "go_first": false,
+          "go_ns": 162477.20174165457,
+          "ref_ns": 188718.13148148148
+        },
+        {
+          "load_before": 6.3837890625,
+          "load_after": 6.3837890625,
+          "go_first": true,
+          "go_ns": 162971.45718432512,
+          "ref_ns": 189292.59259259258
+        },
+        {
+          "load_before": 6.3837890625,
+          "load_after": 6.3837890625,
+          "go_first": false,
+          "go_ns": 160048.13642960813,
+          "ref_ns": 187705.70925925925
+        },
+        {
+          "load_before": 6.3837890625,
+          "load_after": 6.3837890625,
+          "go_first": true,
+          "go_ns": 161704.64441219158,
+          "ref_ns": 197153.62592592594
+        },
+        {
+          "load_before": 6.3837890625,
+          "load_after": 6.3837890625,
+          "go_first": false,
+          "go_ns": 159275.58055152395,
+          "ref_ns": 198521.75925925927
+        },
+        {
+          "load_before": 6.3837890625,
+          "load_after": 6.3837890625,
+          "go_first": true,
+          "go_ns": 161654.39042089984,
+          "ref_ns": 192588.11666666667
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 161654.39042089984,
+        "q1": 159818.69811320753,
+        "q3": 162090.92307692306
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 189608.87407407406,
+        "q1": 189005.36203703703,
+        "q3": 194870.8712962963
       },
-      "ratio": 0
+      "ratio": 0.8525676406777601,
+      "verdict": "faster"
     },
     {
       "name": "CSR.Validate/lap2d-100",
@@ -547,17 +2113,71 @@
       "reference": "scipy.sparse 1.18.1 (A.check_format(full_check=True))",
       "parity": "tolerance",
       "allocs": 0,
+      "go_iters": 4220,
+      "ref_iters": 9969,
+      "rounds": [
+        {
+          "load_before": 6.3837890625,
+          "load_after": 6.3837890625,
+          "go_first": true,
+          "go_ns": 34829.37393364929,
+          "ref_ns": 10900.270037115057
+        },
+        {
+          "load_before": 6.3837890625,
+          "load_after": 6.3837890625,
+          "go_first": false,
+          "go_ns": 32855.27251184834,
+          "ref_ns": 10888.02788644799
+        },
+        {
+          "load_before": 6.3837890625,
+          "load_after": 6.3837890625,
+          "go_first": true,
+          "go_ns": 33610.41682464455,
+          "ref_ns": 10880.87651720333
+        },
+        {
+          "load_before": 6.3837890625,
+          "load_after": 6.3837890625,
+          "go_first": false,
+          "go_ns": 32625.928199052134,
+          "ref_ns": 10854.762263015347
+        },
+        {
+          "load_before": 6.3837890625,
+          "load_after": 6.3837890625,
+          "go_first": true,
+          "go_ns": 35196.879857819906,
+          "ref_ns": 11477.50526632561
+        },
+        {
+          "load_before": 6.3837890625,
+          "load_after": 6.3837890625,
+          "go_first": false,
+          "go_ns": 38608.10616113744,
+          "ref_ns": 11567.647206339652
+        },
+        {
+          "load_before": 6.3837890625,
+          "load_after": 6.3837890625,
+          "go_first": true,
+          "go_ns": 38269.07582938389,
+          "ref_ns": 11336.9612799679
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 34829.37393364929,
+        "q1": 33232.84466824644,
+        "q3": 36732.9778436019
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 10900.270037115057,
+        "q1": 10884.452201825661,
+        "q3": 11407.233273146754
       },
-      "ratio": 0
+      "ratio": 3.19527624683209,
+      "verdict": "slower"
     },
     {
       "name": "CSR.Permute/lap2d-100",
@@ -565,17 +2185,71 @@
       "reference": "scipy.sparse 1.18.1 (A[p,:][:,p])",
       "parity": "tolerance",
       "allocs": 6,
+      "go_iters": 317,
+      "ref_iters": 259,
+      "rounds": [
+        {
+          "load_before": 6.3837890625,
+          "load_after": 6.59326171875,
+          "go_first": true,
+          "go_ns": 347578.07570977916,
+          "ref_ns": 447006.11583011586
+        },
+        {
+          "load_before": 6.59326171875,
+          "load_after": 6.59326171875,
+          "go_first": false,
+          "go_ns": 346289.17034700315,
+          "ref_ns": 394578.66795366793
+        },
+        {
+          "load_before": 6.59326171875,
+          "load_after": 6.59326171875,
+          "go_first": true,
+          "go_ns": 345777.86750788643,
+          "ref_ns": 399251.76833976834
+        },
+        {
+          "load_before": 6.59326171875,
+          "load_after": 6.59326171875,
+          "go_first": false,
+          "go_ns": 345422.58359621454,
+          "ref_ns": 385843.95366795367
+        },
+        {
+          "load_before": 6.59326171875,
+          "load_after": 6.59326171875,
+          "go_first": true,
+          "go_ns": 346980.0189274448,
+          "ref_ns": 418385.13513513515
+        },
+        {
+          "load_before": 6.59326171875,
+          "load_after": 6.59326171875,
+          "go_first": false,
+          "go_ns": 348755.6529968454,
+          "ref_ns": 411508.8494208494
+        },
+        {
+          "load_before": 6.59326171875,
+          "load_after": 6.59326171875,
+          "go_first": true,
+          "go_ns": 352003.2839116719,
+          "ref_ns": 409099.74517374515
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 346980.0189274448,
+        "q1": 346033.5189274448,
+        "q3": 348166.8643533123
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 409099.74517374515,
+        "q1": 396915.2181467181,
+        "q3": 414946.9922779923
       },
-      "ratio": 0
+      "ratio": 0.8481550600332982,
+      "verdict": "faster"
     },
     {
       "name": "CSR.Dense/lap2d-30",
@@ -583,17 +2257,71 @@
       "reference": "scipy.sparse 1.18.1 (A.toarray())",
       "parity": "tolerance",
       "allocs": 2,
+      "go_iters": 2691,
+      "ref_iters": 3254,
+      "rounds": [
+        {
+          "load_before": 6.59326171875,
+          "load_after": 6.59326171875,
+          "go_first": true,
+          "go_ns": 72202.99145299145,
+          "ref_ns": 33985.47940995698
+        },
+        {
+          "load_before": 6.59326171875,
+          "load_after": 6.59326171875,
+          "go_first": false,
+          "go_ns": 71693.48457822371,
+          "ref_ns": 33698.5503995083
+        },
+        {
+          "load_before": 6.59326171875,
+          "load_after": 6.59326171875,
+          "go_first": true,
+          "go_ns": 71334.16945373468,
+          "ref_ns": 33747.22126613399
+        },
+        {
+          "load_before": 6.59326171875,
+          "load_after": 6.59326171875,
+          "go_first": false,
+          "go_ns": 72581.70754366406,
+          "ref_ns": 33757.13245236632
+        },
+        {
+          "load_before": 6.59326171875,
+          "load_after": 6.59326171875,
+          "go_first": true,
+          "go_ns": 72569.46005202527,
+          "ref_ns": 34400.9680393362
+        },
+        {
+          "load_before": 6.59326171875,
+          "load_after": 6.59326171875,
+          "go_first": false,
+          "go_ns": 70303.248606466,
+          "ref_ns": 33792.53749231715
+        },
+        {
+          "load_before": 6.59326171875,
+          "load_after": 6.59326171875,
+          "go_first": true,
+          "go_ns": 73600.47380156076,
+          "ref_ns": 34097.76429010449
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 72202.99145299145,
+        "q1": 71513.82701597919,
+        "q3": 72575.58379784467
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 33792.53749231715,
+        "q1": 33752.176859250154,
+        "q3": 34041.62185003073
       },
-      "ratio": 0
+      "ratio": 2.1366549188384285,
+      "verdict": "slower"
     },
     {
       "name": "FromDense/lap2d-30",
@@ -601,17 +2329,71 @@
       "reference": "scipy.sparse 1.18.1 (sp.csr_matrix(D))",
       "parity": "tolerance",
       "allocs": 4,
+      "go_iters": 230,
+      "ref_iters": 110,
+      "rounds": [
+        {
+          "load_before": 6.59326171875,
+          "load_after": 6.59326171875,
+          "go_first": true,
+          "go_ns": 523763.7652173913,
+          "ref_ns": 1868263.6363636365
+        },
+        {
+          "load_before": 6.59326171875,
+          "load_after": 7.34619140625,
+          "go_first": false,
+          "go_ns": 515726.0869565217,
+          "ref_ns": 1903973.1090909091
+        },
+        {
+          "load_before": 7.34619140625,
+          "load_after": 7.34619140625,
+          "go_first": true,
+          "go_ns": 509662.68260869564,
+          "ref_ns": 1891152.6545454545
+        },
+        {
+          "load_before": 7.34619140625,
+          "load_after": 7.34619140625,
+          "go_first": false,
+          "go_ns": 538433.5173913044,
+          "ref_ns": 1970403.790909091
+        },
+        {
+          "load_before": 7.34619140625,
+          "load_after": 7.34619140625,
+          "go_first": true,
+          "go_ns": 509316.48695652175,
+          "ref_ns": 1918373.1090909091
+        },
+        {
+          "load_before": 7.34619140625,
+          "load_after": 7.34619140625,
+          "go_first": false,
+          "go_ns": 523816.48260869563,
+          "ref_ns": 2062619.7
+        },
+        {
+          "load_before": 7.34619140625,
+          "load_after": 7.34619140625,
+          "go_first": true,
+          "go_ns": 497435.5086956522,
+          "ref_ns": 1810970.4545454546
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 515726.0869565217,
+        "q1": 509489.58478260867,
+        "q3": 523790.12391304347
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 1903973.1090909091,
+        "q1": 1879708.1454545455,
+        "q3": 1944388.4500000002
       },
-      "ratio": 0
+      "ratio": 0.27086836704472456,
+      "verdict": "faster"
     },
     {
       "name": "Eye/10000",
@@ -619,17 +2401,71 @@
       "reference": "scipy.sparse 1.18.1 (sp.eye(n, format='csr'))",
       "parity": "tolerance",
       "allocs": 4,
+      "go_iters": 20076,
+      "ref_iters": 12005,
+      "rounds": [
+        {
+          "load_before": 7.34619140625,
+          "load_after": 7.34619140625,
+          "go_first": true,
+          "go_ns": 8491.986700537956,
+          "ref_ns": 8992.832819658475
+        },
+        {
+          "load_before": 7.34619140625,
+          "load_after": 7.34619140625,
+          "go_first": false,
+          "go_ns": 8454.38792588165,
+          "ref_ns": 8974.965347771762
+        },
+        {
+          "load_before": 7.34619140625,
+          "load_after": 7.34619140625,
+          "go_first": true,
+          "go_ns": 8403.79682207611,
+          "ref_ns": 9048.538775510204
+        },
+        {
+          "load_before": 7.34619140625,
+          "load_after": 7.34619140625,
+          "go_first": false,
+          "go_ns": 8451.810221159594,
+          "ref_ns": 9020.095793419408
+        },
+        {
+          "load_before": 7.34619140625,
+          "load_after": 7.34619140625,
+          "go_first": true,
+          "go_ns": 8452.650727236502,
+          "ref_ns": 9132.781507705124
+        },
+        {
+          "load_before": 7.34619140625,
+          "load_after": 7.34619140625,
+          "go_first": false,
+          "go_ns": 8340.308926080892,
+          "ref_ns": 9023.28896293211
+        },
+        {
+          "load_before": 7.34619140625,
+          "load_after": 7.34619140625,
+          "go_first": true,
+          "go_ns": 8417.380603705917,
+          "ref_ns": 9117.56218242399
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 8451.810221159594,
+        "q1": 8410.588712891014,
+        "q3": 8453.519326559075
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 9023.28896293211,
+        "q1": 9006.464306538943,
+        "q3": 9083.050478967096
       },
-      "ratio": 0
+      "ratio": 0.9366662484023104,
+      "verdict": "faster"
     },
     {
       "name": "Diags/tri-10000",
@@ -637,17 +2473,71 @@
       "reference": "scipy.sparse 1.18.1 (sp.diags(...).tocsr())",
       "parity": "tolerance",
       "allocs": 10,
+      "go_iters": 754,
+      "ref_iters": 1972,
+      "rounds": [
+        {
+          "load_before": 7.34619140625,
+          "load_after": 7.34619140625,
+          "go_first": true,
+          "go_ns": 249569.84880636603,
+          "ref_ns": 55966.76369168357
+        },
+        {
+          "load_before": 7.34619140625,
+          "load_after": 7.798828125,
+          "go_first": false,
+          "go_ns": 247397.324933687,
+          "ref_ns": 55268.2976673428
+        },
+        {
+          "load_before": 7.798828125,
+          "load_after": 7.798828125,
+          "go_first": true,
+          "go_ns": 245461.3726790451,
+          "ref_ns": 55859.59685598377
+        },
+        {
+          "load_before": 7.798828125,
+          "load_after": 7.798828125,
+          "go_first": false,
+          "go_ns": 246333.05702917773,
+          "ref_ns": 55841.8275862069
+        },
+        {
+          "load_before": 7.798828125,
+          "load_after": 7.798828125,
+          "go_first": true,
+          "go_ns": 244450.6525198939,
+          "ref_ns": 55996.51369168357
+        },
+        {
+          "load_before": 7.798828125,
+          "load_after": 7.798828125,
+          "go_first": false,
+          "go_ns": 246523.8726790451,
+          "ref_ns": 55548.59685598377
+        },
+        {
+          "load_before": 7.798828125,
+          "load_after": 7.798828125,
+          "go_first": true,
+          "go_ns": 245735.4655172414,
+          "ref_ns": 55977.45537525355
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 246333.05702917773,
+        "q1": 245598.41909814323,
+        "q3": 246960.59880636603
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 55859.59685598377,
+        "q1": 55695.21222109534,
+        "q3": 55972.10953346856
       },
-      "ratio": 0
+      "ratio": 4.409860988869456,
+      "verdict": "slower"
     },
     {
       "name": "gallery.Laplacian1D/10000",
@@ -655,17 +2545,71 @@
       "reference": "scipy.sparse 1.18.1 (sp.diags)",
       "parity": "tolerance",
       "allocs": 15,
+      "go_iters": 266,
+      "ref_iters": 1639,
+      "rounds": [
+        {
+          "load_before": 7.798828125,
+          "load_after": 7.798828125,
+          "go_first": true,
+          "go_ns": 581083.1766917293,
+          "ref_ns": 66601.45942647956
+        },
+        {
+          "load_before": 7.798828125,
+          "load_after": 7.798828125,
+          "go_first": false,
+          "go_ns": 590391.447368421,
+          "ref_ns": 66033.76021964612
+        },
+        {
+          "load_before": 7.798828125,
+          "load_after": 7.798828125,
+          "go_first": true,
+          "go_ns": 590580.984962406,
+          "ref_ns": 66517.13422818792
+        },
+        {
+          "load_before": 7.798828125,
+          "load_after": 7.798828125,
+          "go_first": false,
+          "go_ns": 605729.1691729323,
+          "ref_ns": 66265.93959731543
+        },
+        {
+          "load_before": 7.798828125,
+          "load_after": 7.798828125,
+          "go_first": true,
+          "go_ns": 591209.2706766918,
+          "ref_ns": 65312.99572910311
+        },
+        {
+          "load_before": 7.798828125,
+          "load_after": 7.798828125,
+          "go_first": false,
+          "go_ns": 594255.015037594,
+          "ref_ns": 66335.95179987798
+        },
+        {
+          "load_before": 7.798828125,
+          "load_after": 7.798828125,
+          "go_first": true,
+          "go_ns": 587373.4323308271,
+          "ref_ns": 66158.04881025015
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 590580.984962406,
+        "q1": 588882.4398496241,
+        "q3": 592732.142857143
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 66265.93959731543,
+        "q1": 66095.90451494814,
+        "q3": 66426.54301403294
       },
-      "ratio": 0
+      "ratio": 8.912285686300471,
+      "verdict": "slower"
     },
     {
       "name": "gallery.Laplacian2D/100",
@@ -673,17 +2617,71 @@
       "reference": "scipy.sparse 1.18.1 (kron(I,T) + kron(T,I))",
       "parity": "tolerance",
       "allocs": 15,
+      "go_iters": 203,
+      "ref_iters": 274,
+      "rounds": [
+        {
+          "load_before": 7.798828125,
+          "load_after": 7.798828125,
+          "go_first": true,
+          "go_ns": 899568.1428571428,
+          "ref_ns": 575390.3613138687
+        },
+        {
+          "load_before": 7.798828125,
+          "load_after": 7.798828125,
+          "go_first": false,
+          "go_ns": 980142.0344827586,
+          "ref_ns": 556687.6532846715
+        },
+        {
+          "load_before": 7.798828125,
+          "load_after": 7.494140625,
+          "go_first": true,
+          "go_ns": 902417.2807881774,
+          "ref_ns": 550769.1605839416
+        },
+        {
+          "load_before": 7.494140625,
+          "load_after": 7.494140625,
+          "go_first": false,
+          "go_ns": 897327.3842364532,
+          "ref_ns": 548354.3211678832
+        },
+        {
+          "load_before": 7.494140625,
+          "load_after": 7.494140625,
+          "go_first": true,
+          "go_ns": 915574.7142857143,
+          "ref_ns": 554542.2737226278
+        },
+        {
+          "load_before": 7.494140625,
+          "load_after": 7.494140625,
+          "go_first": false,
+          "go_ns": 884273.8078817734,
+          "ref_ns": 569750.4562043796
+        },
+        {
+          "load_before": 7.494140625,
+          "load_after": 7.494140625,
+          "go_first": true,
+          "go_ns": 878037.5615763547,
+          "ref_ns": 554466.0875912409
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 899568.1428571428,
+        "q1": 890800.5960591133,
+        "q3": 908995.9975369459
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 554542.2737226278,
+        "q1": 552617.6240875912,
+        "q3": 563219.0547445256
       },
-      "ratio": 0
+      "ratio": 1.6221813655762714,
+      "verdict": "slower"
     },
     {
       "name": "gallery.Laplacian3D/22",
@@ -691,17 +2689,71 @@
       "reference": "scipy.sparse 1.18.1 (three kron terms)",
       "parity": "tolerance",
       "allocs": 15,
+      "go_iters": 137,
+      "ref_iters": 102,
+      "rounds": [
+        {
+          "load_before": 7.494140625,
+          "load_after": 7.494140625,
+          "go_first": true,
+          "go_ns": 1293915.1459854015,
+          "ref_ns": 1104440.7647058824
+        },
+        {
+          "load_before": 7.494140625,
+          "load_after": 7.494140625,
+          "go_first": false,
+          "go_ns": 1301479.01459854,
+          "ref_ns": 1107748.3725490195
+        },
+        {
+          "load_before": 7.494140625,
+          "load_after": 7.494140625,
+          "go_first": true,
+          "go_ns": 1316117.3941605838,
+          "ref_ns": 1222683.0098039217
+        },
+        {
+          "load_before": 7.494140625,
+          "load_after": 7.494140625,
+          "go_first": false,
+          "go_ns": 1284104.9270072994,
+          "ref_ns": 1239707.5196078431
+        },
+        {
+          "load_before": 7.494140625,
+          "load_after": 7.494140625,
+          "go_first": true,
+          "go_ns": 1296395.0729927006,
+          "ref_ns": 1093193.2254901961
+        },
+        {
+          "load_before": 7.494140625,
+          "load_after": 7.494140625,
+          "go_first": false,
+          "go_ns": 1294825.7299270073,
+          "ref_ns": 1101758.9901960783
+        },
+        {
+          "load_before": 7.494140625,
+          "load_after": 7.494140625,
+          "go_first": true,
+          "go_ns": 1275905.715328467,
+          "ref_ns": 1090755.7254901961
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 1294825.7299270073,
+        "q1": 1289010.0364963505,
+        "q3": 1298937.0437956203
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 1104440.7647058824,
+        "q1": 1097476.1078431373,
+        "q3": 1165215.6911764706
       },
-      "ratio": 0
+      "ratio": 1.1723813275507133,
+      "verdict": "slower"
     },
     {
       "name": "iter.CG/lap2d-50",
@@ -709,17 +2761,71 @@
       "reference": "scipy.sparse.linalg 1.18.1 (cg)",
       "parity": "tolerance",
       "allocs": 5,
+      "go_iters": 644,
+      "ref_iters": 203,
+      "rounds": [
+        {
+          "load_before": 7.494140625,
+          "load_after": 7.494140625,
+          "go_first": true,
+          "go_ns": 221507.95807453417,
+          "ref_ns": 550102.0147783251
+        },
+        {
+          "load_before": 7.494140625,
+          "load_after": 7.494140625,
+          "go_first": false,
+          "go_ns": 164267.46894409938,
+          "ref_ns": 531482.1428571428
+        },
+        {
+          "load_before": 7.494140625,
+          "load_after": 7.494140625,
+          "go_first": true,
+          "go_ns": 165155.0201863354,
+          "ref_ns": 537983.9901477833
+        },
+        {
+          "load_before": 7.494140625,
+          "load_after": 7.1337890625,
+          "go_first": false,
+          "go_ns": 163053.31211180124,
+          "ref_ns": 530282.2266009853
+        },
+        {
+          "load_before": 7.1337890625,
+          "load_after": 7.1337890625,
+          "go_first": true,
+          "go_ns": 165976.0605590062,
+          "ref_ns": 533840.315270936
+        },
+        {
+          "load_before": 7.1337890625,
+          "load_after": 7.1337890625,
+          "go_first": false,
+          "go_ns": 162975.80279503105,
+          "ref_ns": 530497.1231527093
+        },
+        {
+          "load_before": 7.1337890625,
+          "load_after": 7.1337890625,
+          "go_first": true,
+          "go_ns": 160813.4704968944,
+          "ref_ns": 535000.6157635468
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 164267.46894409938,
+        "q1": 163014.55745341614,
+        "q3": 165565.5403726708
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 533840.315270936,
+        "q1": 530989.6330049261,
+        "q3": 536492.302955665
       },
-      "ratio": 0
+      "ratio": 0.30770899882435804,
+      "verdict": "faster"
     },
     {
       "name": "iter.BiCGSTAB/lap2d-50",
@@ -727,17 +2833,71 @@
       "reference": "scipy.sparse.linalg 1.18.1 (bicgstab)",
       "parity": "tolerance",
       "allocs": 10,
+      "go_iters": 285,
+      "ref_iters": 184,
+      "rounds": [
+        {
+          "load_before": 7.1337890625,
+          "load_after": 7.1337890625,
+          "go_first": true,
+          "go_ns": 384539.61754385964,
+          "ref_ns": 1056158.516304348
+        },
+        {
+          "load_before": 7.1337890625,
+          "load_after": 7.1337890625,
+          "go_first": false,
+          "go_ns": 376189.61754385964,
+          "ref_ns": 1062423.0054347827
+        },
+        {
+          "load_before": 7.1337890625,
+          "load_after": 7.1337890625,
+          "go_first": true,
+          "go_ns": 375229.67719298246,
+          "ref_ns": 1066969.4293478262
+        },
+        {
+          "load_before": 7.1337890625,
+          "load_after": 7.1337890625,
+          "go_first": false,
+          "go_ns": 380236.6947368421,
+          "ref_ns": 1060635.641304348
+        },
+        {
+          "load_before": 7.1337890625,
+          "load_after": 7.1337890625,
+          "go_first": true,
+          "go_ns": 401712.86666666664,
+          "ref_ns": 1258508.608695652
+        },
+        {
+          "load_before": 7.1337890625,
+          "load_after": 7.1337890625,
+          "go_first": false,
+          "go_ns": 378800.1473684211,
+          "ref_ns": 1057431.8369565217
+        },
+        {
+          "load_before": 7.1337890625,
+          "load_after": 7.1337890625,
+          "go_first": true,
+          "go_ns": 378327.9228070175,
+          "ref_ns": 1064755.8858695652
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 378800.1473684211,
+        "q1": 377258.7701754386,
+        "q3": 382388.15614035085
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 1062423.0054347827,
+        "q1": 1059033.7391304348,
+        "q3": 1065862.6576086958
       },
-      "ratio": 0
+      "ratio": 0.3565436228608416,
+      "verdict": "faster"
     },
     {
       "name": "iter.MINRES/lap2d-50",
@@ -745,17 +2905,71 @@
       "reference": "scipy.sparse.linalg 1.18.1 (minres)",
       "parity": "tolerance",
       "allocs": 9,
+      "go_iters": 443,
+      "ref_iters": 154,
+      "rounds": [
+        {
+          "load_before": 7.1337890625,
+          "load_after": 7.1337890625,
+          "go_first": true,
+          "go_ns": 257293.35891647855,
+          "ref_ns": 840544.6428571428
+        },
+        {
+          "load_before": 7.1337890625,
+          "load_after": 7.1337890625,
+          "go_first": false,
+          "go_ns": 253367.85101580137,
+          "ref_ns": 832573.0519480519
+        },
+        {
+          "load_before": 7.1337890625,
+          "load_after": 7.1337890625,
+          "go_first": true,
+          "go_ns": 251971.97065462754,
+          "ref_ns": 928310.064935065
+        },
+        {
+          "load_before": 7.1337890625,
+          "load_after": 7.1337890625,
+          "go_first": false,
+          "go_ns": 257030.66139954852,
+          "ref_ns": 980912.6038961039
+        },
+        {
+          "load_before": 7.1337890625,
+          "load_after": 7.1337890625,
+          "go_first": true,
+          "go_ns": 251350.07674943566,
+          "ref_ns": 848387.1753246753
+        },
+        {
+          "load_before": 7.1337890625,
+          "load_after": 6.802734375,
+          "go_first": false,
+          "go_ns": 255563.0158013544,
+          "ref_ns": 830624.7337662338
+        },
+        {
+          "load_before": 6.802734375,
+          "load_after": 6.802734375,
+          "go_first": true,
+          "go_ns": 252508.65237020317,
+          "ref_ns": 845179.3831168831
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 253367.85101580137,
+        "q1": 252240.31151241536,
+        "q3": 256296.83860045148
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 845179.3831168831,
+        "q1": 836558.8474025973,
+        "q3": 888348.6201298701
       },
-      "ratio": 0
+      "ratio": 0.29977997106534027,
+      "verdict": "faster"
     },
     {
       "name": "iter.GMRES/lap2d-50",
@@ -763,17 +2977,71 @@
       "reference": "scipy.sparse.linalg 1.18.1 (gmres)",
       "parity": "tolerance",
       "allocs": 53,
+      "go_iters": 208,
+      "ref_iters": 37,
+      "rounds": [
+        {
+          "load_before": 6.802734375,
+          "load_after": 6.802734375,
+          "go_first": true,
+          "go_ns": 500905.45192307694,
+          "ref_ns": 2946067.5675675673
+        },
+        {
+          "load_before": 6.802734375,
+          "load_after": 6.802734375,
+          "go_first": false,
+          "go_ns": 488335.9375,
+          "ref_ns": 2926113.7297297297
+        },
+        {
+          "load_before": 6.802734375,
+          "load_after": 6.802734375,
+          "go_first": true,
+          "go_ns": 490953.32692307694,
+          "ref_ns": 2884213.972972973
+        },
+        {
+          "load_before": 6.802734375,
+          "load_after": 6.802734375,
+          "go_first": false,
+          "go_ns": 767588.5432692308,
+          "ref_ns": 3060315.2972972975
+        },
+        {
+          "load_before": 6.802734375,
+          "load_after": 6.802734375,
+          "go_first": true,
+          "go_ns": 494329.5288461539,
+          "ref_ns": 2924443.7027027025
+        },
+        {
+          "load_before": 6.802734375,
+          "load_after": 6.802734375,
+          "go_first": false,
+          "go_ns": 489653.4471153846,
+          "ref_ns": 2927194.8378378376
+        },
+        {
+          "load_before": 6.802734375,
+          "load_after": 6.802734375,
+          "go_first": true,
+          "go_ns": 489486.1778846154,
+          "ref_ns": 2903605.864864865
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 490953.32692307694,
+        "q1": 489569.8125,
+        "q3": 497617.4903846154
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 2926113.7297297297,
+        "q1": 2914024.7837837837,
+        "q3": 2936631.2027027025
       },
-      "ratio": 0
+      "ratio": 0.1677834056601839,
+      "verdict": "faster"
     },
     {
       "name": "iter.LSQR/lap2d-50",
@@ -781,17 +3049,71 @@
       "reference": "scipy.sparse.linalg 1.18.1 (lsqr)",
       "parity": "tolerance",
       "allocs": 8,
+      "go_iters": 213,
+      "ref_iters": 106,
+      "rounds": [
+        {
+          "load_before": 6.802734375,
+          "load_after": 6.802734375,
+          "go_first": true,
+          "go_ns": 526362.8685446009,
+          "ref_ns": 1157815.2547169812
+        },
+        {
+          "load_before": 6.802734375,
+          "load_after": 6.802734375,
+          "go_first": false,
+          "go_ns": 530955.985915493,
+          "ref_ns": 1122255.1132075472
+        },
+        {
+          "load_before": 6.802734375,
+          "load_after": 6.802734375,
+          "go_first": true,
+          "go_ns": 533032.2769953052,
+          "ref_ns": 1153325.0849056605
+        },
+        {
+          "load_before": 6.802734375,
+          "load_after": 6.802734375,
+          "go_first": false,
+          "go_ns": 524836.0704225352,
+          "ref_ns": 1124036.5566037735
+        },
+        {
+          "load_before": 6.802734375,
+          "load_after": 6.802734375,
+          "go_first": true,
+          "go_ns": 529746.0845070423,
+          "ref_ns": 1144860.4528301887
+        },
+        {
+          "load_before": 6.802734375,
+          "load_after": 6.802734375,
+          "go_first": false,
+          "go_ns": 530310.8356807511,
+          "ref_ns": 1109413.9150943395
+        },
+        {
+          "load_before": 6.802734375,
+          "load_after": 6.802734375,
+          "go_first": true,
+          "go_ns": 526021.9107981221,
+          "ref_ns": 1114412.7358490566
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 529746.0845070423,
+        "q1": 526192.3896713615,
+        "q3": 530633.4107981221
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 1124036.5566037735,
+        "q1": 1118333.924528302,
+        "q3": 1149092.7688679246
       },
-      "ratio": 0
+      "ratio": 0.4712890175988996,
+      "verdict": "faster"
     },
     {
       "name": "iter.LSMR/lap2d-50",
@@ -799,17 +3121,71 @@
       "reference": "scipy.sparse.linalg 1.18.1 (lsmr)",
       "parity": "tolerance",
       "allocs": 8,
+      "go_iters": 208,
+      "ref_iters": 90,
+      "rounds": [
+        {
+          "load_before": 6.802734375,
+          "load_after": 6.802734375,
+          "go_first": true,
+          "go_ns": 524310.2980769231,
+          "ref_ns": 1138258.3333333333
+        },
+        {
+          "load_before": 6.802734375,
+          "load_after": 6.802734375,
+          "go_first": false,
+          "go_ns": 534871.5961538461,
+          "ref_ns": 1118146.7666666666
+        },
+        {
+          "load_before": 6.802734375,
+          "load_after": 6.578125,
+          "go_first": true,
+          "go_ns": 532088.3413461539,
+          "ref_ns": 1119619.4444444445
+        },
+        {
+          "load_before": 6.578125,
+          "load_after": 6.578125,
+          "go_first": false,
+          "go_ns": 531823.7163461539,
+          "ref_ns": 1124454.1666666667
+        },
+        {
+          "load_before": 6.578125,
+          "load_after": 6.578125,
+          "go_first": true,
+          "go_ns": 544860.3798076923,
+          "ref_ns": 1111187.9666666666
+        },
+        {
+          "load_before": 6.578125,
+          "load_after": 6.578125,
+          "go_first": false,
+          "go_ns": 532921.4711538461,
+          "ref_ns": 1133605.088888889
+        },
+        {
+          "load_before": 6.578125,
+          "load_after": 6.578125,
+          "go_first": true,
+          "go_ns": 538033.4567307692,
+          "ref_ns": 1183649.0777777778
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 532921.4711538461,
+        "q1": 531956.0288461539,
+        "q3": 536452.5264423077
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 1124454.1666666667,
+        "q1": 1118883.1055555556,
+        "q3": 1135931.711111111
       },
-      "ratio": 0
+      "ratio": 0.4739379220174346,
+      "verdict": "faster"
     },
     {
       "name": "iter.TrueResidual/lap2d-50",
@@ -817,17 +3193,71 @@
       "reference": "numpy 2.5.4 (norm(b - A@x)/norm(b))",
       "parity": "tolerance",
       "allocs": 2,
+      "go_iters": 16707,
+      "ref_iters": 17334,
+      "rounds": [
+        {
+          "load_before": 6.578125,
+          "load_after": 6.578125,
+          "go_first": true,
+          "go_ns": 7026.239001616089,
+          "ref_ns": 11199.386523595247
+        },
+        {
+          "load_before": 6.578125,
+          "load_after": 6.578125,
+          "go_first": false,
+          "go_ns": 6856.1656192015325,
+          "ref_ns": 11897.458290065766
+        },
+        {
+          "load_before": 6.578125,
+          "load_after": 6.578125,
+          "go_first": true,
+          "go_ns": 6738.228467109595,
+          "ref_ns": 11783.553997923156
+        },
+        {
+          "load_before": 6.578125,
+          "load_after": 6.578125,
+          "go_first": false,
+          "go_ns": 6812.2792841324,
+          "ref_ns": 12275.525499019268
+        },
+        {
+          "load_before": 6.578125,
+          "load_after": 6.578125,
+          "go_first": true,
+          "go_ns": 13207.3631411983,
+          "ref_ns": 11549.038940809969
+        },
+        {
+          "load_before": 6.578125,
+          "load_after": 6.578125,
+          "go_first": false,
+          "go_ns": 10626.853055605436,
+          "ref_ns": 11546.087169724242
+        },
+        {
+          "load_before": 6.578125,
+          "load_after": 6.578125,
+          "go_first": true,
+          "go_ns": 6807.869934757886,
+          "ref_ns": 11537.222106842044
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 6856.1656192015325,
+        "q1": 6810.074609445142,
+        "q3": 8826.546028610763
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 11549.038940809969,
+        "q1": 11541.654638283144,
+        "q3": 11840.506143994462
       },
-      "ratio": 0
+      "ratio": 0.5936568102627497,
+      "verdict": "faster"
     },
     {
       "name": "ldl.Analyze/kkt-288",
@@ -835,17 +3265,71 @@
       "reference": "QDLDL v0.1.9 (C, cgo, -O3)",
       "parity": "exact",
       "allocs": 7,
+      "go_iters": 29665,
+      "ref_iters": 98246,
+      "rounds": [
+        {
+          "load_before": 6.578125,
+          "load_after": 6.578125,
+          "go_first": true,
+          "go_ns": 3669.574110905107,
+          "ref_ns": 1989.8816949290556
+        },
+        {
+          "load_before": 6.578125,
+          "load_after": 6.578125,
+          "go_first": false,
+          "go_ns": 3705.331771447834,
+          "ref_ns": 1951.8029639883557
+        },
+        {
+          "load_before": 6.578125,
+          "load_after": 6.37158203125,
+          "go_first": true,
+          "go_ns": 3719.015101972021,
+          "ref_ns": 1978.2637461067118
+        },
+        {
+          "load_before": 6.37158203125,
+          "load_after": 6.37158203125,
+          "go_first": false,
+          "go_ns": 4289.82106859936,
+          "ref_ns": 2394.9834293508134
+        },
+        {
+          "load_before": 6.37158203125,
+          "load_after": 6.37158203125,
+          "go_first": true,
+          "go_ns": 3622.7063205798077,
+          "ref_ns": 1980.207845612035
+        },
+        {
+          "load_before": 6.37158203125,
+          "load_after": 6.37158203125,
+          "go_first": false,
+          "go_ns": 3774.1600539356145,
+          "ref_ns": 1966.8871200863139
+        },
+        {
+          "load_before": 6.37158203125,
+          "load_after": 6.37158203125,
+          "go_first": true,
+          "go_ns": 3591.870318557222,
+          "ref_ns": 1957.0512590843393
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 3705.331771447834,
+        "q1": 3646.1402157424573,
+        "q3": 3746.587577953818
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 1978.2637461067118,
+        "q1": 1961.9691895853266,
+        "q3": 1985.0447702705453
       },
-      "ratio": 0
+      "ratio": 1.8730221279847286,
+      "verdict": "slower"
     },
     {
       "name": "ldl.Factor.Refactor/kkt-288",
@@ -853,17 +3337,71 @@
       "reference": "QDLDL v0.1.9 (C, cgo, -O3)",
       "parity": "exact",
       "allocs": 0,
+      "go_iters": 12311,
+      "ref_iters": 15576,
+      "rounds": [
+        {
+          "load_before": 6.37158203125,
+          "load_after": 6.37158203125,
+          "go_first": true,
+          "go_ns": 9102.103809601169,
+          "ref_ns": 7023.832049306626
+        },
+        {
+          "load_before": 6.37158203125,
+          "load_after": 6.37158203125,
+          "go_first": false,
+          "go_ns": 9159.8265778572,
+          "ref_ns": 7039.424948638932
+        },
+        {
+          "load_before": 6.37158203125,
+          "load_after": 6.37158203125,
+          "go_first": true,
+          "go_ns": 9040.201120948745,
+          "ref_ns": 7007.404532614279
+        },
+        {
+          "load_before": 6.37158203125,
+          "load_after": 6.37158203125,
+          "go_first": false,
+          "go_ns": 9116.599626350418,
+          "ref_ns": 6937.532100667694
+        },
+        {
+          "load_before": 6.37158203125,
+          "load_after": 6.37158203125,
+          "go_first": true,
+          "go_ns": 11825.37974169442,
+          "ref_ns": 9815.06805341551
+        },
+        {
+          "load_before": 6.37158203125,
+          "load_after": 6.37158203125,
+          "go_first": false,
+          "go_ns": 9150.86101860125,
+          "ref_ns": 7300.3793656908065
+        },
+        {
+          "load_before": 6.37158203125,
+          "load_after": 6.37158203125,
+          "go_first": true,
+          "go_ns": 9293.836162781252,
+          "ref_ns": 7140.710580380072
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 9150.86101860125,
+        "q1": 9109.351717975795,
+        "q3": 9226.831370319225
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 7039.424948638932,
+        "q1": 7015.618290960452,
+        "q3": 7220.544973035439
       },
-      "ratio": 0
+      "ratio": 1.2999443967891955,
+      "verdict": "slower"
     },
     {
       "name": "ldl.Factor.Solve/kkt-288",
@@ -871,17 +3409,71 @@
       "reference": "QDLDL v0.1.9 (C, cgo, -O3)",
       "parity": "exact",
       "allocs": 0,
+      "go_iters": 67692,
+      "ref_iters": 65364,
+      "rounds": [
+        {
+          "load_before": 6.37158203125,
+          "load_after": 6.37158203125,
+          "go_first": true,
+          "go_ns": 1979.692947467943,
+          "ref_ns": 1704.255522917814
+        },
+        {
+          "load_before": 6.37158203125,
+          "load_after": 6.37158203125,
+          "go_first": false,
+          "go_ns": 2025.2325533297878,
+          "ref_ns": 1712.7821277767578
+        },
+        {
+          "load_before": 6.37158203125,
+          "load_after": 6.37158203125,
+          "go_first": true,
+          "go_ns": 2046.514610293683,
+          "ref_ns": 1679.9729208738756
+        },
+        {
+          "load_before": 6.37158203125,
+          "load_after": 6.37158203125,
+          "go_first": false,
+          "go_ns": 1987.669030313774,
+          "ref_ns": 1683.81104277584
+        },
+        {
+          "load_before": 6.37158203125,
+          "load_after": 6.37158203125,
+          "go_first": true,
+          "go_ns": 2061.908482538557,
+          "ref_ns": 1719.891683495502
+        },
+        {
+          "load_before": 6.37158203125,
+          "load_after": 6.26171875,
+          "go_first": false,
+          "go_ns": 2050.6688382674465,
+          "ref_ns": 1714.9061409950432
+        },
+        {
+          "load_before": 6.26171875,
+          "load_after": 6.26171875,
+          "go_first": true,
+          "go_ns": 9057.687762217101,
+          "ref_ns": 1785.1104430573405
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 2046.514610293683,
+        "q1": 2006.450791821781,
+        "q3": 2056.288660403002
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 1712.7821277767578,
+        "q1": 1694.033282846827,
+        "q3": 1717.3989122452726
       },
-      "ratio": 0
+      "ratio": 1.194848181274591,
+      "verdict": "slower"
     },
     {
       "name": "ldl.Factor.LSolve/kkt-288",
@@ -889,17 +3481,71 @@
       "reference": "QDLDL v0.1.9 (C, cgo, -O3)",
       "parity": "exact",
       "allocs": 0,
+      "go_iters": 83658,
+      "ref_iters": 143400,
+      "rounds": [
+        {
+          "load_before": 6.26171875,
+          "load_after": 6.26171875,
+          "go_first": true,
+          "go_ns": 947.3561046164144,
+          "ref_ns": 2546.150041841004
+        },
+        {
+          "load_before": 6.26171875,
+          "load_after": 6.26171875,
+          "go_first": false,
+          "go_ns": 851.3954672595568,
+          "ref_ns": 678.4260251046026
+        },
+        {
+          "load_before": 6.26171875,
+          "load_after": 6.26171875,
+          "go_first": true,
+          "go_ns": 853.0933443304884,
+          "ref_ns": 682.2053695955369
+        },
+        {
+          "load_before": 6.26171875,
+          "load_after": 6.26171875,
+          "go_first": false,
+          "go_ns": 851.6290611776519,
+          "ref_ns": 676.9685564853556
+        },
+        {
+          "load_before": 6.26171875,
+          "load_after": 6.26171875,
+          "go_first": true,
+          "go_ns": 851.3232446388869,
+          "ref_ns": 675.6029149232915
+        },
+        {
+          "load_before": 6.26171875,
+          "load_after": 6.26171875,
+          "go_first": false,
+          "go_ns": 852.9374596571756,
+          "ref_ns": 686.3342677824268
+        },
+        {
+          "load_before": 6.26171875,
+          "load_after": 6.26171875,
+          "go_first": true,
+          "go_ns": 849.2318965311148,
+          "ref_ns": 679.1239539748954
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 851.6290611776519,
+        "q1": 851.3593559492218,
+        "q3": 853.015401993832
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 679.1239539748954,
+        "q1": 677.6972907949792,
+        "q3": 684.2698186889818
       },
-      "ratio": 0
+      "ratio": 1.2540112245976431,
+      "verdict": "slower"
     },
     {
       "name": "ldl.Factor.LTSolve/kkt-288",
@@ -907,17 +3553,71 @@
       "reference": "QDLDL v0.1.9 (C, cgo, -O3)",
       "parity": "exact",
       "allocs": 0,
+      "go_iters": 182118,
+      "ref_iters": 108326,
+      "rounds": [
+        {
+          "load_before": 6.26171875,
+          "load_after": 6.26171875,
+          "go_first": true,
+          "go_ns": 1076.2465818864691,
+          "ref_ns": 1045.9800324945072
+        },
+        {
+          "load_before": 6.26171875,
+          "load_after": 6.26171875,
+          "go_first": false,
+          "go_ns": 1096.6745022457967,
+          "ref_ns": 1022.4242102542325
+        },
+        {
+          "load_before": 6.26171875,
+          "load_after": 6.26171875,
+          "go_first": true,
+          "go_ns": 1078.1780219418179,
+          "ref_ns": 1016.9249856913391
+        },
+        {
+          "load_before": 6.26171875,
+          "load_after": 6.26171875,
+          "go_first": false,
+          "go_ns": 1321.675831054591,
+          "ref_ns": 1012.7093218617875
+        },
+        {
+          "load_before": 6.26171875,
+          "load_after": 6.26171875,
+          "go_first": true,
+          "go_ns": 1353.941763032759,
+          "ref_ns": 1009.4475656813692
+        },
+        {
+          "load_before": 6.26171875,
+          "load_after": 6.32080078125,
+          "go_first": false,
+          "go_ns": 1084.8062794451948,
+          "ref_ns": 1007.4312722707383
+        },
+        {
+          "load_before": 6.32080078125,
+          "load_after": 6.32080078125,
+          "go_first": true,
+          "go_ns": 1079.8337726089678,
+          "ref_ns": 1013.6686114136957
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 1084.8062794451948,
+        "q1": 1079.0058972753927,
+        "q3": 1209.175166650194
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 1013.6686114136957,
+        "q1": 1011.0784437715783,
+        "q3": 1019.6745979727858
       },
-      "ratio": 0
+      "ratio": 1.0701784263915288,
+      "verdict": "slower"
     },
     {
       "name": "ldl.Factor.DSolve/kkt-288",
@@ -925,17 +3625,71 @@
       "reference": "QDLDL v0.1.9 (C, cgo, -O3)",
       "parity": "exact",
       "allocs": 0,
+      "go_iters": 1317364,
+      "ref_iters": 2505816,
+      "rounds": [
+        {
+          "load_before": 6.32080078125,
+          "load_after": 6.32080078125,
+          "go_first": true,
+          "go_ns": 106.06838125225829,
+          "ref_ns": 44.07976922487525
+        },
+        {
+          "load_before": 6.32080078125,
+          "load_after": 6.32080078125,
+          "go_first": false,
+          "go_ns": 106.27301945400056,
+          "ref_ns": 43.996812216060555
+        },
+        {
+          "load_before": 6.32080078125,
+          "load_after": 6.32080078125,
+          "go_first": true,
+          "go_ns": 106.48059989494172,
+          "ref_ns": 43.98412533083036
+        },
+        {
+          "load_before": 6.32080078125,
+          "load_after": 6.32080078125,
+          "go_first": false,
+          "go_ns": 106.50542826432178,
+          "ref_ns": 44.01177740105419
+        },
+        {
+          "load_before": 6.32080078125,
+          "load_after": 6.32080078125,
+          "go_first": true,
+          "go_ns": 106.20046243862744,
+          "ref_ns": 44.047195005539116
+        },
+        {
+          "load_before": 6.32080078125,
+          "load_after": 6.32080078125,
+          "go_first": false,
+          "go_ns": 106.23174384604407,
+          "ref_ns": 43.901135199072876
+        },
+        {
+          "load_before": 6.32080078125,
+          "load_after": 6.32080078125,
+          "go_first": true,
+          "go_ns": 106.3199563674125,
+          "ref_ns": 51.28369361517366
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 106.27301945400056,
+        "q1": 106.21610314233575,
+        "q3": 106.40027813117712
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 44.01177740105419,
+        "q1": 43.99046877344546,
+        "q3": 44.06348211520718
       },
-      "ratio": 0
+      "ratio": 2.414649571763377,
+      "verdict": "slower"
     },
     {
       "name": "ldl.Permuted.Refactor/kkt-288",
@@ -943,17 +3697,71 @@
       "reference": "QDLDL v0.1.9 (C, cgo, -O3)",
       "parity": "exact",
       "allocs": 0,
+      "go_iters": 9698,
+      "ref_iters": 10734,
+      "rounds": [
+        {
+          "load_before": 6.32080078125,
+          "load_after": 6.32080078125,
+          "go_first": true,
+          "go_ns": 9435.068261497216,
+          "ref_ns": 7181.96469163406
+        },
+        {
+          "load_before": 6.32080078125,
+          "load_after": 6.32080078125,
+          "go_first": false,
+          "go_ns": 9545.292843885338,
+          "ref_ns": 7235.998509409354
+        },
+        {
+          "load_before": 6.32080078125,
+          "load_after": 6.32080078125,
+          "go_first": true,
+          "go_ns": 9589.838110950712,
+          "ref_ns": 7352.648872740823
+        },
+        {
+          "load_before": 6.32080078125,
+          "load_after": 6.32080078125,
+          "go_first": false,
+          "go_ns": 9426.024231800371,
+          "ref_ns": 7338.868734861188
+        },
+        {
+          "load_before": 6.32080078125,
+          "load_after": 6.32080078125,
+          "go_first": true,
+          "go_ns": 9432.056403382141,
+          "ref_ns": 7351.787218185206
+        },
+        {
+          "load_before": 6.32080078125,
+          "load_after": 6.32080078125,
+          "go_first": false,
+          "go_ns": 9541.387399463807,
+          "ref_ns": 7556.716228805664
+        },
+        {
+          "load_before": 6.32080078125,
+          "load_after": 6.32080078125,
+          "go_first": true,
+          "go_ns": 9431.36904516395,
+          "ref_ns": 7133.788242966275
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 9435.068261497216,
+        "q1": 9431.712724273046,
+        "q3": 9543.340121674573
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 7338.868734861188,
+        "q1": 7208.981600521707,
+        "q3": 7352.218045463014
       },
-      "ratio": 0
+      "ratio": 1.2856297887818369,
+      "verdict": "slower"
     },
     {
       "name": "ldl.Permuted.Solve/kkt-288",
@@ -961,17 +3769,71 @@
       "reference": "QDLDL v0.1.9 (C, cgo, -O3)",
       "parity": "exact",
       "allocs": 0,
+      "go_iters": 53895,
+      "ref_iters": 61016,
+      "rounds": [
+        {
+          "load_before": 6.32080078125,
+          "load_after": 6.32080078125,
+          "go_first": true,
+          "go_ns": 2107.7395862324893,
+          "ref_ns": 1790.3555460862724
+        },
+        {
+          "load_before": 6.32080078125,
+          "load_after": 6.32080078125,
+          "go_first": false,
+          "go_ns": 2061.597402356434,
+          "ref_ns": 1785.6340959748263
+        },
+        {
+          "load_before": 6.32080078125,
+          "load_after": 6.32080078125,
+          "go_first": true,
+          "go_ns": 2070.4672789683646,
+          "ref_ns": 1786.898780647699
+        },
+        {
+          "load_before": 6.32080078125,
+          "load_after": 7.015625,
+          "go_first": false,
+          "go_ns": 2070.2755357639853,
+          "ref_ns": 1790.0373180805034
+        },
+        {
+          "load_before": 7.015625,
+          "load_after": 7.015625,
+          "go_first": true,
+          "go_ns": 2075.2651637443178,
+          "ref_ns": 1793.774731218041
+        },
+        {
+          "load_before": 7.015625,
+          "load_after": 7.015625,
+          "go_first": false,
+          "go_ns": 2056.661879580666,
+          "ref_ns": 1790.9421299331323
+        },
+        {
+          "load_before": 7.015625,
+          "load_after": 7.015625,
+          "go_first": true,
+          "go_ns": 2065.3724835327953,
+          "ref_ns": 1786.3832109610594
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 2070.2755357639853,
+        "q1": 2063.484942944615,
+        "q3": 2072.866221356341
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 1790.0373180805034,
+        "q1": 1786.6409958043791,
+        "q3": 1790.6488380097023
       },
-      "ratio": 0
+      "ratio": 1.1565543996501635,
+      "verdict": "slower"
     },
     {
       "name": "ldl.Analyze/kkt-800",
@@ -979,17 +3841,71 @@
       "reference": "QDLDL v0.1.9 (C, cgo, -O3)",
       "parity": "exact",
       "allocs": 7,
+      "go_iters": 8148,
+      "ref_iters": 15890,
+      "rounds": [
+        {
+          "load_before": 7.015625,
+          "load_after": 7.015625,
+          "go_first": true,
+          "go_ns": 11851.374570446735,
+          "ref_ns": 7257.334235368156
+        },
+        {
+          "load_before": 7.015625,
+          "load_after": 7.015625,
+          "go_first": false,
+          "go_ns": 12092.108492881689,
+          "ref_ns": 7175.036689741976
+        },
+        {
+          "load_before": 7.015625,
+          "load_after": 7.015625,
+          "go_first": true,
+          "go_ns": 11850.766077565047,
+          "ref_ns": 7053.130899937068
+        },
+        {
+          "load_before": 7.015625,
+          "load_after": 7.015625,
+          "go_first": false,
+          "go_ns": 12428.77589592538,
+          "ref_ns": 7005.829137822529
+        },
+        {
+          "load_before": 7.015625,
+          "load_after": 7.015625,
+          "go_first": true,
+          "go_ns": 11930.770373097692,
+          "ref_ns": 7056.757394587791
+        },
+        {
+          "load_before": 7.015625,
+          "load_after": 7.015625,
+          "go_first": false,
+          "go_ns": 11929.742513500245,
+          "ref_ns": 7103.39049716803
+        },
+        {
+          "load_before": 7.015625,
+          "load_after": 7.015625,
+          "go_first": true,
+          "go_ns": 11874.933480608739,
+          "ref_ns": 7209.966960352423
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 11929.742513500245,
+        "q1": 11863.154025527736,
+        "q3": 12011.43943298969
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 7103.39049716803,
+        "q1": 7054.944147262429,
+        "q3": 7192.501825047199
       },
-      "ratio": 0
+      "ratio": 1.6794434317325477,
+      "verdict": "slower"
     },
     {
       "name": "ldl.Factor.Refactor/kkt-800",
@@ -997,17 +3913,71 @@
       "reference": "QDLDL v0.1.9 (C, cgo, -O3)",
       "parity": "exact",
       "allocs": 0,
+      "go_iters": 2923,
+      "ref_iters": 3480,
+      "rounds": [
+        {
+          "load_before": 7.015625,
+          "load_after": 7.015625,
+          "go_first": true,
+          "go_ns": 38648.292165583305,
+          "ref_ns": 31797.030747126435
+        },
+        {
+          "load_before": 7.015625,
+          "load_after": 7.015625,
+          "go_first": false,
+          "go_ns": 38342.69859733151,
+          "ref_ns": 31753.472413793104
+        },
+        {
+          "load_before": 7.015625,
+          "load_after": 7.015625,
+          "go_first": true,
+          "go_ns": 38153.69483407458,
+          "ref_ns": 31830.00488505747
+        },
+        {
+          "load_before": 7.015625,
+          "load_after": 7.015625,
+          "go_first": false,
+          "go_ns": 38247.27745466986,
+          "ref_ns": 31892.025862068964
+        },
+        {
+          "load_before": 7.015625,
+          "load_after": 7.015625,
+          "go_first": true,
+          "go_ns": 37941.983236400956,
+          "ref_ns": 31373.587356321837
+        },
+        {
+          "load_before": 7.015625,
+          "load_after": 7.015625,
+          "go_first": false,
+          "go_ns": 38130.67328087581,
+          "ref_ns": 31446.24051724138
+        },
+        {
+          "load_before": 7.015625,
+          "load_after": 7.015625,
+          "go_first": true,
+          "go_ns": 37988.62470065002,
+          "ref_ns": 31270.92931034483
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 38153.69483407458,
+        "q1": 38059.648990762915,
+        "q3": 38294.98802600068
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 31753.472413793104,
+        "q1": 31409.91393678161,
+        "q3": 31813.517816091953
       },
-      "ratio": 0
+      "ratio": 1.201559764452764,
+      "verdict": "slower"
     },
     {
       "name": "ldl.Factor.Solve/kkt-800",
@@ -1015,17 +3985,71 @@
       "reference": "QDLDL v0.1.9 (C, cgo, -O3)",
       "parity": "exact",
       "allocs": 0,
+      "go_iters": 26802,
+      "ref_iters": 22372,
+      "rounds": [
+        {
+          "load_before": 7.015625,
+          "load_after": 7.015625,
+          "go_first": true,
+          "go_ns": 6268.778113573614,
+          "ref_ns": 5653.817673878062
+        },
+        {
+          "load_before": 7.015625,
+          "load_after": 7.33447265625,
+          "go_first": false,
+          "go_ns": 6264.375494366092,
+          "ref_ns": 5678.770695512248
+        },
+        {
+          "load_before": 7.33447265625,
+          "load_after": 7.33447265625,
+          "go_first": true,
+          "go_ns": 7975.982837101709,
+          "ref_ns": 6736.677900947613
+        },
+        {
+          "load_before": 7.33447265625,
+          "load_after": 7.33447265625,
+          "go_first": false,
+          "go_ns": 6238.231624505634,
+          "ref_ns": 5657.170033971035
+        },
+        {
+          "load_before": 7.33447265625,
+          "load_after": 7.33447265625,
+          "go_first": true,
+          "go_ns": 6208.73751958809,
+          "ref_ns": 5664.03133381012
+        },
+        {
+          "load_before": 7.33447265625,
+          "load_after": 7.33447265625,
+          "go_first": false,
+          "go_ns": 6288.028878441907,
+          "ref_ns": 5682.555202932237
+        },
+        {
+          "load_before": 7.33447265625,
+          "load_after": 7.33447265625,
+          "go_first": true,
+          "go_ns": 6279.738153869114,
+          "ref_ns": 6451.671330234221
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 6268.778113573614,
+        "q1": 6251.303559435863,
+        "q3": 6283.883516155511
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 5678.770695512248,
+        "q1": 5660.600683890578,
+        "q3": 6067.113266583229
       },
-      "ratio": 0
+      "ratio": 1.1038970315402294,
+      "verdict": "slower"
     },
     {
       "name": "ldl.Factor.LSolve/kkt-800",
@@ -1033,17 +4057,71 @@
       "reference": "QDLDL v0.1.9 (C, cgo, -O3)",
       "parity": "exact",
       "allocs": 0,
+      "go_iters": 50284,
+      "ref_iters": 50414,
+      "rounds": [
+        {
+          "load_before": 7.33447265625,
+          "load_after": 7.33447265625,
+          "go_first": true,
+          "go_ns": 7626.995326545223,
+          "ref_ns": 2107.7899988098543
+        },
+        {
+          "load_before": 7.33447265625,
+          "load_after": 7.33447265625,
+          "go_first": false,
+          "go_ns": 2343.455830880598,
+          "ref_ns": 2089.574999008212
+        },
+        {
+          "load_before": 7.33447265625,
+          "load_after": 7.33447265625,
+          "go_first": true,
+          "go_ns": 2288.785538143346,
+          "ref_ns": 2129.268814218273
+        },
+        {
+          "load_before": 7.33447265625,
+          "load_after": 7.33447265625,
+          "go_first": false,
+          "go_ns": 2320.855878609498,
+          "ref_ns": 2114.477962470742
+        },
+        {
+          "load_before": 7.33447265625,
+          "load_after": 7.33447265625,
+          "go_first": true,
+          "go_ns": 2305.4334778458356,
+          "ref_ns": 2131.9069702860315
+        },
+        {
+          "load_before": 7.33447265625,
+          "load_after": 7.33447265625,
+          "go_first": false,
+          "go_ns": 2294.9264776071914,
+          "ref_ns": 2092.9520371325425
+        },
+        {
+          "load_before": 7.33447265625,
+          "load_after": 7.33447265625,
+          "go_first": true,
+          "go_ns": 2324.796814095935,
+          "ref_ns": 2080.953048756298
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 2320.855878609498,
+        "q1": 2300.1799777265132,
+        "q3": 2334.126322488267
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 2107.7899988098543,
+        "q1": 2091.2635180703774,
+        "q3": 2121.8733883445075
       },
-      "ratio": 0
+      "ratio": 1.1010849657318564,
+      "verdict": "slower"
     },
     {
       "name": "ldl.Factor.LTSolve/kkt-800",
@@ -1051,17 +4129,71 @@
       "reference": "QDLDL v0.1.9 (C, cgo, -O3)",
       "parity": "exact",
       "allocs": 0,
+      "go_iters": 26268,
+      "ref_iters": 30520,
+      "rounds": [
+        {
+          "load_before": 7.33447265625,
+          "load_after": 7.2275390625,
+          "go_first": true,
+          "go_ns": 3797.5673823663774,
+          "ref_ns": 3494.0872214941023
+        },
+        {
+          "load_before": 7.2275390625,
+          "load_after": 7.2275390625,
+          "go_first": false,
+          "go_ns": 3810.782130348713,
+          "ref_ns": 3500.4314220183487
+        },
+        {
+          "load_before": 7.2275390625,
+          "load_after": 7.2275390625,
+          "go_first": true,
+          "go_ns": 3799.6088396528094,
+          "ref_ns": 3513.7464613368284
+        },
+        {
+          "load_before": 7.2275390625,
+          "load_after": 7.2275390625,
+          "go_first": false,
+          "go_ns": 3812.412783615045,
+          "ref_ns": 3492.25373525557
+        },
+        {
+          "load_before": 7.2275390625,
+          "load_after": 7.2275390625,
+          "go_first": true,
+          "go_ns": 3782.3841175574844,
+          "ref_ns": 3499.9221821756228
+        },
+        {
+          "load_before": 7.2275390625,
+          "load_after": 7.2275390625,
+          "go_first": false,
+          "go_ns": 3814.159167047358,
+          "ref_ns": 3486.1689056356486
+        },
+        {
+          "load_before": 7.2275390625,
+          "load_after": 7.2275390625,
+          "go_first": true,
+          "go_ns": 3826.5570275620526,
+          "ref_ns": 3518.0141546526866
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 3810.782130348713,
+        "q1": 3798.5881110095934,
+        "q3": 3813.2859753312014
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 3499.9221821756228,
+        "q1": 3493.1704783748364,
+        "q3": 3507.0889416775885
       },
-      "ratio": 0
+      "ratio": 1.088819102823553,
+      "verdict": "slower"
     },
     {
       "name": "ldl.Factor.DSolve/kkt-800",
@@ -1069,17 +4201,71 @@
       "reference": "QDLDL v0.1.9 (C, cgo, -O3)",
       "parity": "exact",
       "allocs": 0,
+      "go_iters": 406658,
+      "ref_iters": 802361,
+      "rounds": [
+        {
+          "load_before": 7.2275390625,
+          "load_after": 7.2275390625,
+          "go_first": true,
+          "go_ns": 269.9191753266873,
+          "ref_ns": 136.17207964993312
+        },
+        {
+          "load_before": 7.2275390625,
+          "load_after": 7.2275390625,
+          "go_first": false,
+          "go_ns": 267.369425905798,
+          "ref_ns": 136.67865835951648
+        },
+        {
+          "load_before": 7.2275390625,
+          "load_after": 7.2275390625,
+          "go_first": true,
+          "go_ns": 267.09165441230715,
+          "ref_ns": 135.0971283499572
+        },
+        {
+          "load_before": 7.2275390625,
+          "load_after": 7.2275390625,
+          "go_first": false,
+          "go_ns": 267.2198358325669,
+          "ref_ns": 135.22991272008485
+        },
+        {
+          "load_before": 7.2275390625,
+          "load_after": 7.2275390625,
+          "go_first": true,
+          "go_ns": 269.6791087351042,
+          "ref_ns": 135.69915287507743
+        },
+        {
+          "load_before": 7.2275390625,
+          "load_after": 7.2275390625,
+          "go_first": false,
+          "go_ns": 267.57885987734164,
+          "ref_ns": 138.17227033716745
+        },
+        {
+          "load_before": 7.2275390625,
+          "load_after": 7.2275390625,
+          "go_first": true,
+          "go_ns": 269.778187076118,
+          "ref_ns": 153.63164710149172
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 267.57885987734164,
+        "q1": 267.29463086918247,
+        "q3": 269.72864790561107
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 136.17207964993312,
+        "q1": 135.46453279758114,
+        "q3": 137.42546434834196
       },
-      "ratio": 0
+      "ratio": 1.9650053121405278,
+      "verdict": "slower"
     },
     {
       "name": "ldl.Permuted.Refactor/kkt-800",
@@ -1087,17 +4273,71 @@
       "reference": "QDLDL v0.1.9 (C, cgo, -O3)",
       "parity": "exact",
       "allocs": 0,
+      "go_iters": 2219,
+      "ref_iters": 3354,
+      "rounds": [
+        {
+          "load_before": 7.2275390625,
+          "load_after": 7.2275390625,
+          "go_first": true,
+          "go_ns": 38591.95223073457,
+          "ref_ns": 32353.371496720334
+        },
+        {
+          "load_before": 7.2275390625,
+          "load_after": 7.2275390625,
+          "go_first": false,
+          "go_ns": 39039,
+          "ref_ns": 32224.44603458557
+        },
+        {
+          "load_before": 7.2275390625,
+          "load_after": 7.2275390625,
+          "go_first": true,
+          "go_ns": 39080.72329878323,
+          "ref_ns": 32329.40757304711
+        },
+        {
+          "load_before": 7.2275390625,
+          "load_after": 7.2275390625,
+          "go_first": false,
+          "go_ns": 38919.59576385759,
+          "ref_ns": 32589.681574239712
+        },
+        {
+          "load_before": 7.2275390625,
+          "load_after": 7.2275390625,
+          "go_first": true,
+          "go_ns": 39795.79765660207,
+          "ref_ns": 33022.4358974359
+        },
+        {
+          "load_before": 7.2275390625,
+          "load_after": 7.2275390625,
+          "go_first": false,
+          "go_ns": 38559.03560162235,
+          "ref_ns": 32147.19976147883
+        },
+        {
+          "load_before": 7.2275390625,
+          "load_after": 7.2275390625,
+          "go_first": true,
+          "go_ns": 37834.94817485354,
+          "ref_ns": 32565.059033989266
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 38919.59576385759,
+        "q1": 38575.49391617846,
+        "q3": 39059.86164939162
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 32353.371496720334,
+        "q1": 32276.92680381634,
+        "q3": 32577.37030411449
       },
-      "ratio": 0
+      "ratio": 1.2029533233592944,
+      "verdict": "slower"
     },
     {
       "name": "ldl.Permuted.Solve/kkt-800",
@@ -1105,17 +4345,71 @@
       "reference": "QDLDL v0.1.9 (C, cgo, -O3)",
       "parity": "exact",
       "allocs": 0,
+      "go_iters": 15714,
+      "ref_iters": 18828,
+      "rounds": [
+        {
+          "load_before": 7.73095703125,
+          "load_after": 7.73095703125,
+          "go_first": true,
+          "go_ns": 6734.785287005218,
+          "ref_ns": 5875.046473337582
+        },
+        {
+          "load_before": 7.73095703125,
+          "load_after": 7.73095703125,
+          "go_first": false,
+          "go_ns": 6571.693012600229,
+          "ref_ns": 5843.612757595071
+        },
+        {
+          "load_before": 7.73095703125,
+          "load_after": 7.73095703125,
+          "go_first": true,
+          "go_ns": 6602.623456790124,
+          "ref_ns": 5847.753346080306
+        },
+        {
+          "load_before": 7.73095703125,
+          "load_after": 7.73095703125,
+          "go_first": false,
+          "go_ns": 6573.800941835306,
+          "ref_ns": 5846.730932653495
+        },
+        {
+          "load_before": 7.73095703125,
+          "load_after": 7.73095703125,
+          "go_first": true,
+          "go_ns": 6590.996372661321,
+          "ref_ns": 5838.288240917782
+        },
+        {
+          "load_before": 7.73095703125,
+          "load_after": 7.73095703125,
+          "go_first": false,
+          "go_ns": 6523.04473717704,
+          "ref_ns": 5878.317346505205
+        },
+        {
+          "load_before": 7.73095703125,
+          "load_after": 7.73095703125,
+          "go_first": true,
+          "go_ns": 6554.1634847906325,
+          "ref_ns": 5802.7250902910555
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 6573.800941835306,
+        "q1": 6562.928248695431,
+        "q3": 6596.809914725723
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 5846.730932653495,
+        "q1": 5840.950499256427,
+        "q3": 5861.399909708944
       },
-      "ratio": 0
+      "ratio": 1.1243549630651184,
+      "verdict": "slower"
     },
     {
       "name": "ldl.Analyze/kkt-3200",
@@ -1123,17 +4417,71 @@
       "reference": "QDLDL v0.1.9 (C, cgo, -O3)",
       "parity": "exact",
       "allocs": 7,
+      "go_iters": 1432,
+      "ref_iters": 2365,
+      "rounds": [
+        {
+          "load_before": 7.73095703125,
+          "load_after": 7.73095703125,
+          "go_first": true,
+          "go_ns": 75908.05377094971,
+          "ref_ns": 46250.19365750528
+        },
+        {
+          "load_before": 7.73095703125,
+          "load_after": 7.73095703125,
+          "go_first": false,
+          "go_ns": 79088.13407821229,
+          "ref_ns": 46446.67019027484
+        },
+        {
+          "load_before": 7.73095703125,
+          "load_after": 7.73095703125,
+          "go_first": true,
+          "go_ns": 77674.20321229051,
+          "ref_ns": 47015.85623678647
+        },
+        {
+          "load_before": 7.73095703125,
+          "load_after": 7.73095703125,
+          "go_first": false,
+          "go_ns": 74532.2688547486,
+          "ref_ns": 46456.73023255814
+        },
+        {
+          "load_before": 7.73095703125,
+          "load_after": 7.73095703125,
+          "go_first": true,
+          "go_ns": 74328.06703910614,
+          "ref_ns": 46536.328118393234
+        },
+        {
+          "load_before": 7.73095703125,
+          "load_after": 7.73095703125,
+          "go_first": false,
+          "go_ns": 75844.41899441341,
+          "ref_ns": 45772.16321353066
+        },
+        {
+          "load_before": 7.73095703125,
+          "load_after": 7.73095703125,
+          "go_first": true,
+          "go_ns": 75805.25488826816,
+          "ref_ns": 47854.42241014799
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 75844.41899441341,
+        "q1": 75168.76187150838,
+        "q3": 76791.12849162011
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 46456.73023255814,
+        "q1": 46348.431923890064,
+        "q3": 46776.09217758985
       },
-      "ratio": 0
+      "ratio": 1.6325819448493941,
+      "verdict": "slower"
     },
     {
       "name": "ldl.Factor.Refactor/kkt-3200",
@@ -1141,17 +4489,71 @@
       "reference": "QDLDL v0.1.9 (C, cgo, -O3)",
       "parity": "exact",
       "allocs": 0,
+      "go_iters": 317,
+      "ref_iters": 381,
+      "rounds": [
+        {
+          "load_before": 7.73095703125,
+          "load_after": 7.73095703125,
+          "go_first": true,
+          "go_ns": 338762.48895899055,
+          "ref_ns": 287449.0367454068
+        },
+        {
+          "load_before": 7.73095703125,
+          "load_after": 7.73095703125,
+          "go_first": false,
+          "go_ns": 340703.59936908516,
+          "ref_ns": 289926.94488188974
+        },
+        {
+          "load_before": 7.73095703125,
+          "load_after": 7.73095703125,
+          "go_first": true,
+          "go_ns": 409715.0378548896,
+          "ref_ns": 403251.41994750657
+        },
+        {
+          "load_before": 7.73095703125,
+          "load_after": 7.73095703125,
+          "go_first": false,
+          "go_ns": 448552.31545741326,
+          "ref_ns": 395182.41469816276
+        },
+        {
+          "load_before": 7.73095703125,
+          "load_after": 7.73095703125,
+          "go_first": true,
+          "go_ns": 342164.5615141956,
+          "ref_ns": 287842.51968503935
+        },
+        {
+          "load_before": 7.73095703125,
+          "load_after": 7.35205078125,
+          "go_first": false,
+          "go_ns": 338680.8643533123,
+          "ref_ns": 286909.8871391076
+        },
+        {
+          "load_before": 7.35205078125,
+          "load_after": 7.35205078125,
+          "go_first": true,
+          "go_ns": 338731.072555205,
+          "ref_ns": 286667.8687664042
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 340703.59936908516,
+        "q1": 338746.78075709776,
+        "q3": 375939.7996845426
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 287842.51968503935,
+        "q1": 287179.46194225724,
+        "q3": 342554.6797900263
       },
-      "ratio": 0
+      "ratio": 1.1836458343329088,
+      "verdict": "tie"
     },
     {
       "name": "ldl.Factor.Solve/kkt-3200",
@@ -1159,17 +4561,71 @@
       "reference": "QDLDL v0.1.9 (C, cgo, -O3)",
       "parity": "exact",
       "allocs": 0,
+      "go_iters": 4414,
+      "ref_iters": 4102,
+      "rounds": [
+        {
+          "load_before": 7.35205078125,
+          "load_after": 7.35205078125,
+          "go_first": true,
+          "go_ns": 36413.65541458994,
+          "ref_ns": 33889.078498293515
+        },
+        {
+          "load_before": 7.35205078125,
+          "load_after": 7.35205078125,
+          "go_first": false,
+          "go_ns": 38334.06026280018,
+          "ref_ns": 34119.779132130665
+        },
+        {
+          "load_before": 7.35205078125,
+          "load_after": 7.35205078125,
+          "go_first": true,
+          "go_ns": 36476.098776619845,
+          "ref_ns": 34349.08776206728
+        },
+        {
+          "load_before": 7.35205078125,
+          "load_after": 7.35205078125,
+          "go_first": false,
+          "go_ns": 36464.09152695967,
+          "ref_ns": 33598.71184787908
+        },
+        {
+          "load_before": 7.35205078125,
+          "load_after": 7.35205078125,
+          "go_first": true,
+          "go_ns": 37654.83869506117,
+          "ref_ns": 33645.741833252076
+        },
+        {
+          "load_before": 7.35205078125,
+          "load_after": 7.35205078125,
+          "go_first": false,
+          "go_ns": 36063.21748980517,
+          "ref_ns": 33860.67771818625
+        },
+        {
+          "load_before": 7.35205078125,
+          "load_after": 7.35205078125,
+          "go_first": true,
+          "go_ns": 36119.553239691886,
+          "ref_ns": 35130.11945392491
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 36464.09152695967,
+        "q1": 36266.604327140914,
+        "q3": 37065.468735840506
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 33889.078498293515,
+        "q1": 33753.209775719166,
+        "q3": 34234.43344709897
       },
-      "ratio": 0
+      "ratio": 1.075983565879368,
+      "verdict": "slower"
     },
     {
       "name": "ldl.Factor.LSolve/kkt-3200",
@@ -1177,17 +4633,71 @@
       "reference": "QDLDL v0.1.9 (C, cgo, -O3)",
       "parity": "exact",
       "allocs": 0,
+      "go_iters": 11890,
+      "ref_iters": 11138,
+      "rounds": [
+        {
+          "load_before": 7.35205078125,
+          "load_after": 7.35205078125,
+          "go_first": true,
+          "go_ns": 13215.156265769554,
+          "ref_ns": 12227.120308852576
+        },
+        {
+          "load_before": 7.35205078125,
+          "load_after": 7.35205078125,
+          "go_first": false,
+          "go_ns": 13434.906812447434,
+          "ref_ns": 11478.725264859042
+        },
+        {
+          "load_before": 7.35205078125,
+          "load_after": 7.35205078125,
+          "go_first": true,
+          "go_ns": 13151.086375105131,
+          "ref_ns": 11728.975848446758
+        },
+        {
+          "load_before": 7.35205078125,
+          "load_after": 7.35205078125,
+          "go_first": false,
+          "go_ns": 13253.441295206056,
+          "ref_ns": 12396.282187107201
+        },
+        {
+          "load_before": 7.35205078125,
+          "load_after": 7.35205078125,
+          "go_first": true,
+          "go_ns": 13531.87897392767,
+          "ref_ns": 13850.231190518944
+        },
+        {
+          "load_before": 7.35205078125,
+          "load_after": 10.68701171875,
+          "go_first": false,
+          "go_ns": 13419.0110176619,
+          "ref_ns": 12583.729843778057
+        },
+        {
+          "load_before": 7.91552734375,
+          "load_after": 8.2421875,
+          "go_first": true,
+          "go_ns": 13089.6306980656,
+          "ref_ns": 11722.908062488777
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 13253.441295206056,
+        "q1": 13183.121320437342,
+        "q3": 13426.958915054667
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 12227.120308852576,
+        "q1": 11725.941955467768,
+        "q3": 12490.006015442628
       },
-      "ratio": 0
+      "ratio": 1.0839380786668478,
+      "verdict": "slower"
     },
     {
       "name": "ldl.Factor.LTSolve/kkt-3200",
@@ -1195,17 +4705,71 @@
       "reference": "QDLDL v0.1.9 (C, cgo, -O3)",
       "parity": "exact",
       "allocs": 0,
+      "go_iters": 4962,
+      "ref_iters": 9262,
+      "rounds": [
+        {
+          "load_before": 7.818359375,
+          "load_after": 7.818359375,
+          "go_first": true,
+          "go_ns": 22326.640870616688,
+          "ref_ns": 21248.654934139493
+        },
+        {
+          "load_before": 7.818359375,
+          "load_after": 7.818359375,
+          "go_first": false,
+          "go_ns": 22360.54010479645,
+          "ref_ns": 21242.982077305118
+        },
+        {
+          "load_before": 7.818359375,
+          "load_after": 7.818359375,
+          "go_first": true,
+          "go_ns": 22276.5433293027,
+          "ref_ns": 21205.998488447418
+        },
+        {
+          "load_before": 7.818359375,
+          "load_after": 7.818359375,
+          "go_first": false,
+          "go_ns": 22183.049576783556,
+          "ref_ns": 21472.499676095875
+        },
+        {
+          "load_before": 7.818359375,
+          "load_after": 7.818359375,
+          "go_first": true,
+          "go_ns": 22115.872228939945,
+          "ref_ns": 21201.88231483481
+        },
+        {
+          "load_before": 7.818359375,
+          "load_after": 7.818359375,
+          "go_first": false,
+          "go_ns": 22281.783151954856,
+          "ref_ns": 21463.137875188942
+        },
+        {
+          "load_before": 7.818359375,
+          "load_after": 7.818359375,
+          "go_first": true,
+          "go_ns": 22109.725715437322,
+          "ref_ns": 21267.40531202764
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 22276.5433293027,
+        "q1": 22149.46090286175,
+        "q3": 22304.212011285774
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 21248.654934139493,
+        "q1": 21224.490282876268,
+        "q3": 21365.27159360829
       },
-      "ratio": 0
+      "ratio": 1.0483742805532474,
+      "verdict": "slower"
     },
     {
       "name": "ldl.Factor.DSolve/kkt-3200",
@@ -1213,17 +4777,71 @@
       "reference": "QDLDL v0.1.9 (C, cgo, -O3)",
       "parity": "exact",
       "allocs": 0,
+      "go_iters": 146666,
+      "ref_iters": 210545,
+      "rounds": [
+        {
+          "load_before": 7.818359375,
+          "load_after": 7.818359375,
+          "go_first": true,
+          "go_ns": 1035.223173741699,
+          "ref_ns": 523.6137167826355
+        },
+        {
+          "load_before": 7.818359375,
+          "load_after": 7.818359375,
+          "go_first": false,
+          "go_ns": 1032.7169078041263,
+          "ref_ns": 521.8264883991545
+        },
+        {
+          "load_before": 7.818359375,
+          "load_after": 7.818359375,
+          "go_first": true,
+          "go_ns": 1037.111532325147,
+          "ref_ns": 524.0120876772187
+        },
+        {
+          "load_before": 7.818359375,
+          "load_after": 7.818359375,
+          "go_first": false,
+          "go_ns": 1036.9410770048955,
+          "ref_ns": 525.2054192690399
+        },
+        {
+          "load_before": 7.818359375,
+          "load_after": 7.818359375,
+          "go_first": true,
+          "go_ns": 1032.8802653648427,
+          "ref_ns": 524.7534161343181
+        },
+        {
+          "load_before": 7.818359375,
+          "load_after": 7.818359375,
+          "go_first": false,
+          "go_ns": 1044.2837262896649,
+          "ref_ns": 530.3965138093994
+        },
+        {
+          "load_before": 7.818359375,
+          "load_after": 7.818359375,
+          "go_first": true,
+          "go_ns": 1036.4797089986773,
+          "ref_ns": 525.8416680519604
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 1036.4797089986773,
+        "q1": 1034.0517195532707,
+        "q3": 1037.0263046650211
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 524.7534161343181,
+        "q1": 523.8129022299271,
+        "q3": 525.5235436605001
       },
-      "ratio": 0
+      "ratio": 1.975174771865374,
+      "verdict": "slower"
     },
     {
       "name": "ldl.Permuted.Refactor/kkt-3200",
@@ -1231,17 +4849,71 @@
       "reference": "QDLDL v0.1.9 (C, cgo, -O3)",
       "parity": "exact",
       "allocs": 0,
+      "go_iters": 315,
+      "ref_iters": 377,
+      "rounds": [
+        {
+          "load_before": 7.818359375,
+          "load_after": 7.59228515625,
+          "go_first": true,
+          "go_ns": 344412.6984126984,
+          "ref_ns": 290876.8779840849
+        },
+        {
+          "load_before": 7.59228515625,
+          "load_after": 7.59228515625,
+          "go_first": false,
+          "go_ns": 342629.7619047619,
+          "ref_ns": 290064.1034482759
+        },
+        {
+          "load_before": 7.59228515625,
+          "load_after": 7.59228515625,
+          "go_first": true,
+          "go_ns": 341822.61904761905,
+          "ref_ns": 291999.88859416445
+        },
+        {
+          "load_before": 7.59228515625,
+          "load_after": 7.59228515625,
+          "go_first": false,
+          "go_ns": 337952.11746031744,
+          "ref_ns": 288905.1724137931
+        },
+        {
+          "load_before": 7.59228515625,
+          "load_after": 7.59228515625,
+          "go_first": true,
+          "go_ns": 340476.5873015873,
+          "ref_ns": 290710.1034482759
+        },
+        {
+          "load_before": 7.59228515625,
+          "load_after": 7.59228515625,
+          "go_first": false,
+          "go_ns": 339865.73968253966,
+          "ref_ns": 290534.8143236074
+        },
+        {
+          "load_before": 7.59228515625,
+          "load_after": 7.59228515625,
+          "go_first": true,
+          "go_ns": 336230.68888888886,
+          "ref_ns": 288932.24933687004
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 340476.5873015873,
+        "q1": 338908.9285714285,
+        "q3": 342226.1904761905
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 290534.8143236074,
+        "q1": 289498.17639257293,
+        "q3": 290793.4907161804
       },
-      "ratio": 0
+      "ratio": 1.1718960018414628,
+      "verdict": "slower"
     },
     {
       "name": "ldl.Permuted.Solve/kkt-3200",
@@ -1249,17 +4921,71 @@
       "reference": "QDLDL v0.1.9 (C, cgo, -O3)",
       "parity": "exact",
       "allocs": 0,
+      "go_iters": 2904,
+      "ref_iters": 3526,
+      "rounds": [
+        {
+          "load_before": 7.59228515625,
+          "load_after": 7.59228515625,
+          "go_first": true,
+          "go_ns": 38870.49449035813,
+          "ref_ns": 35949.104083947816
+        },
+        {
+          "load_before": 7.59228515625,
+          "load_after": 7.59228515625,
+          "go_first": false,
+          "go_ns": 38863.79407713499,
+          "ref_ns": 36152.899886557
+        },
+        {
+          "load_before": 7.59228515625,
+          "load_after": 7.59228515625,
+          "go_first": true,
+          "go_ns": 38583.90736914601,
+          "ref_ns": 36848.23454339195
+        },
+        {
+          "load_before": 7.59228515625,
+          "load_after": 7.59228515625,
+          "go_first": false,
+          "go_ns": 40507.590220385675,
+          "ref_ns": 37096.260918888256
+        },
+        {
+          "load_before": 7.59228515625,
+          "load_after": 7.59228515625,
+          "go_first": true,
+          "go_ns": 40249.598140495866,
+          "ref_ns": 36819.164775950085
+        },
+        {
+          "load_before": 7.59228515625,
+          "load_after": 7.59228515625,
+          "go_first": false,
+          "go_ns": 40420.684228650134,
+          "ref_ns": 37642.642938173565
+        },
+        {
+          "load_before": 7.59228515625,
+          "load_after": 7.59228515625,
+          "go_first": true,
+          "go_ns": 40061.56749311295,
+          "ref_ns": 37354.201928530914
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 40061.56749311295,
+        "q1": 38867.14428374656,
+        "q3": 40335.141184573
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 36848.23454339195,
+        "q1": 36486.03233125355,
+        "q3": 37225.231423709585
       },
-      "ratio": 0
+      "ratio": 1.0872045293224843,
+      "verdict": "slower"
     },
     {
       "name": "order.RCM/lap2d-64-scrambled",
@@ -1267,17 +4993,71 @@
       "reference": "scipy.sparse.csgraph.reverse_cuthill_mckee 1.18.1",
       "parity": "tolerance",
       "allocs": 10,
+      "go_iters": 482,
+      "ref_iters": 608,
+      "rounds": [
+        {
+          "load_before": 7.59228515625,
+          "load_after": 7.59228515625,
+          "go_first": true,
+          "go_ns": 223462.13692946057,
+          "ref_ns": 173910.56743421053
+        },
+        {
+          "load_before": 7.59228515625,
+          "load_after": 7.59228515625,
+          "go_first": false,
+          "go_ns": 229272.47510373444,
+          "ref_ns": 173027.89144736843
+        },
+        {
+          "load_before": 7.59228515625,
+          "load_after": 7.59228515625,
+          "go_first": true,
+          "go_ns": 227945.79875518673,
+          "ref_ns": 185021.7927631579
+        },
+        {
+          "load_before": 7.59228515625,
+          "load_after": 7.59228515625,
+          "go_first": false,
+          "go_ns": 224756.91493775934,
+          "ref_ns": 187827.30263157896
+        },
+        {
+          "load_before": 7.59228515625,
+          "load_after": 7.59228515625,
+          "go_first": true,
+          "go_ns": 224295.21161825725,
+          "ref_ns": 181289.74671052632
+        },
+        {
+          "load_before": 7.59228515625,
+          "load_after": 7.59228515625,
+          "go_first": false,
+          "go_ns": 224730.20331950206,
+          "ref_ns": 179424.41118421053
+        },
+        {
+          "load_before": 7.59228515625,
+          "load_after": 7.62451171875,
+          "go_first": true,
+          "go_ns": 222610.39004149378,
+          "ref_ns": 174900.6990131579
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 224730.20331950206,
+        "q1": 223878.6742738589,
+        "q3": 226351.35684647303
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 179424.41118421053,
+        "q1": 174405.6332236842,
+        "q3": 183155.7697368421
       },
-      "ratio": 0
+      "ratio": 1.2525062885048412,
+      "verdict": "slower"
     },
     {
       "name": "mtx.Read/lap2d-30",
@@ -1285,17 +5065,71 @@
       "reference": "scipy.io.mmread 1.18.1 (same bytes)",
       "parity": "tolerance",
       "allocs": 18,
+      "go_iters": 391,
+      "ref_iters": 480,
+      "rounds": [
+        {
+          "load_before": 7.62451171875,
+          "load_after": 7.62451171875,
+          "go_first": true,
+          "go_ns": 335879.6879795396,
+          "ref_ns": 395374.4791666667
+        },
+        {
+          "load_before": 7.62451171875,
+          "load_after": 7.62451171875,
+          "go_first": false,
+          "go_ns": 344998.6163682864,
+          "ref_ns": 370387.2395833333
+        },
+        {
+          "load_before": 7.62451171875,
+          "load_after": 7.62451171875,
+          "go_first": true,
+          "go_ns": 345375.7468030691,
+          "ref_ns": 366634.8958333333
+        },
+        {
+          "load_before": 7.62451171875,
+          "load_after": 7.62451171875,
+          "go_first": false,
+          "go_ns": 333574.5933503836,
+          "ref_ns": 372069.18333333335
+        },
+        {
+          "load_before": 7.62451171875,
+          "load_after": 7.62451171875,
+          "go_first": true,
+          "go_ns": 342958.97186700767,
+          "ref_ns": 399735.33125
+        },
+        {
+          "load_before": 7.62451171875,
+          "load_after": 7.62451171875,
+          "go_first": false,
+          "go_ns": 340684.5703324808,
+          "ref_ns": 401851.0416666667
+        },
+        {
+          "load_before": 7.62451171875,
+          "load_after": 7.62451171875,
+          "go_first": true,
+          "go_ns": 326160.5933503836,
+          "ref_ns": 398276.99583333335
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 340684.5703324808,
+        "q1": 334727.14066496165,
+        "q3": 343978.79411764705
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 395374.4791666667,
+        "q1": 371228.2114583333,
+        "q3": 399006.1635416667
       },
-      "ratio": 0
+      "ratio": 0.8616756727711508,
+      "verdict": "faster"
     },
     {
       "name": "mtx.Write/lap2d-30",
@@ -1303,17 +5137,71 @@
       "reference": "scipy.io.mmwrite 1.18.1",
       "parity": "tolerance",
       "allocs": 10,
+      "go_iters": 611,
+      "ref_iters": 217,
+      "rounds": [
+        {
+          "load_before": 7.62451171875,
+          "load_after": 7.62451171875,
+          "go_first": true,
+          "go_ns": 168390.54828150573,
+          "ref_ns": 485759.2165898617
+        },
+        {
+          "load_before": 7.62451171875,
+          "load_after": 7.62451171875,
+          "go_first": false,
+          "go_ns": 165791.46153846153,
+          "ref_ns": 483259.9861751152
+        },
+        {
+          "load_before": 7.62451171875,
+          "load_after": 7.62451171875,
+          "go_first": true,
+          "go_ns": 163335.99345335516,
+          "ref_ns": 486070.66359447007
+        },
+        {
+          "load_before": 7.62451171875,
+          "load_after": 7.62451171875,
+          "go_first": false,
+          "go_ns": 168605.01963993453,
+          "ref_ns": 487278.9953917051
+        },
+        {
+          "load_before": 7.62451171875,
+          "load_after": 7.62451171875,
+          "go_first": true,
+          "go_ns": 164341.99509001637,
+          "ref_ns": 487706.4101382489
+        },
+        {
+          "load_before": 7.62451171875,
+          "load_after": 7.62451171875,
+          "go_first": false,
+          "go_ns": 165868.589198036,
+          "ref_ns": 482751.7281105991
+        },
+        {
+          "load_before": 7.62451171875,
+          "load_after": 7.62451171875,
+          "go_first": true,
+          "go_ns": 164708.0605564648,
+          "ref_ns": 486293.39631336404
+        }
+      ],
       "go": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 165791.46153846153,
+        "q1": 164525.02782324058,
+        "q3": 167129.56873977085
       },
       "ref": {
-        "median": 0,
-        "q1": 0,
-        "q3": 0
+        "median": 486070.66359447007,
+        "q1": 484509.6013824885,
+        "q3": 486786.19585253455
       },
-      "ratio": 0
+      "ratio": 0.34108510131519015,
+      "verdict": "faster"
     }
   ]
 }
