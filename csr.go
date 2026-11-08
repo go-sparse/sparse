@@ -3,8 +3,11 @@ package sparse
 import (
 	"fmt"
 	"math"
+	"math/cmplx"
 	"slices"
 	"sort"
+
+	"github.com/go-simd/floats"
 )
 
 // CSR is a compressed-sparse-row matrix. Row i occupies
@@ -408,20 +411,49 @@ func Mul[T Scalar](a, b *CSR[T]) (*CSR[T], error) {
 // Prune removes stored entries with |value| <= tol (tol = 0 removes explicit
 // zeros) in place.
 func (a *CSR[T]) Prune(tol float64) {
-	w := 0
-	start := 0
-	for i := 0; i < a.Rows; i++ {
-		end := a.Indptr[i+1]
+	// One type switch for the whole matrix, then a loop on concrete data:
+	// the generic abs boxed and switched on every entry (about 2 ns each,
+	// scipy's csr_eliminate_zeros runs on concrete types).
+	var w int
+	switch d := any(a.Data).(type) {
+	case []float64:
+		w = pruneReal(a.Rows, a.Indptr, a.Indices, d, tol)
+	case []complex128:
+		w = pruneComplex(a.Rows, a.Indptr, a.Indices, d, tol)
+	}
+	a.Indices, a.Data = a.Indices[:w], a.Data[:w]
+}
+
+func pruneReal(rows int, ptr []int, ind []int32, d []float64, tol float64) int {
+	w, start := 0, 0
+	for i := 0; i < rows; i++ {
+		end := ptr[i+1]
 		for p := start; p < end; p++ {
-			if abs(a.Data[p]) > tol {
-				a.Indices[w], a.Data[w] = a.Indices[p], a.Data[p]
+			if math.Abs(d[p]) > tol {
+				ind[w], d[w] = ind[p], d[p]
 				w++
 			}
 		}
 		start = end
-		a.Indptr[i+1] = w
+		ptr[i+1] = w
 	}
-	a.Indices, a.Data = a.Indices[:w], a.Data[:w]
+	return w
+}
+
+func pruneComplex(rows int, ptr []int, ind []int32, d []complex128, tol float64) int {
+	w, start := 0, 0
+	for i := 0; i < rows; i++ {
+		end := ptr[i+1]
+		for p := start; p < end; p++ {
+			if cmplx.Abs(d[p]) > tol {
+				ind[w], d[w] = ind[p], d[p]
+				w++
+			}
+		}
+		start = end
+		ptr[i+1] = w
+	}
+	return w
 }
 
 // Tril returns the lower triangle (entries with j - i <= k).
@@ -546,6 +578,15 @@ func (a *CSR[T]) NormInf() float64 {
 
 // NormFro is the Frobenius norm.
 func (a *CSR[T]) NormFro() float64 {
+	// scipy.sparse.linalg.norm(A, 'fro') is np.linalg.norm of the data
+	// array, which is sqrt(dot(x, x)): a BLAS ddot with several accumulators.
+	// The serial loop below is one chain of dependent additions (about 4
+	// cycles each), the SIMD dot is not; the sum differs from the serial one
+	// in the last bits, as scipy's does between BLAS builds (the conformance
+	// oracle compares with a tolerance).
+	if d, ok := any(a.Data).([]float64); ok {
+		return math.Sqrt(floats.Dot(d, d))
+	}
 	s := 0.0
 	for _, v := range a.Data {
 		x := abs(v)

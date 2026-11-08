@@ -13,11 +13,14 @@ import (
 // from a per-point function that appends (neighbour offset, value) pairs.
 func grid(nx, ny, nz int, point func(emit func(dx, dy, dz int, v float64))) *sparse.CSR[float64] {
 	n := nx * ny * nz
-	c := sparse.NewCOO[float64](n, n)
-	// One emit closure for the whole grid (it reads the loop variables below),
-	// not one per point; a first sweep counts the entries so that the triplets
-	// are allocated once at their size.
-	var x, y, z, row, count int
+	// The matrix is built as CSR directly, not through triplets and a
+	// conversion (which sorted and summed them again): a stencil never emits
+	// the same neighbour twice, so a row only needs its few entries put in
+	// column order. One emit closure serves the whole grid (it reads the loop
+	// variables below); a first sweep counts the entries of each row, the
+	// second stores them.
+	a := &sparse.CSR[float64]{Rows: n, Cols: n, Indptr: make([]int, n+1)}
+	var x, y, z, row, filled int
 	fill := false
 	emit := func(dx, dy, dz int, v float64) {
 		X, Y, Z := x+dx, y+dy, z+dz
@@ -25,26 +28,47 @@ func grid(nx, ny, nz int, point func(emit func(dx, dy, dz int, v float64))) *spa
 			return
 		}
 		if !fill {
-			count++
+			a.Indptr[row+1]++
 			return
 		}
-		c.I, c.J, c.V = append(c.I, row), append(c.J, (Z*ny+Y)*nx+X), append(c.V, v)
+		p := a.Indptr[row] + filled
+		a.Indices[p], a.Data[p] = int32((Z*ny+Y)*nx+X), v
+		filled++
 	}
 	sweep := func() {
 		for z = 0; z < nz; z++ {
 			for y = 0; y < ny; y++ {
 				for x = 0; x < nx; x++ {
-					row = (z*ny+y)*nx + x
+					row, filled = (z*ny+y)*nx+x, 0
 					point(emit)
+					if fill {
+						sortRow(a.Indices[a.Indptr[row]:a.Indptr[row+1]], a.Data[a.Indptr[row]:a.Indptr[row+1]])
+					}
 				}
 			}
 		}
 	}
 	sweep()
-	c.I, c.J, c.V = make([]int, 0, count), make([]int, 0, count), make([]float64, 0, count)
+	for i := 0; i < n; i++ {
+		a.Indptr[i+1] += a.Indptr[i]
+	}
+	a.Indices, a.Data = make([]int32, a.Indptr[n]), make([]float64, a.Indptr[n])
 	fill = true
 	sweep()
-	return c.ToCSR()
+	return a
+}
+
+// sortRow puts the few entries of a stencil row in column order (insertion
+// sort, stable; the indices of a row are distinct).
+func sortRow(ind []int32, data []float64) {
+	for p := 1; p < len(ind); p++ {
+		j, v := ind[p], data[p]
+		q := p
+		for ; q > 0 && ind[q-1] > j; q-- {
+			ind[q], data[q] = ind[q-1], data[q-1]
+		}
+		ind[q], data[q] = j, v
+	}
 }
 
 // Laplacian1D is the n x n tridiagonal matrix tridiag(-1, 2, -1).
