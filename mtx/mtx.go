@@ -17,6 +17,8 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"unicode"
+	"unicode/utf8"
 
 	"github.com/go-sparse/sparse"
 )
@@ -159,9 +161,10 @@ func ReadLimited(r io.Reader, lim Limits) (*Matrix, error) {
 }
 
 type parser struct {
-	br   *bufio.Reader
-	lim  Limits
-	line int
+	br     *bufio.Reader
+	lim    Limits
+	line   int
+	fields [][]byte // scratch of nextData
 }
 
 func (p *parser) errf(format string, a ...any) error {
@@ -177,17 +180,58 @@ func (p *parser) eof(err error, msg string) error {
 	return p.errf("%s", msg)
 }
 
-// next returns the next line (without terminator); io.EOF at the end.
-func (p *parser) next() (string, error) {
+// maxPrealloc bounds the triplets allocated from a declared entry count.
+const maxPrealloc = 1 << 14
+
+// nextLine returns the next line (without terminator) as bytes of the reader's
+// buffer, valid until the next read; io.EOF at the end.
+func (p *parser) nextLine() ([]byte, error) {
 	b, long, err := p.br.ReadLine()
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 	p.line++
 	if long {
-		return "", p.errf("line longer than %d bytes", p.lim.MaxLine)
+		return nil, p.errf("line longer than %d bytes", p.lim.MaxLine)
+	}
+	return b, nil
+}
+
+// next returns the next line (without terminator); io.EOF at the end.
+func (p *parser) next() (string, error) {
+	b, err := p.nextLine()
+	if err != nil {
+		return "", err
 	}
 	return string(b), nil
+}
+
+// splitFields is strings.Fields on bytes, into dst's storage: the fields are
+// sub-slices of b and nothing is allocated once dst has grown to the longest
+// line. A line of the entries is read once per entry, so a string and a slice
+// per line were two allocations per entry.
+func splitFields(dst [][]byte, b []byte) [][]byte {
+	dst = dst[:0]
+	start := -1
+	for i := 0; i < len(b); {
+		r, w := rune(b[i]), 1
+		if r >= utf8.RuneSelf {
+			r, w = utf8.DecodeRune(b[i:])
+		}
+		if unicode.IsSpace(r) {
+			if start >= 0 {
+				dst = append(dst, b[start:i])
+				start = -1
+			}
+		} else if start < 0 {
+			start = i
+		}
+		i += w
+	}
+	if start >= 0 {
+		dst = append(dst, b[start:])
+	}
+	return dst
 }
 
 // noMoreEntries enforces that the entry count is exact: after the declared
@@ -214,14 +258,15 @@ func (p *parser) trailingErr(err error) error {
 }
 
 // nextData returns the next non-blank, non-comment line.
-func (p *parser) nextData() ([]string, error) {
+// The fields are valid until the next call.
+func (p *parser) nextData() ([][]byte, error) {
 	for {
-		s, err := p.next()
+		b, err := p.nextLine()
 		if err != nil {
 			return nil, p.eof(err, "unexpected end of file")
 		}
-		f := strings.Fields(s)
-		if len(f) > 0 && !strings.HasPrefix(f[0], "%") {
+		p.fields = splitFields(p.fields, b)
+		if f := p.fields; len(f) > 0 && f[0][0] != '%' {
 			return f, nil
 		}
 	}
@@ -318,6 +363,16 @@ func (p *parser) parse() (*Matrix, error) {
 	}
 	h.Entries = int(entries)
 	coo := sparse.NewCOO[complex128](h.Rows, h.Cols)
+	// Room for the declared entries, up to a bound: the count comes from the
+	// file, so a header that declares the limit and sends nothing must not
+	// make a large allocation (Limits.MaxEntries is checked above, the bytes
+	// are not there yet). Beyond the bound append grows the triplets.
+	if hint := min(h.Entries, maxPrealloc); hint > 0 {
+		if h.Symmetry != General {
+			hint *= 2
+		}
+		coo.I, coo.J, coo.V = make([]int, 0, hint), make([]int, 0, hint), make([]complex128, 0, hint)
+	}
 	if h.Layout == Coordinate {
 		err = p.readCoordinate(&h, coo)
 	} else {
@@ -343,7 +398,7 @@ func (p *parser) parse() (*Matrix, error) {
 	return m, nil
 }
 
-func (p *parser) value(h *Header, f []string) (complex128, error) {
+func (p *parser) value(h *Header, f [][]byte) (complex128, error) {
 	switch h.Field {
 	case Pattern:
 		if len(f) != 0 {
@@ -354,8 +409,8 @@ func (p *parser) value(h *Header, f []string) (complex128, error) {
 		if len(f) != 2 {
 			return 0, p.errf("complex entry needs two numbers")
 		}
-		re, e1 := strconv.ParseFloat(f[0], 64)
-		im, e2 := strconv.ParseFloat(f[1], 64)
+		re, e1 := strconv.ParseFloat(string(f[0]), 64)
+		im, e2 := strconv.ParseFloat(string(f[1]), 64)
 		if e1 != nil || e2 != nil {
 			return 0, p.errf("bad number %q %q", f[0], f[1])
 		}
@@ -364,7 +419,7 @@ func (p *parser) value(h *Header, f []string) (complex128, error) {
 		if len(f) != 1 {
 			return 0, p.errf("entry needs one integer")
 		}
-		v, err := strconv.ParseInt(f[0], 10, 64)
+		v, err := strconv.ParseInt(string(f[0]), 10, 64)
 		if err != nil {
 			return 0, p.errf("bad integer %q", f[0])
 		}
@@ -373,7 +428,7 @@ func (p *parser) value(h *Header, f []string) (complex128, error) {
 	if len(f) != 1 {
 		return 0, p.errf("entry needs one number")
 	}
-	v, err := strconv.ParseFloat(f[0], 64)
+	v, err := strconv.ParseFloat(string(f[0]), 64)
 	if err != nil {
 		return 0, p.errf("bad number %q", f[0])
 	}
@@ -404,8 +459,8 @@ func (p *parser) readCoordinate(h *Header, c *sparse.COO[complex128]) error {
 		if len(f) < 2 {
 			return p.errf("coordinate entry needs row and column")
 		}
-		i, e1 := strconv.Atoi(f[0])
-		j, e2 := strconv.Atoi(f[1])
+		i, e1 := strconv.Atoi(string(f[0]))
+		j, e2 := strconv.Atoi(string(f[1]))
 		if e1 != nil || e2 != nil {
 			return p.errf("bad index %q %q", f[0], f[1])
 		}
@@ -502,6 +557,9 @@ func Write[T sparse.Scalar](w io.Writer, a *sparse.CSR[T], o Options) error {
 		v    T
 	}
 	var ents []entry
+	if o.Layout == Coordinate {
+		ents = make([]entry, 0, len(a.Data))
+	}
 	keep := func(i, j int) bool {
 		switch o.Symmetry {
 		case General:
@@ -538,24 +596,37 @@ func Write[T sparse.Scalar](w io.Writer, a *sparse.CSR[T], o Options) error {
 	} else {
 		fmt.Fprintf(bw, "%d %d\n", a.Rows, a.Cols)
 	}
+	line := make([]byte, 0, 96)
 	for _, e := range ents {
+		// One scratch line, formatted with strconv.Append*: fmt.Fprintf boxes
+		// every operand and strconv.FormatFloat allocates a string, so the
+		// loop allocated several times per entry. The bytes are the same.
+		line = line[:0]
 		if o.Layout == Coordinate {
-			fmt.Fprintf(bw, "%d %d", e.i+1, e.j+1)
+			line = strconv.AppendInt(line, int64(e.i)+1, 10)
+			line = append(line, ' ')
+			line = strconv.AppendInt(line, int64(e.j)+1, 10)
 		}
 		c := toComplex(e.v)
 		switch o.Field {
 		case Pattern:
 		case Complex:
-			fmt.Fprintf(bw, " %s %s", num(real(c)), num(imag(c)))
+			line = append(line, ' ')
+			line = strconv.AppendFloat(line, real(c), 'g', -1, 64)
+			line = append(line, ' ')
+			line = strconv.AppendFloat(line, imag(c), 'g', -1, 64)
 		case Integer:
 			if real(c) != math.Trunc(real(c)) {
 				return fmt.Errorf("%w: value %g is not an integer", ErrFormat, real(c))
 			}
-			fmt.Fprintf(bw, " %d", int64(real(c)))
+			line = append(line, ' ')
+			line = strconv.AppendInt(line, int64(real(c)), 10)
 		default:
-			fmt.Fprintf(bw, " %s", num(real(c)))
+			line = append(line, ' ')
+			line = strconv.AppendFloat(line, real(c), 'g', -1, 64)
 		}
-		bw.WriteByte('\n')
+		line = append(line, '\n')
+		bw.Write(line)
 	}
 	return bw.Flush()
 }
@@ -566,8 +637,6 @@ func toComplex[T sparse.Scalar](v T) complex128 {
 	}
 	return complex(any(v).(float64), 0)
 }
-
-func num(f float64) string { return strconv.FormatFloat(f, 'g', -1, 64) }
 
 func checkSymmetry[T sparse.Scalar](a *sparse.CSR[T], s Symmetry) error {
 	if a.Rows != a.Cols {

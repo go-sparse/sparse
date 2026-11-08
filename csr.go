@@ -244,8 +244,15 @@ func FromDense[T Scalar](rows, cols int, d []T) (*CSR[T], error) {
 	if rows < 0 || cols < 0 || rows > MaxDim || cols > MaxDim || (cols != 0 && rows > math.MaxInt/cols) || len(d) != rows*cols {
 		return nil, shapeErr("FromDense", [2]int{rows, cols}, len(d))
 	}
-	a := &CSR[T]{Rows: rows, Cols: cols, Indptr: make([]int, rows+1)}
 	var z T
+	nz := 0
+	for _, v := range d {
+		if v != z {
+			nz++
+		}
+	}
+	a := &CSR[T]{Rows: rows, Cols: cols, Indptr: make([]int, rows+1),
+		Indices: make([]int32, 0, nz), Data: make([]T, 0, nz)}
 	for i := 0; i < rows; i++ {
 		for j := 0; j < cols; j++ {
 			if v := d[i*cols+j]; v != z {
@@ -360,13 +367,19 @@ func Mul[T Scalar](a, b *CSR[T]) (*CSR[T], error) {
 	if a.Cols != b.Rows {
 		return nil, shapeErr("Mul", [2]int{a.Rows, a.Cols}, [2]int{b.Rows, b.Cols})
 	}
-	c := &CSR[T]{Rows: a.Rows, Cols: b.Cols, Indptr: make([]int, a.Rows+1)}
+	// The product has at least as many entries as the larger operand in the
+	// usual case (stencils, banded matrices): start there rather than at
+	// zero, so growth takes one or two steps instead of a dozen. A row has at
+	// most b.Cols entries.
+	hint := max(len(a.Data), len(b.Data))
+	c := &CSR[T]{Rows: a.Rows, Cols: b.Cols, Indptr: make([]int, a.Rows+1),
+		Indices: make([]int32, 0, hint), Data: make([]T, 0, hint)}
 	acc := make([]T, b.Cols)
 	mark := make([]int, b.Cols)
 	for j := range mark {
 		mark[j] = -1
 	}
-	var cols []int32
+	cols := make([]int32, 0, b.Cols)
 	for i := 0; i < a.Rows; i++ {
 		cols = cols[:0]
 		for p := a.Indptr[i]; p < a.Indptr[i+1]; p++ {
@@ -418,7 +431,18 @@ func (a *CSR[T]) Tril(k int) *CSR[T] { return a.filter(func(i, j int) bool { ret
 func (a *CSR[T]) Triu(k int) *CSR[T] { return a.filter(func(i, j int) bool { return j-i >= k }) }
 
 func (a *CSR[T]) filter(keep func(i, j int) bool) *CSR[T] {
-	c := &CSR[T]{Rows: a.Rows, Cols: a.Cols, Indptr: make([]int, a.Rows+1)}
+	// A first pass counts what is kept, so that the result is allocated once
+	// at its size instead of grown by doubling.
+	kept := 0
+	for i := 0; i < a.Rows; i++ {
+		for p := a.Indptr[i]; p < a.Indptr[i+1]; p++ {
+			if keep(i, int(a.Indices[p])) {
+				kept++
+			}
+		}
+	}
+	c := &CSR[T]{Rows: a.Rows, Cols: a.Cols, Indptr: make([]int, a.Rows+1),
+		Indices: make([]int32, 0, kept), Data: make([]T, 0, kept)}
 	for i := 0; i < a.Rows; i++ {
 		for p := a.Indptr[i]; p < a.Indptr[i+1]; p++ {
 			if keep(i, int(a.Indices[p])) {
@@ -444,12 +468,20 @@ func (a *CSR[T]) Permute(p, q []int) (*CSR[T], error) {
 	for j, v := range q {
 		qinv[v] = j
 	}
-	c := &CSR[T]{Rows: a.Rows, Cols: a.Cols, Indptr: make([]int, a.Rows+1)}
+	// The output has the size of the input when p is a permutation (the
+	// capacity is a hint, append still grows it for any other p).
+	c := &CSR[T]{Rows: a.Rows, Cols: a.Cols, Indptr: make([]int, a.Rows+1),
+		Indices: make([]int32, 0, len(a.Indices)), Data: make([]T, 0, len(a.Data))}
 	type ent struct {
 		j int
 		v T
 	}
-	var row []ent
+	longest := 0
+	for i := 0; i < a.Rows; i++ {
+		longest = max(longest, a.Indptr[i+1]-a.Indptr[i])
+	}
+	row := make([]ent, 0, longest)
+	byCol := func(x, y ent) int { return x.j - y.j }
 	for i := 0; i < a.Rows; i++ {
 		src := i
 		if p != nil {
@@ -459,7 +491,9 @@ func (a *CSR[T]) Permute(p, q []int) (*CSR[T], error) {
 		for t := a.Indptr[src]; t < a.Indptr[src+1]; t++ {
 			row = append(row, ent{qinv[a.Indices[t]], a.Data[t]})
 		}
-		sort.Slice(row, func(x, y int) bool { return row[x].j < row[y].j })
+		// slices.SortFunc, not sort.Slice: the latter allocates a closure and
+		// a swapper per row. The keys are distinct in a canonical row.
+		slices.SortFunc(row, byCol)
 		for _, e := range row {
 			c.Indices = append(c.Indices, int32(e.j))
 			c.Data = append(c.Data, e.v)
@@ -540,6 +574,11 @@ func Diags[T Scalar](diagonals [][]T, offsets []int, rows, cols int) (*CSR[T], e
 		return nil, shapeErr("Diags", len(diagonals), len(offsets))
 	}
 	c := NewCOO[T](rows, cols)
+	total := 0
+	for _, d := range diagonals {
+		total += len(d)
+	}
+	c.I, c.J, c.V = make([]int, 0, total), make([]int, 0, total), make([]T, 0, total)
 	for t, k := range offsets {
 		for s, v := range diagonals[t] {
 			i, j := s, s+k

@@ -107,8 +107,10 @@ func (e *engine) reset(n, nelem int) {
 		e.chainNext[i], e.chainTail[i] = -1, i
 	}
 	e.order = e.order[:0]
-	e.lp = e.lp[:0]
-	e.hv.s = e.hv.s[:0]
+	// Each of these never holds more than n entries: one allocation, not
+	// one per doubling.
+	e.lp = slices.Grow(e.lp[:0], n)
+	e.hv.s = slices.Grow(e.hv.s[:0], n)
 }
 
 func (e *engine) vlist(i int) []int { return e.pool[e.vst[i] : e.vst[i]+e.vln[i]] }
@@ -366,6 +368,12 @@ func AMDWith[T sparse.Scalar](w *Workspace, dst []int, a *sparse.CSR[T]) ([]int,
 	n := g.n
 	e := &w.e
 	e.reset(n, 0)
+	// One growth of the arena and of the pivot list instead of one per
+	// doubling. The initial lists take len(g.adj) and the arena ends at
+	// about 3 to 3.5 times that on grids and random patterns; it is only an
+	// estimate, append still grows it if the fill is larger.
+	e.pool = slices.Grow(e.pool, 4*len(g.adj)+2*n)
+	e.order = slices.Grow(e.order, n)
 	limit := int(math.Max(16, 10*math.Sqrt(float64(n))))
 	dense := w.dense[:0]
 	for i := 0; i < n; i++ {
@@ -435,6 +443,8 @@ func COLAMDWith[T sparse.Scalar](w *Workspace, dst []int, a *sparse.CSR[T]) ([]i
 	}
 	e := &w.e
 	e.reset(n, m)
+	e.pool = slices.Grow(e.pool, 8*a.Indptr[m]+2*n) // see AMDWith
+	e.order = slices.Grow(e.order, n)
 	rowLimit := int(math.Max(16, 10*math.Sqrt(float64(n))))
 	colLimit := int(math.Max(16, 10*math.Sqrt(float64(m))))
 	colCount := zeroed(w.colCount, n)
