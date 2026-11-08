@@ -69,11 +69,12 @@ func TestAllocsDoNotGrowWithSize(t *testing.T) {
 	for _, n := range []int{101, 1003} {
 		a := triDiag(t, n)
 		coo := a.ToCOO()
-		if got := testing.AllocsPerRun(5, func() { _ = coo.ToCSC() }); got > 4 {
-			t.Errorf("COO.ToCSC of order %d: %v allocations, want at most 4", n, got)
+		// 3 allocations, plus up to 2 that the counter sees on a 32-bit run
+		if got := testing.AllocsPerRun(5, func() { _ = coo.ToCSC() }); got > 5 {
+			t.Errorf("COO.ToCSC of order %d: %v allocations, want at most 5", n, got)
 		}
-		if got := testing.AllocsPerRun(5, func() { _ = coo.ToCSR() }); got > 4 {
-			t.Errorf("COO.ToCSR of order %d: %v allocations, want at most 4", n, got)
+		if got := testing.AllocsPerRun(5, func() { _ = coo.ToCSR() }); got > 5 {
+			t.Errorf("COO.ToCSR of order %d: %v allocations, want at most 5", n, got)
 		}
 		if got := testing.AllocsPerRun(5, func() { a.Prune(0) }); got != 0 {
 			t.Errorf("Prune of order %d: %v allocations, want 0", n, got)
