@@ -22,10 +22,10 @@
 package order
 
 import (
+	"cmp"
 	"errors"
 	"fmt"
 	"slices"
-	"sort"
 
 	"github.com/go-sparse/sparse"
 )
@@ -165,14 +165,18 @@ func RCM[T sparse.Scalar](a *sparse.CSR[T]) ([]int, error) {
 	}
 	n := g.n
 	visited := make([]bool, n)
-	b := &bfs{level: make([]int, n), seen: make([]int, n)}
+	b := &bfs{level: make([]int, n), seen: make([]int, n), queue: make([]int, 0, n)}
 	order := make([]int, 0, n)
 	// vertices by increasing degree, to pick component starts
 	byDeg := make([]int, n)
 	for i := range byDeg {
 		byDeg[i] = i
 	}
-	sort.SliceStable(byDeg, func(x, y int) bool { return g.degree(byDeg[x]) < g.degree(byDeg[y]) })
+	// slices.SortStableFunc, not sort.SliceStable: the latter allocates a
+	// swapper per call, one per vertex below. A stable sort has a unique
+	// result, so the ordering is unchanged.
+	byDegree := func(x, y int) int { return cmp.Compare(g.degree(x), g.degree(y)) }
+	slices.SortStableFunc(byDeg, byDegree)
 	for _, s := range byDeg {
 		if visited[s] {
 			continue
@@ -191,7 +195,7 @@ func RCM[T sparse.Scalar](a *sparse.CSR[T]) ([]int, error) {
 				}
 			}
 			nb := order[from:]
-			sort.SliceStable(nb, func(x, y int) bool { return g.degree(nb[x]) < g.degree(nb[y]) })
+			slices.SortStableFunc(nb, byDegree)
 		}
 	}
 	for i, j := 0, n-1; i < j; i, j = i+1, j-1 {

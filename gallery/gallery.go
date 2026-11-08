@@ -14,20 +14,36 @@ import (
 func grid(nx, ny, nz int, point func(emit func(dx, dy, dz int, v float64))) *sparse.CSR[float64] {
 	n := nx * ny * nz
 	c := sparse.NewCOO[float64](n, n)
-	for z := 0; z < nz; z++ {
-		for y := 0; y < ny; y++ {
-			for x := 0; x < nx; x++ {
-				row := (z*ny+y)*nx + x
-				point(func(dx, dy, dz int, v float64) {
-					X, Y, Z := x+dx, y+dy, z+dz
-					if X < 0 || X >= nx || Y < 0 || Y >= ny || Z < 0 || Z >= nz {
-						return
-					}
-					_ = c.Append(row, (Z*ny+Y)*nx+X, v)
-				})
+	// One emit closure for the whole grid (it reads the loop variables below),
+	// not one per point; a first sweep counts the entries so that the triplets
+	// are allocated once at their size.
+	var x, y, z, row, count int
+	fill := false
+	emit := func(dx, dy, dz int, v float64) {
+		X, Y, Z := x+dx, y+dy, z+dz
+		if X < 0 || X >= nx || Y < 0 || Y >= ny || Z < 0 || Z >= nz {
+			return
+		}
+		if !fill {
+			count++
+			return
+		}
+		c.I, c.J, c.V = append(c.I, row), append(c.J, (Z*ny+Y)*nx+X), append(c.V, v)
+	}
+	sweep := func() {
+		for z = 0; z < nz; z++ {
+			for y = 0; y < ny; y++ {
+				for x = 0; x < nx; x++ {
+					row = (z*ny+y)*nx + x
+					point(emit)
+				}
 			}
 		}
 	}
+	sweep()
+	c.I, c.J, c.V = make([]int, 0, count), make([]int, 0, count), make([]float64, 0, count)
+	fill = true
+	sweep()
 	return c.ToCSR()
 }
 

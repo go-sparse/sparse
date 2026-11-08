@@ -158,6 +158,26 @@ jobs:
           done
           exit $fail
 
+  # The performance campaign's CI mode (go-scikit/refbench, bench/): the
+  # allocation count of every case must equal docs/perf.json, docs/perf-table.md
+  # must be what the JSON generates, and every public function must have a case
+  # or a named exemption (docs/perf-exempt.md). No Python and no timing here:
+  # the reference loops (QDLDL, scipy) run only in a measurement at a quiet
+  # load (go test -run TestPerf -cpu 1 -perf.run), never on a shared runner.
+  perf:
+    name: perf (allocations, table, denominator)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version: 1.27.3
+      - name: Allocation counts and public-function coverage
+        working-directory: bench
+        run: |
+          go vet ./...
+          go test -run 'TestPerf|TestParityWithQDLDL' -v .
+
   govulncheck:
     name: govulncheck
     runs-on: ubuntu-latest

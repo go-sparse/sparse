@@ -120,6 +120,19 @@ above is v0.2.1's; v0.3.0 fused `Solve` into two sweeps (2 to 4% faster) and
 its numbers against QDLDL are re-measured in [docs/perf.md](docs/perf.md) when
 the machine is quiet.
 
+`bench/` (a module of its own, so cgo stays out of the library) registers one
+[refbench](https://github.com/go-scikit/refbench) case per public function
+against QDLDL v0.1.9 (the direct path) or scipy.sparse 1.18.1, and names the
+others, with a reason, in [docs/perf-exempt.md](docs/perf-exempt.md);
+`cd bench && go test -run TestPerf .` checks allocation counts and coverage in
+CI, `-cpu 1 -perf.run` measures at a load below 8 and writes
+[docs/perf-table.md](docs/perf-table.md), which is still **deferred** (allocation
+counts, no timing). Wave W3 removed the per-row and per-vertex allocations of
+`order.RCM`, `CSR.Permute`, the `gallery` constructors, `mtx.Read` and
+`mtx.Write` (for example `CSR.Permute` of a 10 000-row matrix: 30 055
+allocations to 6), and presized the AMD arenas; see
+[docs/perf.md](docs/perf.md).
+
 The symbolic side of a solver setup (AMD ordering plus `ldl.NewPermuted`, same
 KKT grids, `BenchmarkSetupAMD`, one core; the machine was busy, so read the
 ratios) in v0.3.0 against v0.2.1:

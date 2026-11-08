@@ -1,0 +1,1319 @@
+{
+  "schema": 1,
+  "status": "deferred",
+  "date": "2026-11-08T12:18:00+01:00",
+  "commit": "w3",
+  "repo": "go-sparse/sparse",
+  "go_version": "go1.27.3",
+  "machine": "darwin/arm64, 16 CPUs",
+  "ref_versions": {
+    "QDLDL": "v0.1.9 (Apache-2.0, copied verbatim in bench/qdldl.c), cgo -O3",
+    "python": "3.12.12",
+    "scipy": "1.18.1 (scipy.sparse, one thread)"
+  },
+  "max_load": 8,
+  "load": {
+    "min": 0,
+    "median": 0,
+    "max": 0
+  },
+  "valid": true,
+  "rows": [
+    {
+      "name": "CSR.MulVec/lap2d-100",
+      "func": "CSR.MulVec",
+      "reference": "scipy.sparse 1.18.1",
+      "parity": "tolerance",
+      "allocs": 0,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "CSR.MulVecT/lap2d-100",
+      "func": "CSR.MulVecT",
+      "reference": "scipy.sparse 1.18.1 (A.T@x)",
+      "parity": "tolerance",
+      "allocs": 0,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "CSC.MulVec/lap2d-100",
+      "func": "CSC.MulVec",
+      "reference": "scipy.sparse 1.18.1",
+      "parity": "tolerance",
+      "allocs": 0,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "CSC.MulVecT/lap2d-100",
+      "func": "CSC.MulVecT",
+      "reference": "scipy.sparse 1.18.1 (A.T@x)",
+      "parity": "tolerance",
+      "allocs": 0,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "CSC.MulVecSymUpper/lap2d-100",
+      "func": "CSC.MulVecSymUpper",
+      "reference": "scipy.sparse 1.18.1 (U@x + U.T@x - diag(U)*x)",
+      "parity": "tolerance",
+      "allocs": 0,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "CSR.MulDense/lap2d-100x4",
+      "func": "CSR.MulDense",
+      "reference": "scipy.sparse 1.18.1",
+      "parity": "tolerance",
+      "allocs": 0,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "Add/lap2d+tri",
+      "func": "Add",
+      "reference": "scipy.sparse 1.18.1",
+      "parity": "tolerance",
+      "allocs": 4,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "Sub/lap2d-tri",
+      "func": "Sub",
+      "reference": "scipy.sparse 1.18.1",
+      "parity": "tolerance",
+      "allocs": 4,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "Mul/lap2d*tri",
+      "func": "Mul",
+      "reference": "scipy.sparse 1.18.1",
+      "parity": "tolerance",
+      "allocs": 15,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "Axpby/2lap2d+3tri",
+      "func": "Axpby",
+      "reference": "scipy.sparse 1.18.1 (2.0*A + 3.0*B)",
+      "parity": "tolerance",
+      "allocs": 4,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "CSR.ToCSC/lap2d-100",
+      "func": "CSR.ToCSC",
+      "reference": "scipy.sparse 1.18.1",
+      "parity": "tolerance",
+      "allocs": 5,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "CSC.ToCSR/lap2d-100",
+      "func": "CSC.ToCSR",
+      "reference": "scipy.sparse 1.18.1",
+      "parity": "tolerance",
+      "allocs": 5,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "CSR.T/lap2d-100",
+      "func": "CSR.T",
+      "reference": "scipy.sparse 1.18.1 (A.T.tocsr())",
+      "parity": "tolerance",
+      "allocs": 5,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "CSR.Transpose/lap2d-100",
+      "func": "CSR.Transpose",
+      "reference": "scipy.sparse 1.18.1 (A.transpose(), a view)",
+      "parity": "tolerance",
+      "allocs": 1,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "CSR.ToCOO/lap2d-100",
+      "func": "CSR.ToCOO",
+      "reference": "scipy.sparse 1.18.1",
+      "parity": "tolerance",
+      "allocs": 4,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "COO.ToCSR/lap2d-100",
+      "func": "COO.ToCSR",
+      "reference": "scipy.sparse 1.18.1",
+      "parity": "tolerance",
+      "allocs": 7,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "COO.ToCSC/lap2d-100",
+      "func": "COO.ToCSC",
+      "reference": "scipy.sparse 1.18.1",
+      "parity": "tolerance",
+      "allocs": 7,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "CSR.Clone/lap2d-100",
+      "func": "CSR.Clone",
+      "reference": "scipy.sparse 1.18.1 (A.copy())",
+      "parity": "tolerance",
+      "allocs": 4,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "CSR.Diagonal/lap2d-100",
+      "func": "CSR.Diagonal",
+      "reference": "scipy.sparse 1.18.1",
+      "parity": "tolerance",
+      "allocs": 2,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "CSR.Tril/lap2d-100",
+      "func": "CSR.Tril",
+      "reference": "scipy.sparse 1.18.1 (sp.tril, csr)",
+      "parity": "tolerance",
+      "allocs": 4,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "CSR.Triu/lap2d-100",
+      "func": "CSR.Triu",
+      "reference": "scipy.sparse 1.18.1 (sp.triu, csr)",
+      "parity": "tolerance",
+      "allocs": 4,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "CSR.Scale/lap2d-100",
+      "func": "CSR.Scale",
+      "reference": "scipy.sparse 1.18.1 (in place: A.data *= 1.0)",
+      "parity": "tolerance",
+      "allocs": 0,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "CSR.ScaleRows/lap2d-100",
+      "func": "CSR.ScaleRows",
+      "reference": "scipy.sparse 1.18.1 (sp.diags(d) @ A, a new matrix)",
+      "parity": "tolerance",
+      "allocs": 0,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "CSR.ScaleCols/lap2d-100",
+      "func": "CSR.ScaleCols",
+      "reference": "scipy.sparse 1.18.1 (A @ sp.diags(d), a new matrix)",
+      "parity": "tolerance",
+      "allocs": 0,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "CSR.Norm1/lap2d-100",
+      "func": "CSR.Norm1",
+      "reference": "scipy.sparse.linalg 1.18.1",
+      "parity": "tolerance",
+      "allocs": 2,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "CSR.NormInf/lap2d-100",
+      "func": "CSR.NormInf",
+      "reference": "scipy.sparse.linalg 1.18.1",
+      "parity": "tolerance",
+      "allocs": 1,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "CSR.NormFro/lap2d-100",
+      "func": "CSR.NormFro",
+      "reference": "scipy.sparse.linalg 1.18.1",
+      "parity": "tolerance",
+      "allocs": 1,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "CSR.Prune/lap2d-100",
+      "func": "CSR.Prune",
+      "reference": "scipy.sparse 1.18.1 (A.eliminate_zeros(), in place)",
+      "parity": "tolerance",
+      "allocs": 0,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "CSR.IsSymmetric/lap2d-100",
+      "func": "CSR.IsSymmetric",
+      "reference": "scipy.sparse 1.18.1 ((A != A.T).nnz == 0)",
+      "parity": "tolerance",
+      "allocs": 0,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "CSR.Validate/lap2d-100",
+      "func": "CSR.Validate",
+      "reference": "scipy.sparse 1.18.1 (A.check_format(full_check=True))",
+      "parity": "tolerance",
+      "allocs": 0,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "CSR.Permute/lap2d-100",
+      "func": "CSR.Permute",
+      "reference": "scipy.sparse 1.18.1 (A[p,:][:,p])",
+      "parity": "tolerance",
+      "allocs": 6,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "CSR.Dense/lap2d-30",
+      "func": "CSR.Dense",
+      "reference": "scipy.sparse 1.18.1 (A.toarray())",
+      "parity": "tolerance",
+      "allocs": 2,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "FromDense/lap2d-30",
+      "func": "FromDense",
+      "reference": "scipy.sparse 1.18.1 (sp.csr_matrix(D))",
+      "parity": "tolerance",
+      "allocs": 4,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "Eye/10000",
+      "func": "Eye",
+      "reference": "scipy.sparse 1.18.1 (sp.eye(n, format='csr'))",
+      "parity": "tolerance",
+      "allocs": 4,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "Diags/tri-10000",
+      "func": "Diags",
+      "reference": "scipy.sparse 1.18.1 (sp.diags(...).tocsr())",
+      "parity": "tolerance",
+      "allocs": 10,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "gallery.Laplacian1D/10000",
+      "func": "gallery.Laplacian1D",
+      "reference": "scipy.sparse 1.18.1 (sp.diags)",
+      "parity": "tolerance",
+      "allocs": 15,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "gallery.Laplacian2D/100",
+      "func": "gallery.Laplacian2D",
+      "reference": "scipy.sparse 1.18.1 (kron(I,T) + kron(T,I))",
+      "parity": "tolerance",
+      "allocs": 15,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "gallery.Laplacian3D/22",
+      "func": "gallery.Laplacian3D",
+      "reference": "scipy.sparse 1.18.1 (three kron terms)",
+      "parity": "tolerance",
+      "allocs": 15,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "iter.CG/lap2d-50",
+      "func": "iter.CG",
+      "reference": "scipy.sparse.linalg 1.18.1 (cg)",
+      "parity": "tolerance",
+      "allocs": 5,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "iter.BiCGSTAB/lap2d-50",
+      "func": "iter.BiCGSTAB",
+      "reference": "scipy.sparse.linalg 1.18.1 (bicgstab)",
+      "parity": "tolerance",
+      "allocs": 10,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "iter.MINRES/lap2d-50",
+      "func": "iter.MINRES",
+      "reference": "scipy.sparse.linalg 1.18.1 (minres)",
+      "parity": "tolerance",
+      "allocs": 9,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "iter.GMRES/lap2d-50",
+      "func": "iter.GMRES",
+      "reference": "scipy.sparse.linalg 1.18.1 (gmres)",
+      "parity": "tolerance",
+      "allocs": 53,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "iter.LSQR/lap2d-50",
+      "func": "iter.LSQR",
+      "reference": "scipy.sparse.linalg 1.18.1 (lsqr)",
+      "parity": "tolerance",
+      "allocs": 8,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "iter.LSMR/lap2d-50",
+      "func": "iter.LSMR",
+      "reference": "scipy.sparse.linalg 1.18.1 (lsmr)",
+      "parity": "tolerance",
+      "allocs": 8,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "iter.TrueResidual/lap2d-50",
+      "func": "iter.TrueResidual",
+      "reference": "numpy 2.5.4 (norm(b - A@x)/norm(b))",
+      "parity": "tolerance",
+      "allocs": 2,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "ldl.Analyze/kkt-288",
+      "func": "ldl.Analyze",
+      "reference": "QDLDL v0.1.9 (C, cgo, -O3)",
+      "parity": "exact",
+      "allocs": 7,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "ldl.Factor.Refactor/kkt-288",
+      "func": "ldl.Factor.Refactor",
+      "reference": "QDLDL v0.1.9 (C, cgo, -O3)",
+      "parity": "exact",
+      "allocs": 0,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "ldl.Factor.Solve/kkt-288",
+      "func": "ldl.Factor.Solve",
+      "reference": "QDLDL v0.1.9 (C, cgo, -O3)",
+      "parity": "exact",
+      "allocs": 0,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "ldl.Factor.LSolve/kkt-288",
+      "func": "ldl.Factor.LSolve",
+      "reference": "QDLDL v0.1.9 (C, cgo, -O3)",
+      "parity": "exact",
+      "allocs": 0,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "ldl.Factor.LTSolve/kkt-288",
+      "func": "ldl.Factor.LTSolve",
+      "reference": "QDLDL v0.1.9 (C, cgo, -O3)",
+      "parity": "exact",
+      "allocs": 0,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "ldl.Factor.DSolve/kkt-288",
+      "func": "ldl.Factor.DSolve",
+      "reference": "QDLDL v0.1.9 (C, cgo, -O3)",
+      "parity": "exact",
+      "allocs": 0,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "ldl.Permuted.Refactor/kkt-288",
+      "func": "ldl.Permuted.Refactor",
+      "reference": "QDLDL v0.1.9 (C, cgo, -O3)",
+      "parity": "exact",
+      "allocs": 0,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "ldl.Permuted.Solve/kkt-288",
+      "func": "ldl.Permuted.Solve",
+      "reference": "QDLDL v0.1.9 (C, cgo, -O3)",
+      "parity": "exact",
+      "allocs": 0,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "ldl.Analyze/kkt-800",
+      "func": "ldl.Analyze",
+      "reference": "QDLDL v0.1.9 (C, cgo, -O3)",
+      "parity": "exact",
+      "allocs": 7,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "ldl.Factor.Refactor/kkt-800",
+      "func": "ldl.Factor.Refactor",
+      "reference": "QDLDL v0.1.9 (C, cgo, -O3)",
+      "parity": "exact",
+      "allocs": 0,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "ldl.Factor.Solve/kkt-800",
+      "func": "ldl.Factor.Solve",
+      "reference": "QDLDL v0.1.9 (C, cgo, -O3)",
+      "parity": "exact",
+      "allocs": 0,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "ldl.Factor.LSolve/kkt-800",
+      "func": "ldl.Factor.LSolve",
+      "reference": "QDLDL v0.1.9 (C, cgo, -O3)",
+      "parity": "exact",
+      "allocs": 0,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "ldl.Factor.LTSolve/kkt-800",
+      "func": "ldl.Factor.LTSolve",
+      "reference": "QDLDL v0.1.9 (C, cgo, -O3)",
+      "parity": "exact",
+      "allocs": 0,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "ldl.Factor.DSolve/kkt-800",
+      "func": "ldl.Factor.DSolve",
+      "reference": "QDLDL v0.1.9 (C, cgo, -O3)",
+      "parity": "exact",
+      "allocs": 0,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "ldl.Permuted.Refactor/kkt-800",
+      "func": "ldl.Permuted.Refactor",
+      "reference": "QDLDL v0.1.9 (C, cgo, -O3)",
+      "parity": "exact",
+      "allocs": 0,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "ldl.Permuted.Solve/kkt-800",
+      "func": "ldl.Permuted.Solve",
+      "reference": "QDLDL v0.1.9 (C, cgo, -O3)",
+      "parity": "exact",
+      "allocs": 0,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "ldl.Analyze/kkt-3200",
+      "func": "ldl.Analyze",
+      "reference": "QDLDL v0.1.9 (C, cgo, -O3)",
+      "parity": "exact",
+      "allocs": 7,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "ldl.Factor.Refactor/kkt-3200",
+      "func": "ldl.Factor.Refactor",
+      "reference": "QDLDL v0.1.9 (C, cgo, -O3)",
+      "parity": "exact",
+      "allocs": 0,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "ldl.Factor.Solve/kkt-3200",
+      "func": "ldl.Factor.Solve",
+      "reference": "QDLDL v0.1.9 (C, cgo, -O3)",
+      "parity": "exact",
+      "allocs": 0,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "ldl.Factor.LSolve/kkt-3200",
+      "func": "ldl.Factor.LSolve",
+      "reference": "QDLDL v0.1.9 (C, cgo, -O3)",
+      "parity": "exact",
+      "allocs": 0,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "ldl.Factor.LTSolve/kkt-3200",
+      "func": "ldl.Factor.LTSolve",
+      "reference": "QDLDL v0.1.9 (C, cgo, -O3)",
+      "parity": "exact",
+      "allocs": 0,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "ldl.Factor.DSolve/kkt-3200",
+      "func": "ldl.Factor.DSolve",
+      "reference": "QDLDL v0.1.9 (C, cgo, -O3)",
+      "parity": "exact",
+      "allocs": 0,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "ldl.Permuted.Refactor/kkt-3200",
+      "func": "ldl.Permuted.Refactor",
+      "reference": "QDLDL v0.1.9 (C, cgo, -O3)",
+      "parity": "exact",
+      "allocs": 0,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "ldl.Permuted.Solve/kkt-3200",
+      "func": "ldl.Permuted.Solve",
+      "reference": "QDLDL v0.1.9 (C, cgo, -O3)",
+      "parity": "exact",
+      "allocs": 0,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "order.RCM/lap2d-64-scrambled",
+      "func": "order.RCM",
+      "reference": "scipy.sparse.csgraph.reverse_cuthill_mckee 1.18.1",
+      "parity": "tolerance",
+      "allocs": 10,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "mtx.Read/lap2d-30",
+      "func": "mtx.Read",
+      "reference": "scipy.io.mmread 1.18.1 (same bytes)",
+      "parity": "tolerance",
+      "allocs": 18,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "mtx.Write/lap2d-30",
+      "func": "mtx.Write",
+      "reference": "scipy.io.mmwrite 1.18.1",
+      "parity": "tolerance",
+      "allocs": 10,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    }
+  ]
+}

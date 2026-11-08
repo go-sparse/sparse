@@ -43,3 +43,35 @@ What was opened and measured (pprof, one core, `BenchmarkRefactorAMD`; QDLDL `qd
 - **Symbolic side.** `order.AMDWith`/`COLAMDWith` (`order.Workspace`) and `ldl.Permuted.Reset`: AMD + `NewPermuted` on the KKT grids, `BenchmarkSetupAMD`, one core, busy machine so read the ratios: order 72 28.5 µs and 652 allocations in v0.2.1, 15.4 µs and 79 with fresh storage, 9.8 µs and 0 with a reused workspace; order 800 280 to 440 µs and 6 323 allocations, 160 µs and 94, 121 µs and 0; order 3200 1.40 ms and 24 952, 0.70 ms and 103, 0.54 ms and 0. The permutations are identical to v0.2.1's (3000 random matrices).
 
 The ratios against QDLDL in the table above are v0.2.1's. They are re-measured with `TestPerfVsQDLDL` when the one-minute load is below 8 (it was above 60 for the whole session in which v0.3.0 was made), and the result is added here.
+
+### Wave W3 of the performance campaign (issue #10)
+
+**Benchmarks moved to refbench.** `bench/` is a module of its own (cgo stays out of the library) that registers one case per public function, or names the function with a reason in [perf-exempt.md](perf-exempt.md), and measures it with [go-scikit/refbench](https://github.com/go-scikit/refbench) v0.1.2 (`rbtest.Perf`: one core, interleaved rounds, gated on a 1-minute load below 8). The direct path (`ldl`) is timed against QDLDL v0.1.9 (`bench/qdldl.c`, copied verbatim, Apache-2.0, driven by the C loops of `bench/loops.c`; the numeric phase, the solves, `Analyze`, and the permuted path with the gather and scatter an OSQP-style caller adds); everything else against scipy.sparse 1.18.1 (numpy 2.5.4, the pinned `bench/refs.txt`) through the refbench Python worker. `TestParityWithQDLDL` checks the factor sizes and solutions bit for bit; `TestDataIdentity` (`RB_PYTHON=1`) checks that the matrices and vectors the Python side times hash like the Go side's.
+
+```sh
+cd bench
+go test -run TestPerf .                         # CI mode: allocations, table, denominator (no Python, no timing)
+go test -run TestPerf -cpu 1 -perf.run .        # measure; writes docs/perf.json and docs/perf-table.md
+```
+
+The CI job `perf` runs the first line. The committed [perf-table.md](perf-table.md) is **deferred**: the host's load stayed at 9 to 13 the whole session, the gate (8) never opened, so it holds allocation counts and no timing. The ratios in this file and the README stay v0.2.1's until a run at load below 8 replaces them.
+
+**Allocations, before and after** (exact counts; `testing.AllocsPerRun`; asserted by `alloc_test.go` in `order`, the root package, `gallery` and `mtx`: the count must not grow with the size of the input):
+
+| call | before | after |
+|---|---|---|
+| `order.AMD`, fresh storage, grids of 8, 16, 32 | 50, 58, 66 | 28, 28, 28 |
+| `order.COLAMD`, same | 49, 57, 62 | 26, 26, 26 |
+| `order.RCM`, same | 88, 290, 1 077 (a swapper per vertex) | 9, 9, 9 |
+| `CSR.Permute`, order 10 000 | 30 055 (three per row) | 6 |
+| `CSR.Tril`, `CSR.Triu`, order 10 000 | 46 | 4 |
+| `FromDense`, order 900 | 33 | 4 |
+| `Diags`, order 10 000 | 76 | 10 |
+| `Mul` (Laplacian times tridiagonal) | 59 | 15 |
+| `gallery.Laplacian1D/2D/3D` | 10 081 / 10 186 / 11 266 | 15 |
+| `mtx.Write`, 4 380 entries | 14 187 | 10 |
+| `mtx.Read`, 4 380 entries | 8 821 | 18 |
+
+`AMDWith`, `COLAMDWith`, `Permuted.Reset`, `Refactor` and every solve were already at 0. No timing is claimed for any of these changes (unmeasured, load 9 to 13); the permutations of `AMD`, `COLAMD` and `RCM` are unchanged (a stable sort has a unique result), and `mtx.Write` produces the same bytes.
+
+**Profile of the numeric phase and the solves** (pprof, `BenchmarkRefactorAMD` and the solve benchmarks, load 9 to 13: a ranking, not a ratio). Refactor: `eliminate` 69% of the samples, `pattern` 15%, `math.IsInf` (the pivot check) 1%, the rest scheduler noise. Solve: `ltsolveTo` 51% and `lsolveD` 44% (cumulative), nothing else. The loop order is QDLDL's (`qdldl.c` v0.1.9, `QDLDL_factor` lines 126 to 259 and `QDLDL_solve`): the same row-by-row elimination-tree walk, the same scatter, the same dependent chain in the Lᵀ sweep, with D folded into the L sweep. No algorithmic difference was found to remove; what is left is the bounds checks on indices that come from data and the 64-bit `lp`, which need `unsafe` (ruled out) to go. The timing verdict is open.
