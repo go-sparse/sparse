@@ -64,6 +64,24 @@ func TestAllocsDoNotGrowWithSize(t *testing.T) {
 			t.Errorf("%s: %v allocations at order 1001, %v at order 101 (want at most %v more, and at most %v)", c.name, big, small, c.slack, c.max+c.slack)
 		}
 	}
+	// COO conversions: three arrays (before: seven, with an n-sized counting
+	// array and a permutation), whatever the size; Prune and NormFro none.
+	for _, n := range []int{101, 1003} {
+		a := triDiag(t, n)
+		coo := a.ToCOO()
+		if got := testing.AllocsPerRun(5, func() { _ = coo.ToCSC() }); got > 4 {
+			t.Errorf("COO.ToCSC of order %d: %v allocations, want at most 4", n, got)
+		}
+		if got := testing.AllocsPerRun(5, func() { _ = coo.ToCSR() }); got > 4 {
+			t.Errorf("COO.ToCSR of order %d: %v allocations, want at most 4", n, got)
+		}
+		if got := testing.AllocsPerRun(5, func() { a.Prune(0) }); got != 0 {
+			t.Errorf("Prune of order %d: %v allocations, want 0", n, got)
+		}
+		if got := testing.AllocsPerRun(5, func() { _ = a.NormFro() }); got != 0 {
+			t.Errorf("NormFro of order %d: %v allocations, want 0", n, got)
+		}
+	}
 	for _, n := range []int{30, 60} {
 		a := triDiag(t, n)
 		d := a.Dense()
