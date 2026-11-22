@@ -5,6 +5,7 @@ import (
 	"math/big"
 	"testing"
 
+	"github.com/go-scikit/refbench"
 	"github.com/go-sparse/sparse"
 	"github.com/go-sparse/sparse/ldl"
 )
@@ -172,6 +173,20 @@ func checkBound(t *testing.T, what string, a *sparse.CSC[float64], f *ldl.Factor
 	}
 	t.Logf("%s: n=%d ‖x̂−x‖∞=%.3g ‖r‖∞=%.3g bound(2)=%.3g, worst |r|/bound(1)=%.3g",
 		what, n, ferr, rmax, ainv*gam*wmax, slack)
+}
+
+// TestParityOf: the full solves are validated against the bound, every other
+// direct-path row bit for bit.
+func TestParityOf(t *testing.T) {
+	for kind, want := range map[string]string{
+		"solve": refbench.ParityTolerance, "psolve": refbench.ParityTolerance,
+		"etree": refbench.ParityExact, "factor": refbench.ParityExact, "lsolve": refbench.ParityExact,
+		"ltsolve": refbench.ParityExact, "dsolve": refbench.ParityExact, "pfactor": refbench.ParityExact,
+	} {
+		if got := parityOf(kind); got != want {
+			t.Errorf("parityOf(%q) = %q, want %q", kind, got, want)
+		}
+	}
 }
 
 // TestParityWithQDLDL holds both this package and QDLDL to the backward- and
