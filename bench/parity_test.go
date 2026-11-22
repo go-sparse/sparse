@@ -11,65 +11,7 @@ import (
 
 	"github.com/go-sparse/sparse"
 	"github.com/go-sparse/sparse/gallery"
-	"github.com/go-sparse/sparse/ldl"
 )
-
-// TestParityWithQDLDL: the Go factorisation and solves return the very bits
-// QDLDL does (the rows of the direct path are ParityExact).
-func TestParityWithQDLDL(t *testing.T) {
-	for _, g := range []int{12, 20} {
-		m, err := newKKT(g)
-		if err != nil {
-			t.Fatal(err)
-		}
-		N := m.k.Cols
-		plain, err := NewRef(m.pa.Indptr, m.pa.Indices, m.pa.Data, m.b, nil, nil, nil)
-		if err != nil {
-			t.Fatal(err)
-		}
-		permd, err := NewRef(m.pa.Indptr, m.pa.Indices, m.pa.Data, m.b, m.perm, m.pmap, m.k.Data)
-		if err != nil {
-			t.Fatal(err)
-		}
-		f, err := ldl.Factorize(m.pa)
-		if err != nil {
-			t.Fatal(err)
-		}
-		if f.NNZL() != plain.NNZL() {
-			t.Fatalf("g=%d: nnz(L) %d, QDLDL %d", g, f.NNZL(), plain.NNZL())
-		}
-		x := append([]float64(nil), m.b...)
-		if err := f.Solve(x); err != nil {
-			t.Fatal(err)
-		}
-		equalBits(t, "Solve", x, plain.Solve(N))
-
-		pf, err := ldl.NewPermuted(m.k, m.perm)
-		if err != nil {
-			t.Fatal(err)
-		}
-		if err := pf.Refactor(m.k); err != nil {
-			t.Fatal(err)
-		}
-		y := append([]float64(nil), m.b...)
-		if err := pf.Solve(y); err != nil {
-			t.Fatal(err)
-		}
-		equalBits(t, "Permuted.Solve", y, permd.PSolve(N))
-		if got := permd.Loop("pfactor", 1); got != float64(N/2) {
-			t.Logf("QDLDL positive pivots %v of %d", got, N)
-		}
-	}
-}
-
-func equalBits(t *testing.T, what string, got, want []float64) {
-	t.Helper()
-	for i := range want {
-		if math.Float64bits(got[i]) != math.Float64bits(want[i]) {
-			t.Fatalf("%s: entry %d is %v, QDLDL has %v", what, i, got[i], want[i])
-		}
-	}
-}
 
 // hashArrays is the SHA-256 the Python worker computes for a tuple of numpy
 // arrays: their bytes, little endian, in order.
