@@ -332,6 +332,15 @@ func (f *Factor) D() []float64 { return f.d }
 // matrix is quasi-definite; fewer means P is not positive semidefinite.
 func (f *Factor) NumPositive() int { return f.npos }
 
+// L returns the strictly lower triangle of the unit lower triangular factor L
+// (the implicit unit diagonal is not stored), sharing f's storage: it must not
+// be modified, and is overwritten by the next Refactor. It lets a caller form
+// the quantity |L||D||Lᵀ| that bounds the backward error of a solve.
+func (f *Factor) L() *sparse.CSC[float64] {
+	n := f.sym.n
+	return &sparse.CSC[float64]{Rows: n, Cols: n, Indptr: f.sym.lp, Indices: f.li, Data: f.lx}
+}
+
 // NNZL returns the number of stored entries of L.
 func (f *Factor) NNZL() int { return len(f.li) }
 

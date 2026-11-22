@@ -90,6 +90,15 @@ func newKKT(g int) (*kkt, error) {
 	return &kkt{k: k, perm: perm, pa: pa, pmap: pmap, b: vec(n)}, nil
 }
 
+// parityOf is the parity class of a direct-path row: the full solves are
+// validated against a stated bound, the rest bit for bit.
+func parityOf(kind string) string {
+	if kind == "solve" || kind == "psolve" {
+		return refbench.ParityTolerance
+	}
+	return refbench.ParityExact
+}
+
 // cTimer times a QDLDL loop.
 func (r *Ref) timer(kind string) refbench.Timer {
 	return func(iters int) (time.Duration, error) {
@@ -139,9 +148,10 @@ func ldlCases() ([]refbench.Case, error) {
 		row := func(name, fn, kind string, ref *Ref, body func(int)) refbench.Case {
 			return refbench.Case{
 				Name: name + "/" + tag, Func: fn, Reference: refQDLDL,
-				// Solutions and factors agree to the last bit with the C code:
-				// TestParityWithQDLDL.
-				Parity: refbench.ParityExact,
+				// Factors and partial sweeps agree to the last bit with the C
+				// code; the full solves (SIMD dots reorder sums) are within the
+				// backward-error bound of TestParityWithQDLDL, as is QDLDL.
+				Parity: parityOf(kind),
 				Go:     body, Ref: ref.timer(kind),
 			}
 		}

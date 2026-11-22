@@ -96,6 +96,7 @@ without reading its source).
 - `ldl.Symbolic.Parent`: returns a slice.
 - `ldl.Symbolic.ColCounts`: returns a slice.
 - `ldl.Factor.D`: returns a slice.
+- `ldl.Factor.L`: returns a view of the factor's own slices (one small allocation, no arithmetic).
 - `ldl.Factor.NNZL`: returns a length.
 - `ldl.Factor.NumPositive`: returns a field.
 - `ldl.Factor.Symbolic`: returns a field.
